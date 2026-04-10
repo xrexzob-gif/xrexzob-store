@@ -1,215 +1,212 @@
-<!DOCTYPE html>
+
+</body>
+</html><!DOCTYPE html>
+
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XrexZob Cyber Scanner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Share Tech Mono', monospace;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XrexZob Secure Vault</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+    body {
+        background: black;
+        color: #00ff00;
+        font-family: 'Share Tech Mono', monospace;
+        margin: 0;
+        padding: 15px;
+    }
 
-        body {
-            background: black;
-            color: #00ff00;
-            padding: 15px;
-            overflow-x: hidden;
-        }
+```
+h1, h2 {
+    text-align: center;
+    text-shadow: 0 0 10px #00ff00;
+}
 
-        canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
+.container {
+    max-width: 420px;
+    margin: auto;
+}
 
-        .container {
-            max-width: 420px;
-            margin: auto;
-        }
+.card {
+    border: 1px solid #00ff00;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #00ff00;
+    background: rgba(0,0,0,0.9);
+}
 
-        h1 {
-            text-align: center;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px #00ff00;
-            animation: glitch 1.5s infinite;
-        }
+input, textarea, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #00ff00;
+    background: black;
+    color: #00ff00;
+    border-radius: 5px;
+    font-family: inherit;
+}
 
-        @keyframes glitch {
-            0% { text-shadow: 2px 2px #0f0; }
-            50% { text-shadow: -2px -2px #0f0; }
-            100% { text-shadow: 2px 2px #0f0; }
-        }
+button:hover {
+    background: #00ff00;
+    color: black;
+    cursor: pointer;
+}
 
-        .card {
-            border: 1px solid #00ff00;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.85);
-            box-shadow: 0 0 10px #00ff00;
-        }
+img {
+    max-width: 100%;
+    margin-top: 10px;
+    border: 1px solid #00ff00;
+}
 
-        .card h2 {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
+.hidden {
+    display: none;
+}
 
-        .info {
-            font-size: 13px;
-            color: #aaffaa;
-        }
+.footer {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 12px;
+    opacity: 0.7;
+}
+```
 
-        button {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #00ff00;
-            background: black;
-            color: #00ff00;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background: #00ff00;
-            color: black;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 11px;
-            margin-top: 10px;
-            opacity: 0.7;
-        }
-    </style>
+</style>
 </head>
 <body>
 
-<canvas id="matrix"></canvas>
-
 <div class="container">
-    <h1>XRExZOB SYSTEM</h1>
+    <h1>XRExZOB SECURE VAULT</h1>
+
+```
+<!-- Login -->
+<div class="card" id="loginBox">
+    <h2>🔐 Masukkan Key</h2>
+    <input type="password" id="keyInput" placeholder="Masukkan key...">
+    <button onclick="login()">ACCESS</button>
+</div>
+
+<!-- Vault -->
+<div id="vault" class="hidden">
 
     <div class="card">
-        <h2>🧠 CPU</h2>
-        <div class="info" id="cpu">Scanning...</div>
+        <h2>📝 Catatan Rahasia</h2>
+        <textarea id="notes" rows="5" placeholder="Tulis catatan rahasia..."></textarea>
+        <button onclick="saveNotes()">Simpan Catatan</button>
     </div>
 
     <div class="card">
-        <h2>💾 RAM</h2>
-        <div class="info" id="ram">Scanning...</div>
+        <h2>📷 Simpan Foto</h2>
+        <input type="file" id="photoInput" accept="image/*">
+        <img id="photoPreview">
     </div>
 
     <div class="card">
-        <h2>🔋 BATTERY</h2>
-        <div class="info" id="battery">Scanning...</div>
+        <h2>📁 Simpan File</h2>
+        <input type="file" id="fileInput">
+        <p id="fileName"></p>
     </div>
 
     <div class="card">
-        <h2>📶 NETWORK</h2>
-        <div class="info" id="network">Scanning...</div>
-    </div>
-
-    <div class="card">
-        <h2>📱 DEVICE</h2>
-        <div class="info" id="device">Scanning...</div>
-    </div>
-
-    <div class="card">
-        <h2>🖥️ SCREEN</h2>
-        <div class="info" id="screen">Scanning...</div>
-    </div>
-
-    <button onclick="location.reload()">REFRESH SYSTEM</button>
-
-    <div class="footer">
-        © 2026 XRExZOB CYBER TERMINAL
+        <button onclick="logout()">LOGOUT</button>
     </div>
 </div>
 
+<div class="footer">
+    © 2026 XRExZOB CYBER TERMINAL
+</div>
+```
+
+</div>
+
 <script>
-    // CPU
-    document.getElementById("cpu").innerHTML =
-        "Cores: " + (navigator.hardwareConcurrency || "Unknown");
-
-    // RAM
-    document.getElementById("ram").innerHTML =
-        "Estimated: " + (navigator.deviceMemory || "Unknown") + " GB";
-
-    // Device Info
-    document.getElementById("device").innerHTML =
-        navigator.userAgent;
-
-    // Screen Info
-    document.getElementById("screen").innerHTML =
-        "Resolution: " + screen.width + " x " + screen.height +
-        "<br>Pixel Ratio: " + window.devicePixelRatio;
-
-    // Network Info
-    if (navigator.connection) {
-        document.getElementById("network").innerHTML =
-            "Type: " + navigator.connection.effectiveType +
-            "<br>Speed: " + navigator.connection.downlink + " Mbps";
-    } else {
-        document.getElementById("network").innerHTML =
-            "Not Available";
+    // Set key default
+    const DEFAULT_KEY = "ARIFIN";
+    if (!localStorage.getItem("vaultKey")) {
+        localStorage.setItem("vaultKey", btoa(DEFAULT_KEY));
     }
 
-    // Battery Info
-    if (navigator.getBattery) {
-        navigator.getBattery().then(function(battery) {
-            function updateBattery() {
-                document.getElementById("battery").innerHTML =
-                    "Level: " + Math.round(battery.level * 100) + "%" +
-                    "<br>Status: " + (battery.charging ? "Charging" : "Discharging");
-            }
-            updateBattery();
-            battery.addEventListener("levelchange", updateBattery);
-            battery.addEventListener("chargingchange", updateBattery);
-        });
-    } else {
-        document.getElementById("battery").innerHTML = "Not Supported";
+    // Enkripsi sederhana
+    function encrypt(text, key) {
+        return btoa(text.split('').map((c, i) =>
+            String.fromCharCode(c.charCodeAt(0) ^ key.charCodeAt(i % key.length))
+        ).join(''));
     }
 
-    // Matrix Effect
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-
-    const letters = "01XRExZOB";
-    const matrix = letters.split("");
-
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = "#00ff00";
-        ctx.font = fontSize + "px monospace";
-
-        for (let i = 0; i < drops.length; i++) {
-            const text = matrix[Math.floor(Math.random() * matrix.length)];
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
-            }
-            drops[i]++;
+    function decrypt(text, key) {
+        try {
+            text = atob(text);
+            return text.split('').map((c, i) =>
+                String.fromCharCode(c.charCodeAt(0) ^ key.charCodeAt(i % key.length))
+            ).join('');
+        } catch {
+            return "";
         }
     }
 
-    setInterval(drawMatrix, 35);
+    function login() {
+        const inputKey = document.getElementById("keyInput").value;
+        const savedKey = atob(localStorage.getItem("vaultKey"));
+
+        if (inputKey === savedKey) {
+            document.getElementById("loginBox").classList.add("hidden");
+            document.getElementById("vault").classList.remove("hidden");
+            loadData(inputKey);
+        } else {
+            alert("Key salah!");
+        }
+    }
+
+    function logout() {
+        location.reload();
+    }
+
+    function saveNotes() {
+        const key = document.getElementById("keyInput").value;
+        const notes = document.getElementById("notes").value;
+        localStorage.setItem("secureNotes", encrypt(notes, key));
+        alert("Catatan disimpan!");
+    }
+
+    function loadData(key) {
+        const encryptedNotes = localStorage.getItem("secureNotes");
+        if (encryptedNotes) {
+            document.getElementById("notes").value =
+                decrypt(encryptedNotes, key);
+        }
+
+        const photo = localStorage.getItem("securePhoto");
+        if (photo) {
+            document.getElementById("photoPreview").src = photo;
+        }
+
+        const fileName = localStorage.getItem("secureFileName");
+        if (fileName) {
+            document.getElementById("fileName").textContent =
+                "File tersimpan: " + fileName;
+        }
+    }
+
+    // Simpan Foto
+    document.getElementById("photoInput").addEventListener("change", function() {
+        const reader = new FileReader();
+        reader.onload = function() {
+            localStorage.setItem("securePhoto", reader.result);
+            document.getElementById("photoPreview").src = reader.result;
+        };
+        reader.readAsDataURL(this.files[0]);
+    });
+
+    // Simpan File
+    document.getElementById("fileInput").addEventListener("change", function() {
+        const file = this.files[0];
+        localStorage.setItem("secureFileName", file.name);
+        document.getElementById("fileName").textContent =
+            "File tersimpan: " + file.name;
+    });
 </script>
 
 </body>
 </html>
+
