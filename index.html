@@ -1,117 +1,108 @@
-
-</body>
-</html><!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XrexZob Secure Vault</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XrexZob AI Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+```
     body {
-        background: black;
+        background: #000;
         color: #00ff00;
-        font-family: 'Share Tech Mono', monospace;
-        margin: 0;
+        text-align: center;
         padding: 15px;
     }
 
-```
-h1, h2 {
-    text-align: center;
-    text-shadow: 0 0 10px #00ff00;
-}
+    h1 {
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #00ff00;
+    }
 
-.container {
-    max-width: 420px;
-    margin: auto;
-}
+    .subtitle {
+        font-size: 14px;
+        margin-bottom: 20px;
+        opacity: 0.8;
+    }
 
-.card {
-    border: 1px solid #00ff00;
-    padding: 15px;
-    margin-top: 15px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #00ff00;
-    background: rgba(0,0,0,0.9);
-}
+    .clock {
+        font-size: 18px;
+        margin-bottom: 15px;
+        text-shadow: 0 0 5px #00ff00;
+    }
 
-input, textarea, button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: 1px solid #00ff00;
-    background: black;
-    color: #00ff00;
-    border-radius: 5px;
-    font-family: inherit;
-}
+    .container {
+        max-width: 420px;
+        margin: auto;
+    }
 
-button:hover {
-    background: #00ff00;
-    color: black;
-    cursor: pointer;
-}
+    .card {
+        border: 1px solid #00ff00;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.9);
+        box-shadow: 0 0 10px #00ff00;
+        transition: 0.3s;
+    }
 
-img {
-    max-width: 100%;
-    margin-top: 10px;
-    border: 1px solid #00ff00;
-}
+    .card:hover {
+        background: #00ff00;
+        color: #000;
+        transform: scale(1.03);
+    }
 
-.hidden {
-    display: none;
-}
+    a {
+        text-decoration: none;
+        color: inherit;
+        font-size: 16px;
+        font-weight: bold;
+    }
 
-.footer {
-    text-align: center;
-    margin-top: 15px;
-    font-size: 12px;
-    opacity: 0.7;
-}
-```
+    .footer {
+        margin-top: 20px;
+        font-size: 12px;
+        opacity: 0.7;
+    }
 
+    /* Matrix Canvas */
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
 </style>
+```
+
 </head>
 <body>
 
+<canvas id="matrix"></canvas>
+
 <div class="container">
-    <h1>XRExZOB SECURE VAULT</h1>
+    <h1>XRExZOB AI HUB</h1>
+    <p class="subtitle">Akses Cepat ke Dunia Kecerdasan Buatan</p>
 
 ```
-<!-- Login -->
-<div class="card" id="loginBox">
-    <h2>🔐 Masukkan Key</h2>
-    <input type="password" id="keyInput" placeholder="Masukkan key...">
-    <button onclick="login()">ACCESS</button>
-</div>
+<div class="clock" id="clock"></div>
 
-<!-- Vault -->
-<div id="vault" class="hidden">
-
-    <div class="card">
-        <h2>📝 Catatan Rahasia</h2>
-        <textarea id="notes" rows="5" placeholder="Tulis catatan rahasia..."></textarea>
-        <button onclick="saveNotes()">Simpan Catatan</button>
-    </div>
-
-    <div class="card">
-        <h2>📷 Simpan Foto</h2>
-        <input type="file" id="photoInput" accept="image/*">
-        <img id="photoPreview">
-    </div>
-
-    <div class="card">
-        <h2>📁 Simpan File</h2>
-        <input type="file" id="fileInput">
-        <p id="fileName"></p>
-    </div>
-
-    <div class="card">
-        <button onclick="logout()">LOGOUT</button>
-    </div>
-</div>
+<div class="card"><a href="https://chat.openai.com" target="_blank">🤖 ChatGPT</a></div>
+<div class="card"><a href="https://gemini.google.com" target="_blank">✨ Google Gemini</a></div>
+<div class="card"><a href="https://copilot.microsoft.com" target="_blank">🧠 Microsoft Copilot</a></div>
+<div class="card"><a href="https://claude.ai" target="_blank">📚 Claude AI</a></div>
+<div class="card"><a href="https://www.perplexity.ai" target="_blank">🔎 Perplexity AI</a></div>
+<div class="card"><a href="https://www.midjourney.com" target="_blank">🎨 Midjourney</a></div>
+<div class="card"><a href="https://www.canva.com/ai" target="_blank">🖌️ Canva AI</a></div>
+<div class="card"><a href="https://runwayml.com" target="_blank">🎬 Runway AI</a></div>
 
 <div class="footer">
     © 2026 XRExZOB CYBER TERMINAL
@@ -121,92 +112,53 @@ img {
 </div>
 
 <script>
-    // Set key default
-    const DEFAULT_KEY = "ARIFIN";
-    if (!localStorage.getItem("vaultKey")) {
-        localStorage.setItem("vaultKey", btoa(DEFAULT_KEY));
+    // Jam Digital
+    function updateClock() {
+        const now = new Date();
+        document.getElementById("clock").innerText =
+            now.toLocaleTimeString("id-ID");
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Matrix Effect
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "01XRExZOB";
+    const matrix = letters.split("");
+
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+
+    for (let i = 0; i < columns; i++) {
+        drops[i] = 1;
     }
 
-    // Enkripsi sederhana
-    function encrypt(text, key) {
-        return btoa(text.split('').map((c, i) =>
-            String.fromCharCode(c.charCodeAt(0) ^ key.charCodeAt(i % key.length))
-        ).join(''));
-    }
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    function decrypt(text, key) {
-        try {
-            text = atob(text);
-            return text.split('').map((c, i) =>
-                String.fromCharCode(c.charCodeAt(0) ^ key.charCodeAt(i % key.length))
-            ).join('');
-        } catch {
-            return "";
+        ctx.fillStyle = "#00ff00";
+        ctx.font = fontSize + "px monospace";
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = matrix[Math.floor(Math.random() * matrix.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
         }
     }
 
-    function login() {
-        const inputKey = document.getElementById("keyInput").value;
-        const savedKey = atob(localStorage.getItem("vaultKey"));
-
-        if (inputKey === savedKey) {
-            document.getElementById("loginBox").classList.add("hidden");
-            document.getElementById("vault").classList.remove("hidden");
-            loadData(inputKey);
-        } else {
-            alert("Key salah!");
-        }
-    }
-
-    function logout() {
-        location.reload();
-    }
-
-    function saveNotes() {
-        const key = document.getElementById("keyInput").value;
-        const notes = document.getElementById("notes").value;
-        localStorage.setItem("secureNotes", encrypt(notes, key));
-        alert("Catatan disimpan!");
-    }
-
-    function loadData(key) {
-        const encryptedNotes = localStorage.getItem("secureNotes");
-        if (encryptedNotes) {
-            document.getElementById("notes").value =
-                decrypt(encryptedNotes, key);
-        }
-
-        const photo = localStorage.getItem("securePhoto");
-        if (photo) {
-            document.getElementById("photoPreview").src = photo;
-        }
-
-        const fileName = localStorage.getItem("secureFileName");
-        if (fileName) {
-            document.getElementById("fileName").textContent =
-                "File tersimpan: " + fileName;
-        }
-    }
-
-    // Simpan Foto
-    document.getElementById("photoInput").addEventListener("change", function() {
-        const reader = new FileReader();
-        reader.onload = function() {
-            localStorage.setItem("securePhoto", reader.result);
-            document.getElementById("photoPreview").src = reader.result;
-        };
-        reader.readAsDataURL(this.files[0]);
-    });
-
-    // Simpan File
-    document.getElementById("fileInput").addEventListener("change", function() {
-        const file = this.files[0];
-        localStorage.setItem("secureFileName", file.name);
-        document.getElementById("fileName").textContent =
-            "File tersimpan: " + file.name;
-    });
+    setInterval(drawMatrix, 35);
 </script>
 
 </body>
 </html>
-
