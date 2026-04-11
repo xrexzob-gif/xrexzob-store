@@ -1,38 +1,51 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { 
-    font-family: 'Segoe UI', sans-serif; 
+    font-family: system-ui, -apple-system, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 100vh; padding: 10px;
 }
 
-.container {
-    width: 90%; max-width: 800px; background: rgba(255,255,255,0.95);
-    border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    overflow: hidden;
+.chatbot { 
+    height: 100vh; 
+    background: white; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: flex; flex-direction: column; 
+    max-width: 100%; margin: 0 auto;
 }
 
-header { 
+.header { 
     background: linear-gradient(45deg, #ff6b6b, #4ecdc4); 
-    color: white; padding: 2rem; text-align: center; 
+    color: white; padding: 20px; text-align: center;
+    border-radius: 20px 20px 0 0;
 }
+.header h2 { font-size: 1.3rem; margin-bottom: 5px; }
+.status { font-size: 0.8rem; opacity: 0.9; }
 
-#chat-container { height: 500px; display: flex; flex-direction: column; }
-#chat-messages { 
-    flex: 1; padding: 20px; overflow-y: auto; background: #f8f9fa;
+#messages { 
+    flex: 1; padding: 20px; overflow-y: auto; 
+    background: #f8f9fa;
 }
-.message { margin: 10px 0; padding: 12px 16px; border-radius: 18px; max-width: 80%; }
-.user { background: #4ecdc4; color: white; margin-left: auto; text-align: right; }
+.msg { 
+    margin: 10px 0; padding: 12px 16px; 
+    border-radius: 20px; max-width: 85%; 
+    word-wrap: break-word;
+}
+.you { background: #4ecdc4; color: white; margin-left: auto; }
 .ai { background: white; border: 1px solid #e0e0e0; }
 
-.input-area { 
-    display: flex; padding: 20px; gap: 10px; border-top: 1px solid #eee; 
+.input-box { 
+    padding: 20px; display: flex; gap: 10px; 
+    border-top: 1px solid #eee; background: white;
+    border-radius: 0 0 20px 20px;
 }
-#message-input { flex: 1; padding: 12px; border: 2px solid #e0e0e0; border-radius: 25px; }
+#input { 
+    flex: 1; padding: 15px; border: 2px solid #e0e0e0; 
+    border-radius: 25px; font-size: 16px; /* Mobile keyboard */
+}
 button { 
-    padding: 12px 24px; background: #ff6b6b; color: white; border: none; 
-    border-radius: 25px; cursor: pointer; font-weight: bold;
+    width: 50px; height: 50px; border: none; 
+    background: #ff6b6b; color: white; border-radius: 50%; 
+    font-size: 1.2rem;
 }
-button:hover { background: #ff5252; transform: scale(1.05); }
+button:active { transform: scale(0.95); }
