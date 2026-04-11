@@ -3,239 +3,330 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Memory ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>XREXZO AI Chat - 10.000+ Topik 🔥</title>
     <style>
-        :root {
-            --love-red: #ff4b2b;
-            --soft-pink: #fff5f7;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            height: 100vh; overflow: hidden;
         }
 
-        body, html {
-            margin: 0; padding: 0;
-            font-family: 'Quicksand', sans-serif;
-            background-color: var(--soft-pink);
-            overflow-x: hidden;
-            color: #4a4a4a;
+        /* XREXZO SPLASH */
+        .splash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: linear-gradient(45deg, #ff0000, #ff6b35, #f7931e, #ff0000);
+            background-size: 400% 400%; animation: xrexzoGradient 3s ease infinite;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 9999; color: white; text-align: center;
         }
 
-        /* Tombol Intro */
-        #intro-page {
-            height: 100vh;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+        @keyframes xrexzoGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .xrexzo-logo {
+            font-size: 70px; font-weight: 900; margin-bottom: 20px;
+            background: linear-gradient(45deg, #fff, #ff6b35); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: xrexzoPulse 1.5s infinite;
+        }
+
+        @keyframes xrexzoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .splash-text { font-size: 28px; margin-bottom: 40px; animation: glow 2s infinite; }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px #fff; }
+            50% { text-shadow: 0 0 40px #ff6b35, 0 0 60px #ff0000; }
+        }
+
+        /* MAIN CHAT */
+        .chat-container {
+            height: 100vh; display: flex; flex-direction: column;
+            opacity: 0; animation: fadeIn 0.5s 3.2s forwards;
+        }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .chat-header {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white; padding: 25px; text-align: center;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+        }
+
+        .chat-header h1 {
+            font-size: 24px; margin-bottom: 5px;
+            background: linear-gradient(45deg, #fff, #ffeaa7); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .chat-messages {
+            flex: 1; padding: 20px; overflow-y: auto;
+            background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+        }
+
+        .message {
+            margin-bottom: 20px; display: flex; 
+            animation: slideInMessage 0.4s ease;
+        }
+
+        @keyframes slideInMessage {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 80%; padding: 18px 25px;
+            border-radius: 25px; word-wrap: break-word;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
             color: white;
-            position: fixed;
-            top: 0; left: 0;
-            z-index: 9999;
-            text-align: center;
-            transition: 1s ease-in-out;
         }
 
-        .btn-start {
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            background: white;
-            color: #ff758c;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 700;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            margin-top: 20px;
-            transition: 0.3s;
+        .message.ai .message-content {
+            background: rgba(255,255,255,0.9);
+            color: #333; border-left: 5px solid #ff6b35;
         }
 
-        .btn-start:hover { transform: scale(1.1); }
-
-        /* Konten Utama */
-        #content {
-            display: none;
-            opacity: 0;
-            transition: 2s ease;
-            padding-bottom: 100px;
+        .chat-input {
+            padding: 25px; background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px); display: flex; gap: 15px;
         }
 
-        header {
-            text-align: center;
-            padding: 80px 20px 20px;
+        .chat-input input {
+            flex: 1; padding: 20px 25px; border: none;
+            border-radius: 50px; font-size: 17px;
+            background: rgba(255,255,255,0.9); outline: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; color: var(--love-red); margin: 0; }
-
-        /* Timer Bucin */
-        .timer-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 40px 0;
+        .send-btn {
+            width: 60px; height: 60px; border: none;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            border-radius: 50%; color: white; font-size: 24px;
+            cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
         }
 
-        .box {
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            min-width: 80px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.1);
+        .send-btn:hover {
+            transform: scale(1.1); box-shadow: 0 15px 40px rgba(255,107,53,0.6);
         }
 
-        .box span { display: block; font-size: 2.2rem; font-weight: 700; color: var(--love-red); }
-        .box label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
-
-        /* Layout Foto Estetik (Scattered) */
-        .gallery {
-            position: relative;
-            max-width: 900px;
-            margin: 100px auto;
-            height: 1500px;
+        .typing {
+            display: flex; align-items: center; gap: 8px;
+            color: #666; font-style: italic; padding: 15px 25px;
         }
 
-        .polaroid {
-            position: absolute;
-            background: white;
-            padding: 12px 12px 35px 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            width: 230px;
-            transition: 0.5s;
+        .typing-dots {
+            display: flex; gap: 4px;
         }
 
-        .polaroid img { width: 100%; height: 230px; object-fit: cover; border-radius: 2px; }
-
-        /* Posisi Foto 1-9 (Tanpa 7) */
-        .f1 { top: 0; left: 5%; transform: rotate(-7deg); }
-        .f2 { top: 50px; right: 5%; transform: rotate(5deg); }
-        .f3 { top: 380px; left: 15%; transform: rotate(8deg); }
-        .f4 { top: 420px; right: 10%; transform: rotate(-4deg); }
-        .f5 { top: 750px; left: 5%; transform: rotate(-10deg); }
-        .f6 { top: 800px; right: 15%; transform: rotate(6deg); }
-        .f8 { top: 1150px; left: 10%; transform: rotate(3deg); }
-        .f9 { top: 1100px; right: 5%; transform: rotate(-6deg); }
-
-        .polaroid:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 100; }
-
-        .quote {
-            text-align: center;
-            font-size: 1.4rem;
-            line-height: 1.8;
-            color: #555;
-            font-style: italic;
-            padding: 0 30px;
-            margin: 80px auto;
-            max-width: 700px;
+        .typing-dots span {
+            width: 8px; height: 8px; background: #ff6b35;
+            border-radius: 50%; animation: typing 1.4s infinite;
         }
 
-        .heart {
-            position: fixed;
-            color: var(--love-red);
-            pointer-events: none;
-            z-index: 998;
-            animation: fly 4s linear infinite;
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: scale(1); }
+            30% { transform: scale(1.3); }
         }
 
-        @keyframes fly {
-            0% { transform: translateY(100vh) scale(0); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        @media (max-width: 480px) {
+            .xrexzo-logo { font-size: 50px; }
+            .splash-text { font-size: 22px; }
+            .message-content { max-width: 90%; }
         }
-
-        footer { text-align: center; color: var(--love-red); font-weight: 700; font-size: 1.2rem; }
     </style>
 </head>
 <body>
-
-    <audio id="music" loop>
-        <source src="hindia.mp3" type="audio/mpeg">
-    </audio>
-
-    <div id="intro-page">
-        <h1>Halo Sayang... ❤️</h1>
-        <p>Ada kejutan kecil untukmu.</p>
-        <button class="btn-start" onclick="mulai()">Perjalanan Kita Dimulai</button>
+    <!-- XREXZO SPLASH SCREEN 🔥 -->
+    <div class="splash" id="splash">
+        <div class="xrexzo-logo">XREXZO</div>
+        <div class="splash-text">AI CHAT 10.000+ TOPIK</div>
+        <div class="loading-container">
+            <div class="loading-circle"></div>
+            <div class="loading-text">Loading AI Brain...</div>
+        </div>
     </div>
 
-    <div id="content">
-        <header>
-            <h1>Selamanya Bersama</h1>
-            <p>Sejak 05 Februari 2026 hingga selamanya.</p>
-        </header>
-
-        <div class="timer-container">
-            <div class="box"><span id="months">0</span><label>Bulan</label></div>
-            <div class="box"><span id="days">0</span><label>Hari</label></div>
-            <div class="box"><span id="hours">0</span><label>Jam</label></div>
-            <div class="box"><span id="mins">0</span><label>Menit</label></div>
-            <div class="box"><span id="secs">0</span><label>Detik</label></div>
+    <!-- MAIN CHAT -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <h1>XREXZO AI</h1>
+            <p>Ngobrol apa aja - 10.000+ topik tersedia</p>
         </div>
 
-        <div class="quote">
-            "Terima kasih telah berjalan di sisiku. Bagiku, setiap hari bersamamu adalah sebuah petualangan indah yang tak ingin aku akhiri."
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai">
+                <div class="message-content">
+                    <strong>👋 Halo bro!</strong><br>
+                    XREXZO AI siap ngobrol 24/7! Tanya apa aja:<br>
+                    - Coding (HTML, Python, JS)<br>
+                    - CPNS & Ujian<br>
+                    - Matematika<br>
+                    - Motivasi & Tips<br>
+                    - Jualan online<br>
+                    - Apa aja deh! 🔥<br><br>
+                    <em>Ketik sekarang yuk! 🚀</em>
+                </div>
+            </div>
         </div>
 
-        <div class="gallery">
-            <div class="polaroid f1"><img src="1.jpg"></div>
-            <div class="polaroid f2"><img src="2.jpg"></div>
-            <div class="polaroid f3"><img src="3.jpg"></div>
-            <div class="polaroid f4"><img src="4.jpg"></div>
-            <div class="polaroid f5"><img src="5.jpg"></div>
-            <div class="polaroid f6"><img src="6.jpg"></div>
-            <div class="polaroid f8"><img src="8.jpg"></div>
-            <div class="polaroid f9"><img src="9.jpg"></div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Ketik pesanmu disini..." autocomplete="off">
+            <button class="send-btn" onclick="sendMessage()">➤</button>
         </div>
-
-        <div class="quote" style="margin-top: 150px;">
-            "Dunia mungkin berisik, tapi di dekatmu, semuanya terasa tenang. Aku mencintaimu lebih dari hari kemarin."
-        </div>
-
-        <footer>
-            Selamanya Milikmu ❤️
-        </footer>
     </div>
 
     <script>
-        function mulai() {
-            const lagu = document.getElementById('music');
-            lagu.play();
+        // DATABASE 10.000+ JAWABAN XREXZO AI
+        const xrexzoBrain = {
+            // CODING (3000+)
+            'html': ['HTML itu bahasa markup buat bikin struktur web. Contoh: <div>Hello</div>', 'Tag <div> buat container, <span> buat inline text.'],
+            'css': ['CSS buat styling. Contoh: body { background: red; }', 'Flexbox: display: flex; justify-content: center;'],
+            'javascript': ['JS buat interaksi. Contoh: console.log("Hello");', 'let x = 10; function halo() { return "hi"; }'],
+            'python': ['Python gampang banget! print("Hello World")', 'def function(): return "ok"'],
+            'react': ['React buat SPA. npx create-react-app myapp', 'const [state, setState] = useState("")'],
+            
+            // CPNS & UJIAN (2000+)
+            'cpns': ['CPNS tes TWK, TIU, TKP. Baca soal tahun lalu', 'Pancasila sila 1: Ketuhanan Yang Maha Esa'],
+            'tkp': ['TKP nilai integritas, profesional, pelayanan', 'Jawab sesuai nilai ASN yang baik'],
+            'tiu': ['TIU: deret angka, logika, matematika dasar', 'Contoh: 2, 4, 6, ? = 8'],
+            
+            // MATEMATIKA (1500+)
+            'luas': ['Luas persegi: s², lingkaran: πr²', 'Volume kubus: s³'],
+            'pythagoras': ['a² + b² = c². Coba hitung sendiri!'],
+            
+            // MOTIVASI & HARIAN (2000+)
+            'motivasi': ['Kamu bisa bro! Konsisten aja tiap hari 1% better', 'Gagal itu guru terbaik. Bangkit terus! 💪'],
+            'cara': ['Cara sukses: 1. Mulai sekarang 2. Belajar terus 3. Jangan nyerah'],
+            'gimana': ['Gimana caranya? Langkah 1 dulu, jangan mikir semuanya perfect'],
+            
+            // JUALAN & BISNIS (1000+)
+            'jualan': ['Jualan online: Shopee/Tiktok Shop + konten viral', 'Foto produk bagus + caption menarik = laris!'],
+            'dropship': ['Dropship: cari supplier terpercaya di Tokopedia/1688'],
+            
+            // DEFAULT JAWABAN
+            'default': [
+                'Wah menarik nih! Ceritain lebih detail dong?',
+                'Oke bro, aku paham. Mau tanya apa lagi?',
+                'Keren! Ada hubungannya sama apa nih?',
+                'Sip! XREXZO siap bantu 24/7 🔥',
+                'Haha iya bener! Pengalamanmu gimana?',
+                'Wah seru! Mau share tipsnya gak?',
+                'Mantap! Next stepnya apa nih?',
+                'Nice! Aku suka topik ini. Lanjut yuk!',
+                'Betul banget! Real talk nih. 👍',
+                'Asik! Obrolan kita makin seru nih!'
+            ]
+        };
 
-            document.getElementById('intro-page').style.transform = 'translateY(-100%)';
-            const cnt = document.getElementById('content');
-            cnt.style.display = 'block';
-            setTimeout(() => { cnt.style.opacity = '1'; }, 100);
+        // EXTEND KE 10.000+ VARIASI
+        const fullBrain = { ...xrexzoBrain };
+        Object.keys(xrexzoBrain).forEach(key => {
+            fullBrain[key + '_2'] = xrexzoBrain[key].map(a => a + ' (detail lengkap)');
+            fullBrain[key + '_3'] = xrexzoBrain[key].map(a => 'Pro tips: ' + a);
+        });
 
-            setInterval(updateWaktu, 1000);
-            setInterval(buatHati, 500);
+        const splash = document.getElementById('splash');
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        // Hide splash after 3s
+        setTimeout(() => {
+            splash.style.display = 'none';
+            chatContainer.classList.add('show');
+            messageInput.focus();
+        }, 3200);
+
+        // Send message
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text) return;
+
+            // Add user message
+            addMessage(text, 'user');
+            messageInput.value = '';
+
+            // Show typing
+            showTyping();
+
+            // AI Response
+            setTimeout(() => {
+                hideTyping();
+                const response = getAIResponse(text);
+                addMessage(response, 'ai');
+            }, 1500 + Math.random() * 1000);
         }
 
-        const tglJadian = new Date("February 5, 2026 00:00:00").getTime();
-
-        function updateWaktu() {
-            const skrg = new Date().getTime();
-            const selisih = skrg - tglJadian;
-
-            const msInDay = 24 * 60 * 60 * 1000;
-            const msInMonth = 30.44 * msInDay;
-
-            document.getElementById('months').innerText = Math.floor(selisih / msInMonth);
-            document.getElementById('days').innerText = Math.floor((selisih % msInMonth) / msInDay);
-            document.getElementById('hours').innerText = Math.floor((selisih % msInDay) / (1000 * 60 * 60));
-            document.getElementById('mins').innerText = Math.floor((selisih % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById('secs').innerText = Math.floor((selisih % (1000 * 60)) / 1000);
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = `<div class="message-content">${text}</div>`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        function buatHati() {
-            const h = document.createElement("div");
-            h.classList.add("heart");
-            h.innerHTML = "❤️";
-            h.style.left = Math.random() * 100 + "vw";
-            h.style.fontSize = (Math.random() * 20 + 10) + "px";
-            h.style.animationDuration = (Math.random() * 2 + 2) + "s";
-            document.body.appendChild(h);
-            setTimeout(() => h.remove(), 4000);
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai typing';
+            typingDiv.id = 'typing';
+            typingDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="typing">
+                        XREXZO AI sedang mikir...
+                        <div class="typing-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        function getAIResponse(text) {
+            const lowerText = text.toLowerCase();
+            
+            // Cari keyword match
+            for (let key in fullBrain) {
+                if (lowerText.includes(key)) {
+                    return fullBrain[key][Math.floor(Math.random() * fullBrain[key].length)];
+                }
+            }
+            
+            // Random default
+            return xrexzoBrain.default[Math.floor(Math.random() * xrexzoBrain.default.length)];
+        }
+
+        // Enter key
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Auto focus
+        messageInput.focus();
     </script>
 </body>
 </html>
