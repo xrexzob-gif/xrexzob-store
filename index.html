@@ -1,336 +1,277 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>XREXZ0B</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pegas Code HP - Mobile Editor</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background: #000;
-            color: #00ff41;
-            font-family: 'Courier New', 'monospace', sans-serif;
-            font-size: 11px;
-            line-height: 1.3;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
             height: 100vh;
             overflow: hidden;
+        }
+        
+        .toolbar {
+            background: #21262d;
+            padding: 12px;
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        
+        .btn:hover { background: #2ea043; }
+        .btn:active { background: #1a7f37; }
+        
+        .container {
+            display: flex;
+            height: calc(100vh - 60px);
+        }
+        
+        .editor-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        
+        .editor-tabs {
+            background: #161b22;
+            padding: 8px;
+            display: flex;
+            gap: 4px;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .tab {
+            padding: 6px 12px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px 6px 0 0;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .tab.active { background: #21262d; border-bottom-color: #21262d; }
+        
+        .editor-area {
+            flex: 1;
             position: relative;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: none;
         }
-
-        .terminal {
-            height: 100vh;
-            padding: 15px;
-            overflow-y: auto;
-            background: radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 40%, rgba(120,219,255,0.3) 0%, transparent 50%);
-            position: relative;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+        
+        #htmlEditor, #cssEditor, #jsEditor {
+            width: 100%;
+            height: 100%;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            background: #0d1117;
+            color: #c9d1d9;
+            border: none;
+            padding: 16px;
+            resize: none;
+            outline: none;
         }
-
-        .terminal::-webkit-scrollbar {
-            display: none;
+        
+        #preview {
+            flex: 1;
+            border-left: 1px solid #30363d;
+            background: white;
+            min-width: 300px;
         }
-
-        .prompt {
-            color: #00ff41;
-            text-shadow: 0 0 5px #00ff41;
-            margin-right: 3px;
-            font-weight: bold;
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 6px;
-            height: 13px;
-            background: linear-gradient(#00ff41, #00cc33);
-            border-radius: 2px;
-            animation: blink 0.8s infinite;
-            box-shadow: 0 0 5px #00ff41;
-            margin-left: 1px;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; transform: scaleY(1); }
-            51%, 100% { opacity: 0; transform: scaleY(0.3); }
-        }
-
-        .line {
-            margin-bottom: 1px;
-            white-space: pre-wrap;
-            word-break: break-all;
-            text-shadow: 0 0 2px rgba(0,255,65,0.5);
-        }
-
-        .status-bar {
+        
+        .mobile-keyboard {
             position: fixed;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            height: 25px;
-            background: rgba(0,0,0,0.9);
+            background: #161b22;
+            padding: 10px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 10px;
-            font-size: 9px;
-            z-index: 1000;
-            border-bottom: 1px solid #00ff41;
-            box-shadow: 0 0 10px #00ff41;
+            gap: 5px;
+            border-top: 1px solid #30363d;
+            display: none;
         }
-
-        .scan-line {
-            position: fixed;
-            top: 25px;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #00ff41, #ff0080, #00ff41, transparent);
-            animation: scan 2.5s infinite linear;
-            z-index: 999;
-            box-shadow: 0 0 10px #00ff41;
+        
+        .key {
+            background: #21262d;
+            color: #c9d1d9;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 16px;
+            flex: 1;
+            cursor: pointer;
         }
-
-        @keyframes scan {
-            0% { transform: translateX(-100%); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateX(100%); opacity: 0; }
-        }
-
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.08;
-        }
-
-        .glitch {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 998;
-            opacity: 0;
-        }
-
-        .vibration {
-            animation: vibrate 0.1s infinite;
-        }
-
-        @keyframes vibrate {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
-        }
-
-        .success { color: #00ff88 !important; text-shadow: 0 0 10px #00ff88; }
-        .error { color: #ff0040 !important; text-shadow: 0 0 10px #ff0040; }
-        .warning { color: #ffaa00 !important; text-shadow: 0 0 8px #ffaa00; }
-
-        @media (max-width: 480px) {
-            body { font-size: 10px; }
-            .status-bar { font-size: 8px; padding: 0 8px; }
-            .terminal { padding: 12px; }
-        }
-
-        @media (max-width: 360px) {
-            body { font-size: 9px; }
-            .status-bar { font-size: 7px; }
+        
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            #preview { height: 40vh; }
+            .editor-area { height: 60vh; }
+            .mobile-keyboard { display: flex; }
         }
     </style>
 </head>
 <body>
-    <div class="status-bar">
-        <span>XREXZ0B v3.7.1 | root@darknet</span>
-        <span id="stats">CPU:87% RAM:3GB NET:1.2Gbps</span>
+    <div class="toolbar">
+        <button class="btn" onclick="runCode()">▶️ RUN</button>
+        <button class="btn" onclick="downloadCode()">💾 DOWNLOAD</button>
+        <button class="btn" onclick="clearAll()">🗑️ CLEAR</button>
+        <span style="margin-left:auto;color:#8b949e;">Pegas Code HP</span>
     </div>
     
-    <canvas class="matrix-bg" id="matrix"></canvas>
-    <canvas class="glitch" id="glitch"></canvas>
-    <div class="scan-line"></div>
+    <div class="container">
+        <div class="editor-panel">
+            <div class="editor-tabs">
+                <div class="tab active" onclick="switchTab('html')">HTML</div>
+                <div class="tab" onclick="switchTab('css')">CSS</div>
+                <div class="tab" onclick="switchTab('js')">JS</div>
+            </div>
+            <div class="editor-area">
+                <textarea id="htmlEditor" spellcheck="false">  
+&lt;h1 style="text-align:center;color:#ff6b6b;font-size:2.5rem;margin-top:50px;"&gt;
+  Halo Pegas! 👋
+&lt;/h1&gt;
+&lt;div style="text-align:center;margin-top:20px;"&gt;
+  &lt;p style="font-size:1.2rem;color:#4ecdc4;"&gt;
+    Code di HP gampang banget!
+  &lt;/p&gt;
+&lt;/div&gt;</textarea>
+                <textarea id="cssEditor" spellcheck="false" style="display:none;">
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: -apple-system, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+h1 {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-20px); }
+  60% { transform: translateY(-10px); }
+}</textarea>
+                <textarea id="jsEditor" spellcheck="false" style="display:none;">
+// Klik saya!
+document.addEventListener('click', function(e) {
+  if (e.target.tagName === 'H1') {
+    e.target.style.color = '#' + Math.floor(Math.random()*16777215).toString(16);
+    e.target.innerHTML += ' 😎';
+  }
+});
+
+// Auto rainbow background
+setInterval(() => {
+  document.body.style.background = 
+    `linear-gradient(135deg, 
+      hsl(${Math.random()*360}, 70%, 60%) 0%, 
+      hsl(${Math.random()*360}, 70%, 50%) 100%)`;
+}, 3000);</textarea>
+            </div>
+        </div>
+        <iframe id="preview"></iframe>
+    </div>
     
-    <div class="terminal" id="terminal">
-        <div class="line success">XREXZ0B H4CK3R TERMINAL LOADED</div>
-        <div class="line warning">[!] Touch screen untuk accelerate scan</div>
-        <div class="line"><span class="prompt">root@xrexz0b:~#</span> <span class="cursor" id="cursor"></span></div>
+    <!-- Mobile Keyboard -->
+    <div class="mobile-keyboard">
+        <button class="key" onclick="insertText('(')"> ( )</button>
+        <button class="key" onclick="insertText('{')">{}</button>
+        <button class="key" onclick="insertText('&lt;')">Tags</button>
+        <button class="key" onclick="insertText(';')"> ;</button>
+        <button class="key" onclick="insertText('console.log')">log</button>
     </div>
 
     <script>
-        // Mobile optimized matrix
-        const matrixCanvas = document.getElementById('matrix');
-        const matrixCtx = matrixCanvas.getContext('2d');
-        let cols, drops = [];
-
-        function resizeMatrix() {
-            matrixCanvas.width = window.innerWidth;
-            matrixCanvas.height = window.innerHeight;
-            cols = Math.floor(matrixCanvas.width / 10) * 2;
-            drops = Array(cols).fill(1);
-        }
-        resizeMatrix();
-
-        const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ";
+        let currentTab = 'html';
         
-        function drawMatrix() {
-            matrixCtx.fillStyle = 'rgba(0,0,0,0.08)';
-            matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+        function switchTab(tab) {
+            // Hide all
+            document.querySelectorAll('textarea').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             
-            matrixCtx.fillStyle = 'rgba(0,255,65,0.9)';
-            matrixCtx.font = '10px monospace';
-            
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                matrixCtx.fillText(text, i * 10, drops[i] * 10);
-                if (drops[i] * 10 > matrixCanvas.height && Math.random() > 0.95) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
+            // Show current
+            document.getElementById(tab + 'Editor').style.display = 'block';
+            event.target.classList.add('active');
+            currentTab = tab;
+            runCode();
         }
-
-        // Glitch effect
-        const glitchCanvas = document.getElementById('glitch');
-        const glitchCtx = glitchCanvas.getContext('2d');
         
-        function drawGlitch() {
-            glitchCtx.clearRect(0, 0, glitchCanvas.width, glitchCanvas.height);
-            if (Math.random() < 0.1) {
-                glitchCtx.fillStyle = `rgba(255,0,64,${Math.random() * 0.3})`;
-                glitchCtx.fillRect(0, 0, glitchCanvas.width, glitchCanvas.height * 0.02);
+        function runCode() {
+            const html = document.getElementById('htmlEditor').value;
+            const css = `<style>${document.getElementById('cssEditor').value}</style>`;
+            const js = `<script>${document.getElementById('jsEditor').value}<\/script>`;
+            
+            document.getElementById('preview').srcdoc = html + css + js;
+        }
+        
+        function downloadCode() {
+            const html = document.getElementById('htmlEditor').value;
+            const css = document.getElementById('cssEditor').value;
+            const js = document.getElementById('jsEditor').value;
+            
+            const fullCode = `<!DOCTYPE html>
+<html>
+<head>
+<style>${css}</style>
+</head>
+<body>
+${html}
+<script>${js}</script>
+</body>
+</html>`;
+            
+            const blob = new Blob([fullCode], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pegas-project.html';
+            a.click();
+        }
+        
+        function clearAll() {
+            if (confirm('Hapus semua code?')) {
+                document.getElementById('htmlEditor').value = '';
+                document.getElementById('cssEditor').value = '';
+                document.getElementById('jsEditor').value = '';
+                runCode();
             }
         }
-
-        // Terminal logic
-        const terminal = document.getElementById('terminal');
-        const cursor = document.getElementById('cursor');
-        const stats = document.getElementById('stats');
-
-        const prompts = [
-            "root@xrexz0b:~# ", "hacker@ghost:~$ ", "pwn@target:~# ", 
-            "scan@net:~$ ", "root@payload:~# ", "xrexz0b@dark:~# "
-        ];
-
-        const codeLines = [];
-        const templates = [
-            "exploit = b'\\\\x90' * 100 + shellcode",
-            "sock.connect(('target.com', 1337))",
-            "payload = base64.b64decode('...')",
-            "for port in range(1,65536): scan(port)",
-            "hashcat -m 0 hash.txt rockyou.txt",
-            "msfvenom -p windows/shell_reverse_tcp",
-            "'; DROP TABLE users; --",
-            "buffer = 'A'*1024 + shellcode",
-            "python -c 'import pty;pty.spawn(\"/bin/bash\")'"
-        ];
-
-        // Generate 20k lines untuk mobile (lebih cepat)
-        for (let i = 0; i < 20000; i++) {
-            const randTemplate = templates[Math.floor(Math.random()*templates.length)];
-            codeLines.push(`${String(i).padStart(5,'0')} ${randTemplate.replace('...', Math.random().toString(36).substr(2,8))}`);
+        
+        function insertText(text) {
+            const editor = document.getElementById(currentTab + 'Editor');
+            const start = editor.selectionStart;
+            const end = editor.selectionEnd;
+            editor.value = editor.value.substring(0, start) + text + editor.value.substring(end);
+            editor.focus();
+            runCode();
         }
-
-        let lineIdx = 0, charIdx = 0, promptIdx = 0;
-        let speed = 25; // Faster untuk mobile
-        let isAccelerated = false;
-
-        function typeNextLine() {
-            const lineEl = document.createElement('div');
-            lineEl.className = 'line';
-            
-            const prompt = prompts[promptIdx % prompts.length];
-            const cmd = ['nmap -sS', 'hydra -l admin', 'sqlmap -u', 'msfvenom'][Math.floor(Math.random()*4)];
-            
-            lineEl.innerHTML = `<span class="prompt">${prompt}</span>`;
-            terminal.appendChild(lineEl);
-            scrollBottom();
-
-            const text = cmd + codeLines[lineIdx].slice(25);
-            
-            function typeChar() {
-                if (charIdx < text.length) {
-                    lineEl.innerHTML += text[charIdx];
-                    charIdx++;
-                    scrollBottom();
-                    
-                    const delay = isAccelerated ? speed/3 : speed;
-                    setTimeout(typeChar, delay + Math.random()*10);
-                } else {
-                    // Fake output
-                    setTimeout(() => {
-                        const outEl = document.createElement('div');
-                        outEl.className = `line ${['success','error','warning'][Math.floor(Math.random()*3)]}`;
-                        outEl.textContent = `[${['+','-','!'][Math.floor(Math.random()*3)]}] ${Math.random().toString(36).substr(2,12)} (${Math.floor(Math.random()*9999)}B)`;
-                        terminal.appendChild(outEl);
-                        scrollBottom();
-                        
-                        lineIdx++; charIdx = 0; promptIdx++;
-                        
-                        if (lineIdx < 100) {
-                            setTimeout(typeNextLine, isAccelerated ? 200 : 800);
-                        }
-                    }, 150);
-                }
+        
+        // Auto run
+        setTimeout(runCode, 500);
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'Enter') runCode();
+                if (e.key === 's') { e.preventDefault(); downloadCode(); }
             }
-            typeChar();
-        }
-
-        function scrollBottom() {
-            terminal.scrollTop = terminal.scrollHeight;
-        }
-
-        // Update stats
-        setInterval(() => {
-            const cpu = Math.floor(Math.random()*100);
-            const ram = Math.floor(Math.random()*16);
-            stats.textContent = `CPU:${cpu}% RAM:${ram}GB NET:${(Math.random()*10).toFixed(1)}Gbps`;
-        }, 2000);
-
-        // Animation loop
-        function animate() {
-            drawMatrix();
-            drawGlitch();
-            requestAnimationFrame(animate);
-        }
-
-        // Touch controls
-        document.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            document.body.classList.add('vibration');
-            isAccelerated = true;
-            speed = 8;
-            setTimeout(() => {
-                document.body.classList.remove('vibration');
-                isAccelerated = false;
-                speed = 25;
-            }, 3000);
-        }, {passive: false});
-
-        // Start
-        resizeMatrix();
-        setTimeout(typeNextLine, 800);
-        animate();
-
-        // Resize handler
-        window.addEventListener('resize', resizeMatrix);
-        window.addEventListener('orientationchange', () => {
-            setTimeout(resizeMatrix, 300);
         });
     </script>
 </body>
