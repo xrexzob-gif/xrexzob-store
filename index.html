@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perjalanan Cinta Kita 💕</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
@@ -14,401 +12,350 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
             height: 100vh;
+            overflow: hidden;
             position: relative;
         }
 
-        /* Animasi hati */
-        .hearts {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .heart {
+        body::before {
+            content: '';
             position: absolute;
-            color: #ff69b4;
-            font-size: 20px;
-            animation: float 6s infinite linear;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-
-        /* Loading Screen */
-        .intro {
-            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ff6b6b, #feca57, #ff9ff3, #54a0ff);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="20" cy="20" r="2" fill="url(%23a)"><animate attributeName="cy" values="20;80;20" dur="3s" repeatCount="indefinite"/></circle><circle cx="80" cy="80" r="1.5" fill="url(%23a)"><animate attributeName="cy" values="80;20;80" dur="4s" repeatCount="indefinite"/></circle><circle cx="50" cy="10" r="1.8" fill="url(%23a)"><animate attributeName="cy" values="10;90;10" dur="5s" repeatCount="indefinite"/></circle></svg>');
+            pointer-events: none;
+        }
+
+        .intro {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            color: white;
+            height: 100vh;
             text-align: center;
+            color: white;
+            position: relative;
+            z-index: 2;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .heart {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            animation: heartbeat 1.5s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.8));
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
         }
 
         .intro h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 4rem;
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(255,255,255,0.8);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .start-btn {
+            padding: 1.2rem 3rem;
+            font-size: 1.3rem;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,107,157,0.4);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .start-btn {
-            padding: 20px 40px;
-            font-size: 1.5rem;
-            background: rgba(255,255,255,0.2);
-            border: 3px solid white;
-            border-radius: 50px;
-            color: white;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            0% { box-shadow: 0 10px 30px rgba(255,107,157,0.4); }
+            50% { box-shadow: 0 10px 40px rgba(255,107,157,0.6); }
+            100% { box-shadow: 0 10px 30px rgba(255,107,157,0.4); }
         }
 
         .start-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255,107,157,0.6);
         }
 
-        /* Main Content */
         .main-content {
             display: none;
             height: 100vh;
             position: relative;
-            overflow: hidden;
         }
 
-        /* Audio Player */
-        .audio-player {
+        .music-player {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 100;
-            background: rgba(255,255,255,0.9);
-            padding: 15px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            opacity: 0.8;
         }
 
-        /* Countdown */
-        .countdown {
+        .timer {
             position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.95);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            z-index: 100;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #c44569;
+        }
+
+        .photo-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .photo {
+            width: 400px;
+            height: 500px;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            object-fit: cover;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: scale(0.8) rotateY(10deg);
+            opacity: 0;
+        }
+
+        .photo.active {
+            transform: scale(1) rotateY(0deg);
+            opacity: 1;
+        }
+
+        .photo:hover {
+            transform: scale(1.05);
+        }
+
+        .quote {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 2rem 3rem;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #555;
+            font-style: italic;
+            border-left: 5px solid #ff6b9d;
+        }
+
+        .progress {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 6px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b9d, #c44569);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+
+        .photo-counter {
+            position: absolute;
             top: 100px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255,255,255,0.95);
-            padding: 20px 40px;
-            border-radius: 30px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            text-align: center;
-            z-index: 99;
-            font-family: 'Dancing Script', cursive;
-        }
-
-        .countdown h2 {
-            font-size: 2.5rem;
-            color: #e91e63;
-            margin-bottom: 10px;
-        }
-
-        .countdown .date {
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             font-size: 1.2rem;
-            color: #666;
-            font-family: 'Poppins', sans-serif;
+            color: #c44569;
+            font-weight: bold;
         }
 
-        /* Memories */
-        .memories {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            padding: 200px 20px 100px;
-            gap: 30px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-
-        .memory {
-            background: rgba(255,255,255,0.9);
-            border-radius: 30px;
-            padding: 30px;
-            max-width: 500px;
-            margin: 0 auto;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            transform: translateY(50px);
-            opacity: 0;
-            animation: slideUp 1s ease forwards;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .memory:nth-child(1) { animation-delay: 0.2s; }
-        .memory:nth-child(2) { animation-delay: 0.4s; }
-        .memory:nth-child(3) { animation-delay: 0.6s; }
-        .memory:nth-child(4) { animation-delay: 0.8s; }
-        .memory:nth-child(5) { animation-delay: 1s; }
-        .memory:nth-child(6) { animation-delay: 1.2s; }
-        .memory:nth-child(7) { animation-delay: 1.4s; }
-        .memory:nth-child(8) { animation-delay: 1.6s; }
-        .memory:nth-child(9) { animation-delay: 1.8s; }
-
-        @keyframes slideUp {
-            to {
-                transform: translateY(0);
-                opacity: 1;
+        @media (max-width: 768px) {
+            .photo {
+                width: 90vw;
+                height: 60vh;
             }
-        }
-
-        .memory img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-
-        .memory-text {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.4rem;
-            color: #e91e63;
-            text-align: center;
-            line-height: 1.4;
-            margin-bottom: 15px;
-        }
-
-        .memory-time {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
-            color: #888;
-            text-align: right;
-        }
-
-        /* Love Quote */
-        .love-quote {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #ff9a9e, #fecfef);
-            color: white;
-            padding: 25px 40px;
-            border-radius: 30px;
-            text-align: center;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.6rem;
-            max-width: 90%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            z-index: 98;
+            .intro h1 { font-size: 2rem; }
+            .heart { font-size: 4rem; }
+            .quote { 
+                position: relative;
+                bottom: 0;
+                margin: 2rem 1rem;
+                max-width: none;
+            }
+            .progress { bottom: 80px; width: 80vw; }
         }
     </style>
 </head>
 <body>
-    <!-- Hearts Background -->
-    <div class="hearts" id="hearts"></div>
+    <audio id="bgMusic" loop>
+        <source src="hindia.mp3" type="audio/mpeg">
+    </audio>
 
-    <!-- Intro Screen -->
     <div class="intro" id="intro">
-        <h1>💖 Perjalanan Cinta Kita 💖</h1>
-        <p style="font-size: 1.3rem; margin-bottom: 40px;">Tekan tombol untuk memulai kenangan indah...</p>
-        <button class="start-btn" onclick="startJourney()">🌹 MULAI PERJALANAN KITA 🌹</button>
+        <div class="heart">💖</div>
+        <h1>Perjalanan Cinta Kita</h1>
+        <p>Ketemu dirimu adalah keajaiban terindah dalam hidup ini. Siapkah kamu menelusuri setiap momen manis bersamaku?</p>
+        <button class="start-btn" onclick="startJourney()">🌸 Mulai Perjalanan Kita 🌸</button>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <!-- Audio Player -->
-        <div class="audio-player">
-            <audio id="bgMusic" loop>
-                <source src="hindia.mp3" type="audio/mpeg">
-            </audio>
-            <button onclick="toggleMusic()" id="musicBtn" style="background:none;border:none;font-size:1.5rem;cursor:pointer;">🎵</button>
+        <div class="timer" id="timer"></div>
+        <div class="photo-counter" id="photoCounter"></div>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
         </div>
-
-        <!-- Countdown -->
-        <div class="countdown" id="countdown">
-            <h2 id="countdownText">Menghitung Hari Bahagia...</h2>
-            <div class="date">05 Februari 2026</div>
+        
+        <div class="photo-container">
+            <img src="1.jpg" class="photo active" data-quote="1">
+            <img src="2.jpg" class="photo" data-quote="2">
+            <img src="3.jpg" class="photo" data-quote="3">
+            <img src="4.jpg" class="photo" data-quote="4">
+            <img src="5.jpg" class="photo" data-quote="5">
+            <img src="6.jpg" class="photo" data-quote="6">
+            <img src="8.jpg" class="photo" data-quote="7">
+            <img src="9.jpg" class="photo" data-quote="8">
         </div>
+        
+        <div class="quote" id="quote"></div>
 
-        <!-- Memories -->
-        <div class="memories" id="memories">
-            <div class="memory">
-                <img src="1.jpg" alt="Kenangan 1">
-                <div class="memory-text">Pertama kali tatapan mata kita bertemu, dunia seakan berhenti berputar ✨</div>
-                <div class="memory-time" id="time1"></div>
-            </div>
-            <div class="memory">
-                <img src="2.jpg" alt="Kenangan 2">
-                <div class="memory-text">Senyummu adalah sinar matahari yang paling hangat di hatiku 🌞</div>
-                <div class="memory-time" id="time2"></div>
-            </div>
-            <div class="memory">
-                <img src="3.jpg" alt="Kenangan 3">
-                <div class="memory-text">Setiap detik bersamamu adalah keajaiban yang tak ternilai 💫</div>
-                <div class="memory-time" id="time3"></div>
-            </div>
-            <div class="memory">
-                <img src="4.jpg" alt="Kenangan 4">
-                <div class="memory-text">Kau adalah mimpi indah yang menjadi kenyataan di hidupku 💭</div>
-                <div class="memory-time" id="time4"></div>
-            </div>
-            <div class="memory">
-                <img src="5.jpg" id="img5" alt="Kenangan 5">
-                <div class="memory-text">Pelukmu adalah rumah terbaik yang pernah kurasakan 🏠</div>
-                <div class="memory-time" id="time5"></div>
-            </div>
-            <div class="memory">
-                <img src="6.jpg" alt="Kenangan 6">
-                <div class="memory-text">Bersamamu, setiap hari adalah petualangan cinta yang manis 🌈</div>
-                <div class="memory-time" id="time6"></div>
-            </div>
-            <div class="memory">
-                <img src="8.jpg" alt="Kenangan 7">
-                <div class="memory-text">Kau adalah bagian terindah dari cerita hidupku 📖</div>
-                <div class="memory-time" id="time7"></div>
-            </div>
-            <div class="memory">
-                <img src="9.jpg" alt="Kenangan 8">
-                <div class="memory-text">Cintaku padamu tak pernah pudar, selamanya bersamamu 💕</div>
-                <div class="memory-time" id="time8"></div>
-            </div>
-        </div>
-
-        <!-- Love Quote -->
-        <div class="love-quote">
-            "Kau adalah alasan hatiku berdetak lebih kencang setiap harinya 💓"
+        <div class="music-player">
+            <button onclick="toggleMusic()" id="musicBtn" style="background:none;border:none;font-size:2rem;cursor:pointer;">🎵</button>
         </div>
     </div>
 
     <script>
+        // Tanggal jadian: 05 Februari 2026 pukul 00:00
+        const startDate = new Date('2026-02-05T00:00:00');
+        const photos = document.querySelectorAll('.photo');
+        const quotes = [
+            "Setiap detik bersamamu adalah kebahagiaan yang tak ternilai. Kamu adalah alasan hatiku berdegup kencang setiap hari 💕",
+            "Senyummu adalah sinar matahari yang menghangatkan hari-hariku. Terima kasih telah memilihku untuk dicintai 🌸",
+            "Dalam pelukanmu, dunia terasa sempurna. Kamu adalah rumah yang selalu kuinginkan ❤️",
+            "Mata indahmu adalah tempatku tersesat setiap hari. Aku beruntung sekali bisa memanggilmu milikku ✨",
+            "Cinta kita seperti bintang di langit malam, semakin lama semakin terang dan indah 🌟",
+            "Setiap 'pagi' bersamamu adalah awal yang sempurna. Kamu membuat hidupku jadi dongeng cinta 💖",
+            "Tanganmu dalam genggamanku adalah janji abadi. Bersama selamanya, ya sayang? 🤍",
+            "Kamu bukan hanya cinta pertamaku, tapi juga cinta terakhirku. Selamanya milikmu 💍"
+        ];
+
+        let currentPhotoIndex = 0;
         let musicPlaying = false;
-        let journeyStarted = false;
+        const bgMusic = document.getElementById('bgMusic');
 
-        // Create floating hearts
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = '💖';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-            document.getElementById('hearts').appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 6000);
-        }
-
-        // Start journey
         function startJourney() {
             document.getElementById('intro').style.display = 'none';
             document.getElementById('mainContent').style.display = 'block';
-            journeyStarted = true;
-            
-            // Start music
-            document.getElementById('bgMusic').play().catch(e => console.log('Autoplay blocked'));
+            bgMusic.play().catch(() => {});
             musicPlaying = true;
             document.getElementById('musicBtn').textContent = '🔇';
-            
-            // Start timers and hearts
-            updateCountdown();
-            updateTimes();
-            setInterval(createHeart, 300);
+            startTimer();
+            showPhoto(0);
         }
 
-        // Toggle music
         function toggleMusic() {
-            const audio = document.getElementById('bgMusic');
-            const btn = document.getElementById('musicBtn');
-            
             if (musicPlaying) {
-                audio.pause();
-                btn.textContent = '🔇';
-                musicPlaying = false;
+                bgMusic.pause();
+                document.getElementById('musicBtn').textContent = '🎵';
             } else {
-                audio.play();
-                btn.textContent = '🎵';
-                musicPlaying = true;
+                bgMusic.play();
+                document.getElementById('musicBtn').textContent = '🔇';
             }
+            musicPlaying = !musicPlaying;
         }
 
-        // Countdown to 05-02-2026
-        function updateCountdown() {
-            const targetDate = new Date('2026-02-05T00:00:00').getTime();
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+        function startTimer() {
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - startDate;
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                const months = Math.floor(days / 30);
+                const remainingDays = days % 30;
 
-            document.getElementById('countdownText').innerHTML = 
-                `${days}H ${hours}J ${minutes}M ${seconds}D lagi... 💑`;
+                document.getElementById('timer').innerHTML = `
+                    💕 Kita sudah bersama <br>
+                    ${months} bulan ${remainingDays} hari <br>
+                    ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}
+                `;
+            }, 1000);
         }
 
-        // Update memory times
-        function updateTimes() {
-            const now = new Date();
-            const timeString = now.toLocaleString('id-ID', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
+        function showPhoto(index) {
+            photos.forEach((photo, i) => {
+                photo.classList.toggle('active', i === index);
             });
-
-            for (let i = 1; i <= 8; i++) {
-                document.getElementById(`time${i}`).textContent = timeString;
+            
+            document.getElementById('quote').textContent = quotes[index];
+            document.getElementById('photoCounter').textContent = `Kenangan ${index + 1} dari ${photos.length} 💕`;
+            
+            const progress = ((index + 1) / photos.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            
+            if (index < photos.length - 1) {
+                setTimeout(() => showPhoto(index + 1), 5000);
             }
         }
 
-        // Update every second
-        setInterval(() => {
-            if (journeyStarted) {
-                updateCountdown();
-                updateTimes();
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentPhotoIndex < photos.length - 1) {
+                showPhoto(++currentPhotoIndex);
+            } else if (e.key === 'ArrowLeft' && currentPhotoIndex > 0) {
+                showPhoto(--currentPhotoIndex);
             }
-        }, 1000);
+        });
 
-        // Preload images
-        const images = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '8.jpg', '9.jpg'];
-        images.forEach(img => {
-            const image = new Image();
-            image.src = img;
+        // Auto slideshow dengan pause on hover
+        let slideshowInterval;
+        document.querySelector('.photo-container').addEventListener('mouseenter', () => {
+            clearInterval(slideshowInterval);
+        });
+        document.querySelector('.photo-container').addEventListener('mouseleave', () => {
+            slideshowInterval = setInterval(() => {
+                if (currentPhotoIndex < photos.length - 1) {
+                    showPhoto(++currentPhotoIndex);
+                }
+            }, 5000);
         });
     </script>
 </body>
