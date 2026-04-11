@@ -2,276 +2,286 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pegas Code HP - Mobile Editor</title>
+    <meta name="viewport" content="width=device-width">
+    <title>Xrexzob Calculator v2.0 - HACKED</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #0d1117;
-            color: #c9d1d9;
+            background: #000;
+            color: #00ff41;
+            font-family: 'Orbitron', monospace;
             height: 100vh;
             overflow: hidden;
-        }
-        
-        .toolbar {
-            background: #21262d;
-            padding: 12px;
-            display: flex;
-            gap: 10px;
-            border-bottom: 1px solid #30363d;
-        }
-        
-        .btn {
-            background: #238636;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            touch-action: manipulation;
-        }
-        
-        .btn:hover { background: #2ea043; }
-        .btn:active { background: #1a7f37; }
-        
-        .container {
-            display: flex;
-            height: calc(100vh - 60px);
-        }
-        
-        .editor-panel {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-        
-        .editor-tabs {
-            background: #161b22;
-            padding: 8px;
-            display: flex;
-            gap: 4px;
-            border-bottom: 1px solid #30363d;
-        }
-        
-        .tab {
-            padding: 6px 12px;
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 6px 6px 0 0;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        
-        .tab.active { background: #21262d; border-bottom-color: #21262d; }
-        
-        .editor-area {
-            flex: 1;
             position: relative;
         }
         
-        #htmlEditor, #cssEditor, #jsEditor {
+        /* Matrix rain effect */
+        canvas { position: fixed; top: 0; left: 0; z-index: 1; }
+        
+        .terminal {
+            position: relative;
+            z-index: 10;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(15px);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px;
+            max-width: 400px;
+            margin: 20px auto;
+            box-shadow: 
+                0 0 50px #00ff41,
+                inset 0 0 50px rgba(0,255,65,0.1);
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            10% { transform: translate(-2px, 2px); }
+            20% { transform: translate(2px, -2px); }
+            30% { transform: translate(-1px, 1px); }
+            40% { transform: translate(-2px, -1px); }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .logo {
+            font-size: 18px;
+            font-weight: 900;
+            color: #ff0040;
+            text-shadow: 0 0 10px #ff0040;
+            margin-bottom: 5px;
+        }
+        
+        .version { color: #00ff41; }
+        
+        .display {
+            background: #001100;
+            border: 1px solid #00aa28;
+            color: #00ff41;
+            font-size: 2.2rem;
+            font-weight: 700;
+            padding: 20px;
+            text-align: right;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            min-height: 70px;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 20px rgba(0,255,65,0.2);
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #00ff41;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        
+        button {
+            height: 65px;
+            border: 1px solid #00aa28;
+            border-radius: 10px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            background: #0d1117;
-            color: #c9d1d9;
-            border: none;
-            padding: 16px;
-            resize: none;
-            outline: none;
+            background: linear-gradient(90deg, transparent, rgba(0,255,65,0.3), transparent);
+            transition: 0.5s;
         }
         
-        #preview {
-            flex: 1;
-            border-left: 1px solid #30363d;
-            background: white;
-            min-width: 300px;
-        }
+        button:hover::before { left: 100%; }
         
-        .mobile-keyboard {
+        .num { 
+            background: #001a00; 
+            color: #00ff41; 
+            box-shadow: 0 0 15px rgba(0,255,65,0.3);
+        }
+        .num:hover { background: #002200; transform: scale(1.02); }
+        
+        .op { 
+            background: #1a0000; 
+            color: #ff0040; 
+            box-shadow: 0 0 15px rgba(255,0,64,0.5);
+            font-size: 1.6rem;
+        }
+        .op:hover { background: #2a0000; }
+        
+        .eq { 
+            background: linear-gradient(45deg, #ff0040, #00ff41); 
+            color: #000; 
+            font-size: 1.8rem;
+            box-shadow: 0 0 25px #ff0040;
+        }
+        .eq:hover { transform: scale(1.05); box-shadow: 0 0 35px #00ff41; }
+        
+        .clear { 
+            background: #330000; 
+            color: #ff6666; 
+            box-shadow: 0 0 15px rgba(255,102,102,0.5);
+        }
+        .clear:hover { background: #440000; }
+        
+        .scanline {
             position: fixed;
-            bottom: 0;
+            top: 0;
             left: 0;
-            right: 0;
-            background: #161b22;
-            padding: 10px;
-            display: flex;
-            gap: 5px;
-            border-top: 1px solid #30363d;
-            display: none;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff41, transparent);
+            animation: scan 3s linear infinite;
+            z-index: 20;
         }
         
-        .key {
-            background: #21262d;
-            color: #c9d1d9;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-size: 16px;
-            flex: 1;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 768px) {
-            .container { flex-direction: column; }
-            #preview { height: 40vh; }
-            .editor-area { height: 60vh; }
-            .mobile-keyboard { display: flex; }
+        @keyframes scan {
+            0% { top: -2px; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100vh; opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <div class="toolbar">
-        <button class="btn" onclick="runCode()">▶️ RUN</button>
-        <button class="btn" onclick="downloadCode()">💾 DOWNLOAD</button>
-        <button class="btn" onclick="clearAll()">🗑️ CLEAR</button>
-        <span style="margin-left:auto;color:#8b949e;">Pegas Code HP</span>
-    </div>
+    <canvas id="matrix"></canvas>
+    <div class="scanline"></div>
     
-    <div class="container">
-        <div class="editor-panel">
-            <div class="editor-tabs">
-                <div class="tab active" onclick="switchTab('html')">HTML</div>
-                <div class="tab" onclick="switchTab('css')">CSS</div>
-                <div class="tab" onclick="switchTab('js')">JS</div>
-            </div>
-            <div class="editor-area">
-                <textarea id="htmlEditor" spellcheck="false">  
-&lt;h1 style="text-align:center;color:#ff6b6b;font-size:2.5rem;margin-top:50px;"&gt;
-  Halo Pegas! 👋
-&lt;/h1&gt;
-&lt;div style="text-align:center;margin-top:20px;"&gt;
-  &lt;p style="font-size:1.2rem;color:#4ecdc4;"&gt;
-    Code di HP gampang banget!
-  &lt;/p&gt;
-&lt;/div&gt;</textarea>
-                <textarea id="cssEditor" spellcheck="false" style="display:none;">
-body {
-  margin: 0;
-  padding: 20px;
-  font-family: -apple-system, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  min-height: 100vh;
-}
-
-h1 {
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-20px); }
-  60% { transform: translateY(-10px); }
-}</textarea>
-                <textarea id="jsEditor" spellcheck="false" style="display:none;">
-// Klik saya!
-document.addEventListener('click', function(e) {
-  if (e.target.tagName === 'H1') {
-    e.target.style.color = '#' + Math.floor(Math.random()*16777215).toString(16);
-    e.target.innerHTML += ' 😎';
-  }
-});
-
-// Auto rainbow background
-setInterval(() => {
-  document.body.style.background = 
-    `linear-gradient(135deg, 
-      hsl(${Math.random()*360}, 70%, 60%) 0%, 
-      hsl(${Math.random()*360}, 70%, 50%) 100%)`;
-}, 3000);</textarea>
-            </div>
+    <div class="terminal">
+        <div class="header">
+            <div class="logo">Xrexzob v2.0</div>
+            <div class="version">[HACKED BY PEGAS]</div>
+            <div style="color:#666;font-size:12px;">> calculator module loaded</div>
         </div>
-        <iframe id="preview"></iframe>
-    </div>
-    
-    <!-- Mobile Keyboard -->
-    <div class="mobile-keyboard">
-        <button class="key" onclick="insertText('(')"> ( )</button>
-        <button class="key" onclick="insertText('{')">{}</button>
-        <button class="key" onclick="insertText('&lt;')">Tags</button>
-        <button class="key" onclick="insertText(';')"> ;</button>
-        <button class="key" onclick="insertText('console.log')">log</button>
+        
+        <div class="display" id="display">0</div>
+        
+        <div class="buttons">
+            <button class="clear" onclick="clearAll()">CLEAR</button>
+            <button class="clear" onclick="deleteLast()">DEL</button>
+            <button class="op" onclick="appendToDisplay('/')">/</button>
+            <button class="op" onclick="appendToDisplay('*')">x</button>
+            
+            <button class="num" onclick="appendToDisplay('7')">7</button>
+            <button class="num" onclick="appendToDisplay('8')">8</button>
+            <button class="num" onclick="appendToDisplay('9')">9</button>
+            <button class="op" onclick="appendToDisplay('-')">-</button>
+            
+            <button class="num" onclick="appendToDisplay('4')">4</button>
+            <button class="num" onclick="appendToDisplay('5')">5</button>
+            <button class="num" onclick="appendToDisplay('6')">6</button>
+            <button class="op" onclick="appendToDisplay('+')">+</button>
+            
+            <button class="num" onclick="appendToDisplay('1')">1</button>
+            <button class="num" onclick="appendToDisplay('2')">2</button>
+            <button class="num" onclick="appendToDisplay('3')">3</button>
+            <button class="eq" onclick="calculate()">=</button>
+            
+            <button class="num" onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
+            <button class="num" onclick="appendToDisplay('.')">.</button>
+        </div>
+        
+        <div style="text-align:center;margin-top:15px;font-size:11px;color:#666;">
+            > press keys 0-9 + - * / = Enter
+        </div>
     </div>
 
     <script>
-        let currentTab = 'html';
+        // Matrix rain
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
         
-        function switchTab(tab) {
-            // Hide all
-            document.querySelectorAll('textarea').forEach(t => t.style.display = 'none');
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Show current
-            document.getElementById(tab + 'Editor').style.display = 'block';
-            event.target.classList.add('active');
-            currentTab = tab;
-            runCode();
+            ctx.fillStyle = '#00ff41';
+            ctx.font = fontSize + 'px monospace';
+            
+            drops.forEach((y, i) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, y * fontSize);
+                
+                if (y * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            });
         }
         
-        function runCode() {
-            const html = document.getElementById('htmlEditor').value;
-            const css = `<style>${document.getElementById('cssEditor').value}</style>`;
-            const js = `<script>${document.getElementById('jsEditor').value}<\/script>`;
-            
-            document.getElementById('preview').srcdoc = html + css + js;
+        setInterval(drawMatrix, 50);
+        
+        // Calculator logic
+        let display = '0';
+        
+        function appendToDisplay(value) {
+            if (display === '0' || display === 'Error') {
+                display = value;
+            } else {
+                display += value;
+            }
+            updateDisplay();
         }
         
-        function downloadCode() {
-            const html = document.getElementById('htmlEditor').value;
-            const css = document.getElementById('cssEditor').value;
-            const js = document.getElementById('jsEditor').value;
-            
-            const fullCode = `<!DOCTYPE html>
-<html>
-<head>
-<style>${css}</style>
-</head>
-<body>
-${html}
-<script>${js}</script>
-</body>
-</html>`;
-            
-            const blob = new Blob([fullCode], {type: 'text/html'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'pegas-project.html';
-            a.click();
+        function updateDisplay() {
+            document.getElementById('display').textContent = display;
+        }
+        
+        function calculate() {
+            try {
+                const result = eval(display.replace('x', '*'));
+                display = Number.isInteger(result) ? result : result.toFixed(8);
+                updateDisplay();
+            } catch {
+                display = 'Error';
+                updateDisplay();
+            }
         }
         
         function clearAll() {
-            if (confirm('Hapus semua code?')) {
-                document.getElementById('htmlEditor').value = '';
-                document.getElementById('cssEditor').value = '';
-                document.getElementById('jsEditor').value = '';
-                runCode();
-            }
+            display = '0';
+            updateDisplay();
         }
         
-        function insertText(text) {
-            const editor = document.getElementById(currentTab + 'Editor');
-            const start = editor.selectionStart;
-            const end = editor.selectionEnd;
-            editor.value = editor.value.substring(0, start) + text + editor.value.substring(end);
-            editor.focus();
-            runCode();
+        function deleteLast() {
+            display = display.slice(0, -1) || '0';
+            updateDisplay();
         }
         
-        // Auto run
-        setTimeout(runCode, 500);
-        
-        // Keyboard shortcuts
+        // Keyboard
         document.addEventListener('keydown', e => {
-            if (e.ctrlKey || e.metaKey) {
-                if (e.key === 'Enter') runCode();
-                if (e.key === 's') { e.preventDefault(); downloadCode(); }
-            }
+            if (/[0-9.]/.test(e.key)) appendToDisplay(e.key);
+            if (e.key === '+') appendToDisplay('+');
+            if (e.key === '-') appendToDisplay('-');
+            if (e.key === '*') appendToDisplay('x');
+            if (e.key === '/') appendToDisplay('/');
+            if (e.key === 'Enter' || e.key === '=') calculate();
+            if (e.key === 'Escape') clearAll();
+            if (e.key === 'Backspace') deleteLast();
         });
     </script>
 </body>
