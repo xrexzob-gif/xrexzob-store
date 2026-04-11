@@ -2,377 +2,171 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>AI-Xrexzob Calculator v3.0 [NEURAL HACK]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web AI Skillan - Index</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background: radial-gradient(circle at 20% 80%, #0f0f23 0%, #000 50%, #1a0033 100%);
-            color: #00ff88;
-            font-family: 'Orbitron', monospace;
-            height: 100vh;
-            overflow: hidden;
-            position: relative;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        /* Neural network visualization */
-        #neural-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
         }
         
-        .terminal {
-            position: relative;
-            z-index: 10;
-            background: linear-gradient(145deg, rgba(0,15,35,0.95), rgba(10,0,51,0.95));
-            backdrop-filter: blur(25px);
-            border: 2px solid #00ff88;
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 30px;
-            margin: 25px auto;
-            max-width: 420px;
-            box-shadow: 
-                0 0 60px #00ff88,
-                0 0 120px rgba(0,255,136,0.3),
-                inset 0 0 40px rgba(0,255,136,0.1);
-            animation: neuralPulse 4s infinite;
-        }
-        
-        @keyframes neuralPulse {
-            0%, 100% { box-shadow: 0 0 60px #00ff88, 0 0 120px rgba(0,255,136,0.3); }
-            50% { box-shadow: 0 0 80px #ff0088, 0 0 160px rgba(255,0,136,0.4); }
-        }
-        
-        .ai-header {
+            padding: 3rem;
             text-align: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #00ff88;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 90%;
         }
         
-        .logo {
-            font-size: 20px;
-            font-weight: 900;
-            background: linear-gradient(45deg, #00ff88, #ff0088, #0088ff);
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 8px;
-            animation: aiGlitch 2s infinite;
         }
         
-        @keyframes aiGlitch {
-            0%, 100% { transform: translate(0); }
-            15% { transform: translate(-2px, 1px); }
-            35% { transform: translate(2px, -1px); }
-            50% { transform: translate(-1px, 2px); }
-            75% { transform: translate(1px, -2px); }
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
         }
         
-        .ai-status {
-            font-size: 12px;
-            color: #88ff88;
-            font-family: 'Roboto Mono', monospace;
-        }
-        
-        .loading-dots::after {
-            content: '...';
-            animation: dots 1.5s infinite;
-        }
-        
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
-        }
-        
-        .display {
-            background: linear-gradient(145deg, #000, #001100);
-            border: 2px solid #00aa44;
-            color: #00ff88;
-            font-size: 2.4rem;
-            font-weight: 700;
-            padding: 25px;
-            text-align: right;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            min-height: 85px;
-            box-sizing: border-box;
-            box-shadow: 
-                inset 0 0 30px rgba(0,255,136,0.2),
-                0 0 30px rgba(0,255,136,0.4);
-            letter-spacing: 3px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .display::before {
-            content: 'AI-NEURAL-CALC';
-            position: absolute;
-            top: 5px;
-            left: 10px;
-            font-size: 10px;
-            color: rgba(0,255,136,0.4);
-            font-weight: 300;
-        }
-        
-        .buttons {
+        .features {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
         
-        button {
-            height: 70px;
-            border: 2px solid #00aa44;
-            border-radius: 12px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            font-family: 'Orbitron', monospace;
+        .feature {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .feature h3 {
+            margin-bottom: 0.5rem;
+            color: #ffd93d;
+        }
+        
+        .chat-btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            color: white;
             cursor: pointer;
-            position: relative;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        
+        .chat-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .typing {
             overflow: hidden;
-            transition: all 0.3s;
-            background: rgba(0,20,0,0.8);
-            color: #00ff88;
-            text-shadow: 0 0 10px #00ff88;
+            border-right: 3px solid #ffd93d;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
         }
         
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.4), transparent);
-            transition: 0.6s;
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
         }
         
-        button:hover::before { left: 100%; }
-        button:active { transform: scale(0.97); }
-        
-        .num:hover { 
-            background: rgba(0,40,0,0.9); 
-            box-shadow: 0 0 25px rgba(0,255,136,0.6);
-        }
-        
-        .op { 
-            border-color: #aa4400;
-            color: #ff8844;
-            text-shadow: 0 0 10px #ff8844;
-        }
-        .op:hover { box-shadow: 0 0 25px rgba(255,136,68,0.6); }
-        
-        .eq { 
-            border-color: #ff0088;
-            color: #ff44aa;
-            font-size: 1.9rem;
-            background: rgba(30,0,20,0.9);
-            text-shadow: 0 0 15px #ff44aa;
-        }
-        .eq:hover { 
-            box-shadow: 0 0 40px #ff44aa;
-            transform: scale(1.03);
-        }
-        
-        .clear { 
-            border-color: #aa0000;
-            color: #ff6666;
-            text-shadow: 0 0 10px #ff6666;
-        }
-        .clear:hover { box-shadow: 0 0 25px rgba(255,102,102,0.6); }
-        
-        .ai-log {
-            margin-top: 20px;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 11px;
-            color: #88ff88;
-            height: 60px;
-            overflow: hidden;
-        }
-        
-        .log-line {
-            opacity: 0;
-            animation: logFade 0.5s forwards;
-        }
-        
-        @keyframes logFade {
-            to { opacity: 1; }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #ffd93d }
         }
     </style>
 </head>
 <body>
-    <canvas id="neural-bg"></canvas>
-    
-    <div class="terminal">
-        <div class="ai-header">
-            <div class="logo">AI-Xrexzob v3.0</div>
-            <div class="ai-status">[NEURAL NETWORK v3.7.2]</div>
-            <div class="ai-status loading-dots">AI processing<span class="loading-dots"></span></div>
+    <div class="container">
+        <h1>🤖 Web AI Skillan</h1>
+        <p class="subtitle">Otaknya ga ada, tapi skillnya <span class="typing">MAX LEVEL! 🔥</span></p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>💻 Coding</h3>
+                <p>HTML, CSS, JS, Python</p>
+            </div>
+            <div class="feature">
+                <h3>🧠 Chat</h3>
+                <p>Jawab semua pertanyaan</p>
+            </div>
+            <div class="feature">
+                <h3>🎨 Design</h3>
+                <p>UI/UX modern</p>
+            </div>
+            <div class="feature">
+                <h3>🚀 API</h3>
+                <p>Integrasi mudah</p>
+            </div>
         </div>
         
-        <div class="display" id="display">0</div>
+        <a href="#chat" class="chat-btn">Chat Sekarang! 💬</a>
         
-        <div class="buttons">
-            <button class="clear" onclick="clearAll()">CLEAR</button>
-            <button class="clear" onclick="deleteLast()">DEL</button>
-            <button class="op" onclick="appendToDisplay('/')">/</button>
-            <button class="op" onclick="appendToDisplay('*')">×</button>
-            
-            <button class="num" onclick="appendToDisplay('7')">7</button>
-            <button class="num" onclick="appendToDisplay('8')">8</button>
-            <button class="num" onclick="appendToDisplay('9')">9</button>
-            <button class="op" onclick="appendToDisplay('-')">-</button>
-            
-            <button class="num" onclick="appendToDisplay('4')">4</button>
-            <button class="num" onclick="appendToDisplay('5')">5</button>
-            <button class="num" onclick="appendToDisplay('6')">6</button>
-            <button class="op" onclick="appendToDisplay('+')">+</button>
-            
-            <button class="num" onclick="appendToDisplay('1')">1</button>
-            <button class="num" onclick="appendToDisplay('2')">2</button>
-            <button class="num" onclick="appendToDisplay('3')">3</button>
-            <button class="eq" onclick="calculateAI()">=</button>
-            
-            <button class="num" onclick="appendToDisplay('0')" style="grid-column: span 2;">0</button>
-            <button class="num" onclick="appendToDisplay('.')">.</button>
-        </div>
-        
-        <div class="ai-log" id="aiLog">
-            <div>> Neural network initialized</div>
-            <div>> Quantum calculator online</div>
-        </div>
+        <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">
+            Dibuat dengan ❤️ oleh Blackbox AI
+        </p>
     </div>
 
     <script>
-        // Neural network visualization
-        const canvas = document.getElementById('neural-bg');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        class Neuron {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.connections = [];
-            }
-        }
-        
-        const neurons = [];
-        for (let i = 0; i < 20; i++) {
-            neurons.push(new Neuron(
-                Math.random() * canvas.width,
-                Math.random() * canvas.height
-            ));
-        }
-        
-        function drawNeural() {
-            ctx.fillStyle = 'rgba(0,0,0,0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Connections
-            ctx.strokeStyle = 'rgba(0,255,136,0.1)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < neurons.length; i++) {
-                for (let j = i + 1; j < neurons.length; j++) {
-                    ctx.beginPath();
-                    ctx.moveTo(neurons[i].x, neurons[i].y);
-                    ctx.lineTo(neurons[j].x, neurons[j].y);
-                    ctx.stroke();
-                }
-            }
-            
-            // Neurons
-            neurons.forEach((neuron, i) => {
-                const pulse = Math.sin(Date.now() * 0.01 + i) * 0.5 + 0.5;
-                ctx.beginPath();
-                ctx.arc(neuron.x, neuron.y, 4 + pulse * 3, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(0,255,136,${0.8 + pulse * 0.2})`;
-                ctx.fill();
-            });
-        }
-        
-        setInterval(drawNeural, 100);
-        
-        // Calculator AI
-        let display = '0';
-        let aiLogLines = 2;
-        
-        function appendToDisplay(value) {
-            if (display === '0' || display === 'Error') {
-                display = value;
-            } else {
-                display += value;
-            }
-            updateDisplay();
-            addLog(`> Input: ${value}`);
-        }
-        
-        function updateDisplay() {
-            document.getElementById('display').textContent = display;
-        }
-        
-        function calculateAI() {
-            try {
-                addLog('> AI computing...');
-                setTimeout(() => {
-                    const result = eval(display.replace('×', '*').replace('÷', '/'));
-                    display = Number.isInteger(result) ? result : result.toFixed(10);
-                    updateDisplay();
-                    addLog(`> Neural result: ${display}`);
-                }, 800);
-            } catch {
-                display = 'AI-ERROR';
-                updateDisplay();
-                addLog('> Neural network failed');
-            }
-        }
-        
-        function clearAll() {
-            display = '0';
-            updateDisplay();
-            addLog('> Memory cleared');
-        }
-        
-        function deleteLast() {
-            display = display.slice(0, -1) || '0';
-            updateDisplay();
-        }
-        
-        function addLog(message) {
-            const log = document.getElementById('aiLog');
-            const div = document.createElement('div');
-            div.className = 'log-line';
-            div.textContent = message;
-            log.appendChild(div);
-            
-            aiLogLines++;
-            if (aiLogLines > 5) {
-                log.removeChild(log.firstChild);
-                aiLogLines--;
-            }
-            
-            log.scrollTop = log.scrollHeight;
-        }
-        
-        // Keyboard
-        document.addEventListener('keydown', e => {
-            if (/[0-9.]/.test(e.key)) appendToDisplay(e.key);
-            if (e.key === '+' || e.key === '-') appendToDisplay(e.key);
-            if (e.key === '*' || e.key === 'x') appendToDisplay('×');
-            if (e.key === '/') appendToDisplay('÷');
-            if (e.key === 'Enter' || e.key === '=') calculateAI();
-            if (e.key === 'Escape') clearAll();
-            if (e.key === 'Backspace') deleteLast();
+        // Smooth scroll ke chat (bisa ditambahin chat widget nanti)
+        document.querySelector('.chat-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Chat AI skillan siap jawab semua! 🚀\nCoba tanya coding, design, atau apa aja!');
         });
+
+        // Particle effect
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.background = '#ffd93d';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = '100vh';
+            particle.style.animation = 'fall linear infinite';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 3000);
+        }
+        
+        setInterval(createParticle, 300);
     </script>
 </body>
 </html>
