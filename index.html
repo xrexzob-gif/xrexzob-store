@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Love Journey ❤️</title>
+    <title>Our Memory ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-love: #ff4b2b;
-            --bg-color: #fff5f7;
+            --love-red: #ff4b2b;
+            --soft-pink: #fff5f7;
         }
 
         body, html {
             margin: 0; padding: 0;
             font-family: 'Quicksand', sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--soft-pink);
             overflow-x: hidden;
+            color: #4a4a4a;
         }
 
-        /* --- HALAMAN DEPAN (INTRO) --- */
-        #landing {
+        /* Tombol Intro */
+        #intro-page {
             height: 100vh;
             width: 100%;
             display: flex;
@@ -29,8 +30,10 @@
             background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
             color: white;
             position: fixed;
-            top: 0; z-index: 9999;
-            transition: transform 1s ease-in-out;
+            top: 0; left: 0;
+            z-index: 9999;
+            text-align: center;
+            transition: 1s ease-in-out;
         }
 
         .btn-start {
@@ -42,110 +45,127 @@
             border-radius: 50px;
             cursor: pointer;
             font-weight: 700;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             margin-top: 20px;
+            transition: 0.3s;
         }
 
-        /* --- KONTEN UTAMA --- */
-        #main-content {
+        .btn-start:hover { transform: scale(1.1); }
+
+        /* Konten Utama */
+        #content {
             display: none;
             opacity: 0;
-            padding: 20px;
-            text-align: center;
+            transition: 2s ease;
+            padding-bottom: 100px;
         }
 
-        h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: var(--primary-love); }
+        header {
+            text-align: center;
+            padding: 80px 20px 20px;
+        }
 
-        /* --- COUNTER WAKTU --- */
-        .timer {
+        h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; color: var(--love-red); margin: 0; }
+
+        /* Timer Bucin */
+        .timer-container {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin: 30px 0;
             flex-wrap: wrap;
+            margin: 40px 0;
         }
 
         .box {
             background: white;
             padding: 15px;
             border-radius: 15px;
-            min-width: 70px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.1);
         }
 
-        .box span { display: block; font-size: 2rem; font-weight: 700; color: var(--primary-love); }
-        .box label { font-size: 0.7rem; color: #888; text-transform: uppercase; }
+        .box span { display: block; font-size: 2.2rem; font-weight: 700; color: var(--love-red); }
+        .box label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
 
-        /* --- LAYOUT FOTO POLAROID --- */
+        /* Layout Foto Estetik (Scattered) */
         .gallery {
             position: relative;
-            max-width: 800px;
-            margin: 50px auto;
-            height: 1300px;
+            max-width: 900px;
+            margin: 100px auto;
+            height: 1500px;
         }
 
-        .photo {
+        .polaroid {
             position: absolute;
             background: white;
-            padding: 10px 10px 30px 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 200px;
-            transition: 0.4s;
+            padding: 12px 12px 35px 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 230px;
+            transition: 0.5s;
         }
 
-        .photo img { width: 100%; height: 200px; object-fit: cover; }
+        .polaroid img { width: 100%; height: 230px; object-fit: cover; border-radius: 2px; }
 
-        /* Atur posisi foto 1,2,3,4,5,6,8,9 */
-        .p1 { top: 0; left: 5%; transform: rotate(-5deg); }
-        .p2 { top: 50px; right: 5%; transform: rotate(5deg); }
-        .p3 { top: 300px; left: 15%; transform: rotate(7deg); }
-        .p4 { top: 350px; right: 10%; transform: rotate(-8deg); }
-        .p5 { top: 600px; left: 5%; transform: rotate(-5deg); }
-        .p6 { top: 650px; right: 15%; transform: rotate(10deg); }
-        .p8 { top: 900px; left: 10%; transform: rotate(-3deg); }
-        .f9 { top: 950px; right: 5%; transform: rotate(6deg); }
+        /* Posisi Foto 1-9 (Tanpa 7) */
+        .f1 { top: 0; left: 5%; transform: rotate(-7deg); }
+        .f2 { top: 50px; right: 5%; transform: rotate(5deg); }
+        .f3 { top: 380px; left: 15%; transform: rotate(8deg); }
+        .f4 { top: 420px; right: 10%; transform: rotate(-4deg); }
+        .f5 { top: 750px; left: 5%; transform: rotate(-10deg); }
+        .f6 { top: 800px; right: 15%; transform: rotate(6deg); }
+        .f8 { top: 1150px; left: 10%; transform: rotate(3deg); }
+        .f9 { top: 1100px; right: 5%; transform: rotate(-6deg); }
 
-        .photo:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 10; }
+        .polaroid:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 100; }
 
         .quote {
-            font-style: italic;
-            font-size: 1.2rem;
+            text-align: center;
+            font-size: 1.4rem;
+            line-height: 1.8;
             color: #555;
-            max-width: 600px;
-            margin: 40px auto;
-            line-height: 1.6;
+            font-style: italic;
+            padding: 0 30px;
+            margin: 80px auto;
+            max-width: 700px;
         }
 
         .heart {
             position: fixed;
-            color: var(--primary-love);
-            animation: fly 4s linear infinite;
+            color: var(--love-red);
+            pointer-events: none;
             z-index: 998;
+            animation: fly 4s linear infinite;
         }
 
         @keyframes fly {
-            0% { transform: translateY(100vh); opacity: 1; }
-            100% { transform: translateY(-10vh); opacity: 0; }
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
+
+        footer { text-align: center; color: var(--love-red); font-weight: 700; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-    <audio id="mySong" loop>
+    <audio id="music" loop>
         <source src="hindia.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="landing">
-        <h1 style="color: white;">Halo Sayang... ❤️</h1>
-        <p>Klik tombol di bawah untuk memulai</p>
-        <button class="btn-start" onclick="start()">Perjalanan Kita Dimulai</button>
+    <div id="intro-page">
+        <h1>Halo Sayang... ❤️</h1>
+        <p>Ada kejutan kecil untukmu.</p>
+        <button class="btn-start" onclick="mulai()">Perjalanan Kita Dimulai</button>
     </div>
 
-    <div id="main-content">
-        <h1>Our Love Story</h1>
-        <p>Terima kasih telah menemani hariku.</p>
+    <div id="content">
+        <header>
+            <h1>Selamanya Bersama</h1>
+            <p>Sejak 05 Februari 2026 hingga selamanya.</p>
+        </header>
 
-        <div class="timer">
+        <div class="timer-container">
+            <div class="box"><span id="months">0</span><label>Bulan</label></div>
             <div class="box"><span id="days">0</span><label>Hari</label></div>
             <div class="box"><span id="hours">0</span><label>Jam</label></div>
             <div class="box"><span id="mins">0</span><label>Menit</label></div>
@@ -153,70 +173,66 @@
         </div>
 
         <div class="quote">
-            "Kamu adalah alasan aku tersenyum setiap pagi. Di setiap detik yang kita lalui, aku hanya ingin terus bersamamu."
+            "Terima kasih telah berjalan di sisiku. Bagiku, setiap hari bersamamu adalah sebuah petualangan indah yang tak ingin aku akhiri."
         </div>
 
         <div class="gallery">
-            <div class="photo p1"><img src="1.jpg"></div>
-            <div class="photo p2"><img src="2.jpg"></div>
-            <div class="photo p3"><img src="3.jpg"></div>
-            <div class="photo p4"><img src="4.jpg"></div>
-            <div class="photo p5"><img src="5.jpg"></div>
-            <div class="photo p6"><img src="6.jpg"></div>
-            <div class="photo p8"><img src="8.jpg"></div>
-            <div class="photo f9"><img src="9.jpg"></div>
+            <div class="polaroid f1"><img src="1.jpg"></div>
+            <div class="polaroid f2"><img src="2.jpg"></div>
+            <div class="polaroid f3"><img src="3.jpg"></div>
+            <div class="polaroid f4"><img src="4.jpg"></div>
+            <div class="polaroid f5"><img src="5.jpg"></div>
+            <div class="polaroid f6"><img src="6.jpg"></div>
+            <div class="polaroid f8"><img src="8.jpg"></div>
+            <div class="polaroid f9"><img src="9.jpg"></div>
         </div>
 
-        <div class="quote" style="margin-top: 100px;">
-            "Dunia mungkin berubah, tapi perasaanku akan selalu menetap di kamu."
+        <div class="quote" style="margin-top: 150px;">
+            "Dunia mungkin berisik, tapi di dekatmu, semuanya terasa tenang. Aku mencintaimu lebih dari hari kemarin."
         </div>
 
-        <p style="padding-bottom: 50px; color: #ff758c; font-weight: bold;">I Love You Forever ❤️</p>
+        <footer>
+            Selamanya Milikmu ❤️
+        </footer>
     </div>
 
     <script>
-        function start() {
-            // Putar musik hindia.mp3
-            const song = document.getElementById('mySong');
-            song.play();
+        function mulai() {
+            const lagu = document.getElementById('music');
+            lagu.play();
 
-            // Sembunyikan intro
-            document.getElementById('landing').style.transform = 'translateY(-100%)';
-            
-            // Tampilkan konten
-            const main = document.getElementById('main-content');
-            main.style.display = 'block';
-            setTimeout(() => { main.style.opacity = '1'; }, 100);
+            document.getElementById('intro-page').style.transform = 'translateY(-100%)';
+            const cnt = document.getElementById('content');
+            cnt.style.display = 'block';
+            setTimeout(() => { cnt.style.opacity = '1'; }, 100);
 
-            // Jalankan fungsi
-            setInterval(updateTime, 1000);
-            setInterval(createHeart, 500);
+            setInterval(updateWaktu, 1000);
+            setInterval(buatHati, 500);
         }
 
-        // Tanggal Jadian: 05 Feb 2026
-        const joinDate = new Date("February 5, 2026 00:00:00").getTime();
+        const tglJadian = new Date("February 5, 2026 00:00:00").getTime();
 
-        function updateTime() {
-            const now = new Date().getTime();
-            const diff = now - joinDate;
+        function updateWaktu() {
+            const skrg = new Date().getTime();
+            const selisih = skrg - tglJadian;
 
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            const msInDay = 24 * 60 * 60 * 1000;
+            const msInMonth = 30.44 * msInDay;
 
-            document.getElementById('days').innerText = d;
-            document.getElementById('hours').innerText = h;
-            document.getElementById('mins').innerText = m;
-            document.getElementById('secs').innerText = s;
+            document.getElementById('months').innerText = Math.floor(selisih / msInMonth);
+            document.getElementById('days').innerText = Math.floor((selisih % msInMonth) / msInDay);
+            document.getElementById('hours').innerText = Math.floor((selisih % msInDay) / (1000 * 60 * 60));
+            document.getElementById('mins').innerText = Math.floor((selisih % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('secs').innerText = Math.floor((selisih % (1000 * 60)) / 1000);
         }
 
-        function createHeart() {
+        function buatHati() {
             const h = document.createElement("div");
             h.classList.add("heart");
             h.innerHTML = "❤️";
             h.style.left = Math.random() * 100 + "vw";
-            h.style.animationDuration = (Math.random() * 2 + 3) + "s";
+            h.style.fontSize = (Math.random() * 20 + 10) + "px";
+            h.style.animationDuration = (Math.random() * 2 + 2) + "s";
             document.body.appendChild(h);
             setTimeout(() => h.remove(), 4000);
         }
