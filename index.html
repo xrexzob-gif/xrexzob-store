@@ -1,164 +1,310 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XrexZob AI Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>05.02.2026</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Share Tech Mono', monospace;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at 20% 80%, #f9dbbd 0%, #e8c1c5 25%, #d4a5bd 50%, #c39bd3 75%, #a18cd1 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
-```
-    body {
-        background: #000;
-        color: #00ff00;
-        text-align: center;
-        padding: 15px;
-    }
+        /* Particle background */
+        .particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
 
-    h1 {
-        margin-bottom: 10px;
-        text-shadow: 0 0 10px #00ff00;
-    }
+        .particle {
+            position: absolute;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
 
-    .subtitle {
-        font-size: 14px;
-        margin-bottom: 20px;
-        opacity: 0.8;
-    }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
 
-    .clock {
-        font-size: 18px;
-        margin-bottom: 15px;
-        text-shadow: 0 0 5px #00ff00;
-    }
+        /* Glassmorphism containers */
+        .glass {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 24px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.1);
+        }
 
-    .container {
-        max-width: 420px;
-        margin: auto;
-    }
+        /* Welcome screen */
+        .welcome {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 1000;
+            background: inherit;
+        }
 
-    .card {
-        border: 1px solid #00ff00;
-        padding: 15px;
-        margin: 10px 0;
-        border-radius: 10px;
-        background: rgba(0, 0, 0, 0.9);
-        box-shadow: 0 0 10px #00ff00;
-        transition: 0.3s;
-    }
+        .welcome h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            background: linear-gradient(135deg, #ff6b9d, #c44569, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
 
-    .card:hover {
-        background: #00ff00;
-        color: #000;
-        transform: scale(1.03);
-    }
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px #ff6b9d); }
+            to { filter: drop-shadow(0 0 20px #c44569); }
+        }
 
-    a {
-        text-decoration: none;
-        color: inherit;
-        font-size: 16px;
-        font-weight: bold;
-    }
+        .welcome-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(255,107,157,0.4);
+        }
 
-    .footer {
-        margin-top: 20px;
-        font-size: 12px;
-        opacity: 0.7;
-    }
+        .welcome-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255,107,157,0.6);
+        }
 
-    /* Matrix Canvas */
-    canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: -1;
-    }
-</style>
-```
+        /* Main content */
+        .main { display: none; padding: 2rem; max-width: 1200px; margin: 0 auto; }
 
+        /* Hero countdown */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .date-tag {
+            font-size: clamp(1.2rem, 4vw, 1.8rem);
+            color: #ff6b9d;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .countdown-display {
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Memories grid */
+        .memories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .memory-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 35px 60px rgba(0,0,0,0.25);
+        }
+
+        .memory-card img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .memory-card:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Love notes */
+        .love-notes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .love-note {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .love-note h3 {
+            font-size: 1.3rem;
+            color: #ff6b9d;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .love-note p {
+            color: #333;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        /* Floating elements */
+        .floating {
+            position: fixed;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 2;
+            animation: float 20s infinite linear;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main { padding: 1.5rem; }
+            .love-notes { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
 
-<canvas id="matrix"></canvas>
+    <!-- Welcome -->
+    <div class="welcome" id="welcome">
+        <h1>05.02.2026</h1>
+        <p style="color: white; font-size: clamp(1.1rem, 3vw, 1.4rem); margin-bottom: 2rem; max-width: 90%;">
+            Tanggal kita dimulai. Tekan untuk memulai perjalanan cinta ini ✨
+        </p>
+        <button class="welcome-btn" onclick="startJourney()">▶️ MULAI</button>
+    </div>
 
-<div class="container">
-    <h1>XRExZOB AI HUB</h1>
-    <p class="subtitle">Akses Cepat ke Dunia Kecerdasan Buatan</p>
+    <!-- Main content -->
+    <div class="main" id="main">
+        <div class="hero glass" style="padding: 3rem 2rem; max-width: 600px; margin: 0 auto 3rem;">
+            <div class="date-tag">Sejak Jadian Kita</div>
+            <div class="countdown-display" id="countdown">0h 0m 0s</div>
+        </div>
 
-```
-<div class="clock" id="clock"></div>
+        <div class="love-notes">
+            <div class="love-note glass">
+                <h3>💕 Kamu Prioritas</h3>
+                <p>Sejak hari itu, kamu jadi pusat dunia gw. Setiap detik sama kamu berharga banget.</p>
+            </div>
+            <div class="love-note glass">
+                <h3>🌙 Malam Gw Milikmu</h3>
+                <p>Mikir kamu sampe pagi. Kamu bikin hidup gw jadi cerita cinta terbaik.</p>
+            </div>
+            <div class="love-note glass">
+                <h3>💖 Hati Gw Penuh</h3>
+                <p>Dari 05.02.2026, hati ini cuma punya satu nama: KAMU. Forever yours.</p>
+            </div>
+        </div>
 
-<div class="card"><a href="https://chat.openai.com" target="_blank">🤖 ChatGPT</a></div>
-<div class="card"><a href="https://gemini.google.com" target="_blank">✨ Google Gemini</a></div>
-<div class="card"><a href="https://copilot.microsoft.com" target="_blank">🧠 Microsoft Copilot</a></div>
-<div class="card"><a href="https://claude.ai" target="_blank">📚 Claude AI</a></div>
-<div class="card"><a href="https://www.perplexity.ai" target="_blank">🔎 Perplexity AI</a></div>
-<div class="card"><a href="https://www.midjourney.com" target="_blank">🎨 Midjourney</a></div>
-<div class="card"><a href="https://www.canva.com/ai" target="_blank">🖌️ Canva AI</a></div>
-<div class="card"><a href="https://runwayml.com" target="_blank">🎬 Runway AI</a></div>
+        <div class="memories" id="memories"></div>
+    </div>
 
-<div class="footer">
-    © 2026 XRExZOB CYBER TERMINAL
-</div>
-```
+    <audio id="music" loop preload="auto">
+        <source src="hindia.mp3" type="audio/mpeg">
+    </audio>
 
-</div>
+    <script>
+        const startDate = new Date('2026-02-05');
+        const photos = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','8.jpg','9.jpg'];
 
-<script>
-    // Jam Digital
-    function updateClock() {
-        const now = new Date();
-        document.getElementById("clock").innerText =
-            now.toLocaleTimeString("id-ID");
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // Matrix Effect
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-
-    const letters = "01XRExZOB";
-    const matrix = letters.split("");
-
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = [];
-
-    for (let i = 0; i < columns; i++) {
-        drops[i] = 1;
-    }
-
-    function drawMatrix() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        ctx.fillStyle = "#00ff00";
-        ctx.font = fontSize + "px monospace";
-
-        for (let i = 0; i < drops.length; i++) {
-            const text = matrix[Math.floor(Math.random() * matrix.length)];
-            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                drops[i] = 0;
+        // Create particles
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for(let i = 0; i < 50; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.width = p.style.height = (Math.random() * 6 + 2) + 'px';
+                p.style.animationDelay = Math.random() * 15 + 's';
+                p.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particles.appendChild(p);
             }
-            drops[i]++;
         }
-    }
 
-    setInterval(drawMatrix, 35);
-</script>
+        // Start journey
+        function startJourney() {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('main').style.display = 'block';
+            
+            document.getElementById('music').volume = 0.3;
+            document.getElementById('music').play();
+            
+            createParticles();
+            loadMemories();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            
+            // Floating emojis
+            setInterval(() => {
+                const emoji = document.createElement('div');
+                emoji.className = 'floating';
+                emoji.innerHTML = ['💕','💖','✨','🌸','🥰'][Math.floor(Math.random()*5)];
+                emoji.style.left = Math.random() * 100 + '%';
+                emoji.style.top = '100%';
+                emoji.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                document.body.appendChild(emoji);
+                setTimeout(() => emoji.remove(), 25000);
+            }, 2000);
+        }
 
+        // Load photo memories
+        function loadMemories() {
+            const container = document.getElementById('memories');
+            photos.forEach((photo, i) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card glass';
+                card.innerHTML = `<img src="${photo}" onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7838edbc8?w=300&h=300&fit=crop&crop=face&auto=format'" alt="Memory ${i+1}">`;
+                container.appendChild(card);
+            });
+        }
+
+        // Countdown
+        function updateCountdown() {
+            const now = new Date();
+            const diff = Math.max(0, now - startDate);
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown').textContent = 
+                `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+    </script>
 </body>
 </html>
