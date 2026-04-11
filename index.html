@@ -1,332 +1,337 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XREXZO AI Chat - 10.000+ Topik 🔥</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>XREXZ0B</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-            height: 100vh; overflow: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* XREXZO SPLASH */
-        .splash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(45deg, #ff0000, #ff6b35, #f7931e, #ff0000);
-            background-size: 400% 400%; animation: xrexzoGradient 3s ease infinite;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999; color: white; text-align: center;
+        body {
+            background: #000;
+            color: #00ff41;
+            font-family: 'Courier New', 'monospace', sans-serif;
+            font-size: 11px;
+            line-height: 1.3;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
         }
 
-        @keyframes xrexzoGradient {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .terminal {
+            height: 100vh;
+            padding: 15px;
+            overflow-y: auto;
+            background: radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(120,219,255,0.3) 0%, transparent 50%);
+            position: relative;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
-        .xrexzo-logo {
-            font-size: 70px; font-weight: 900; margin-bottom: 20px;
-            background: linear-gradient(45deg, #fff, #ff6b35); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: xrexzoPulse 1.5s infinite;
+        .terminal::-webkit-scrollbar {
+            display: none;
         }
 
-        @keyframes xrexzoPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+        .prompt {
+            color: #00ff41;
+            text-shadow: 0 0 5px #00ff41;
+            margin-right: 3px;
+            font-weight: bold;
         }
 
-        .splash-text { font-size: 28px; margin-bottom: 40px; animation: glow 2s infinite; }
-
-        @keyframes glow {
-            0%, 100% { text-shadow: 0 0 20px #fff; }
-            50% { text-shadow: 0 0 40px #ff6b35, 0 0 60px #ff0000; }
+        .cursor {
+            display: inline-block;
+            width: 6px;
+            height: 13px;
+            background: linear-gradient(#00ff41, #00cc33);
+            border-radius: 2px;
+            animation: blink 0.8s infinite;
+            box-shadow: 0 0 5px #00ff41;
+            margin-left: 1px;
         }
 
-        /* MAIN CHAT */
-        .chat-container {
-            height: 100vh; display: flex; flex-direction: column;
-            opacity: 0; animation: fadeIn 0.5s 3.2s forwards;
+        @keyframes blink {
+            0%, 50% { opacity: 1; transform: scaleY(1); }
+            51%, 100% { opacity: 0; transform: scaleY(0.3); }
         }
 
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        .chat-header {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: white; padding: 25px; text-align: center;
-            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+        .line {
+            margin-bottom: 1px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            text-shadow: 0 0 2px rgba(0,255,65,0.5);
         }
 
-        .chat-header h1 {
-            font-size: 24px; margin-bottom: 5px;
-            background: linear-gradient(45deg, #fff, #ffeaa7); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .status-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 25px;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 9px;
+            z-index: 1000;
+            border-bottom: 1px solid #00ff41;
+            box-shadow: 0 0 10px #00ff41;
         }
 
-        .chat-messages {
-            flex: 1; padding: 20px; overflow-y: auto;
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+        .scan-line {
+            position: fixed;
+            top: 25px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ff41, #ff0080, #00ff41, transparent);
+            animation: scan 2.5s infinite linear;
+            z-index: 999;
+            box-shadow: 0 0 10px #00ff41;
         }
 
-        .message {
-            margin-bottom: 20px; display: flex; 
-            animation: slideInMessage 0.4s ease;
+        @keyframes scan {
+            0% { transform: translateX(-100%); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
         }
 
-        @keyframes slideInMessage {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.08;
         }
 
-        .message.user {
-            justify-content: flex-end;
+        .glitch {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 998;
+            opacity: 0;
         }
 
-        .message-content {
-            max-width: 80%; padding: 18px 25px;
-            border-radius: 25px; word-wrap: break-word;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        .vibration {
+            animation: vibrate 0.1s infinite;
         }
 
-        .message.user .message-content {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: white;
+        @keyframes vibrate {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
         }
 
-        .message.ai .message-content {
-            background: rgba(255,255,255,0.9);
-            color: #333; border-left: 5px solid #ff6b35;
-        }
-
-        .chat-input {
-            padding: 25px; background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px); display: flex; gap: 15px;
-        }
-
-        .chat-input input {
-            flex: 1; padding: 20px 25px; border: none;
-            border-radius: 50px; font-size: 17px;
-            background: rgba(255,255,255,0.9); outline: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .send-btn {
-            width: 60px; height: 60px; border: none;
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            border-radius: 50%; color: white; font-size: 24px;
-            cursor: pointer; transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
-        }
-
-        .send-btn:hover {
-            transform: scale(1.1); box-shadow: 0 15px 40px rgba(255,107,53,0.6);
-        }
-
-        .typing {
-            display: flex; align-items: center; gap: 8px;
-            color: #666; font-style: italic; padding: 15px 25px;
-        }
-
-        .typing-dots {
-            display: flex; gap: 4px;
-        }
-
-        .typing-dots span {
-            width: 8px; height: 8px; background: #ff6b35;
-            border-radius: 50%; animation: typing 1.4s infinite;
-        }
-
-        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes typing {
-            0%, 60%, 100% { transform: scale(1); }
-            30% { transform: scale(1.3); }
-        }
+        .success { color: #00ff88 !important; text-shadow: 0 0 10px #00ff88; }
+        .error { color: #ff0040 !important; text-shadow: 0 0 10px #ff0040; }
+        .warning { color: #ffaa00 !important; text-shadow: 0 0 8px #ffaa00; }
 
         @media (max-width: 480px) {
-            .xrexzo-logo { font-size: 50px; }
-            .splash-text { font-size: 22px; }
-            .message-content { max-width: 90%; }
+            body { font-size: 10px; }
+            .status-bar { font-size: 8px; padding: 0 8px; }
+            .terminal { padding: 12px; }
+        }
+
+        @media (max-width: 360px) {
+            body { font-size: 9px; }
+            .status-bar { font-size: 7px; }
         }
     </style>
 </head>
 <body>
-    <!-- XREXZO SPLASH SCREEN 🔥 -->
-    <div class="splash" id="splash">
-        <div class="xrexzo-logo">XREXZO</div>
-        <div class="splash-text">AI CHAT 10.000+ TOPIK</div>
-        <div class="loading-container">
-            <div class="loading-circle"></div>
-            <div class="loading-text">Loading AI Brain...</div>
-        </div>
+    <div class="status-bar">
+        <span>XREXZ0B v3.7.1 | root@darknet</span>
+        <span id="stats">CPU:87% RAM:3GB NET:1.2Gbps</span>
     </div>
-
-    <!-- MAIN CHAT -->
-    <div class="chat-container" id="chatContainer">
-        <div class="chat-header">
-            <h1>XREXZO AI</h1>
-            <p>Ngobrol apa aja - 10.000+ topik tersedia</p>
-        </div>
-
-        <div class="chat-messages" id="chatMessages">
-            <div class="message ai">
-                <div class="message-content">
-                    <strong>👋 Halo bro!</strong><br>
-                    XREXZO AI siap ngobrol 24/7! Tanya apa aja:<br>
-                    - Coding (HTML, Python, JS)<br>
-                    - CPNS & Ujian<br>
-                    - Matematika<br>
-                    - Motivasi & Tips<br>
-                    - Jualan online<br>
-                    - Apa aja deh! 🔥<br><br>
-                    <em>Ketik sekarang yuk! 🚀</em>
-                </div>
-            </div>
-        </div>
-
-        <div class="chat-input">
-            <input type="text" id="messageInput" placeholder="Ketik pesanmu disini..." autocomplete="off">
-            <button class="send-btn" onclick="sendMessage()">➤</button>
-        </div>
+    
+    <canvas class="matrix-bg" id="matrix"></canvas>
+    <canvas class="glitch" id="glitch"></canvas>
+    <div class="scan-line"></div>
+    
+    <div class="terminal" id="terminal">
+        <div class="line success">XREXZ0B H4CK3R TERMINAL LOADED</div>
+        <div class="line warning">[!] Touch screen untuk accelerate scan</div>
+        <div class="line"><span class="prompt">root@xrexz0b:~#</span> <span class="cursor" id="cursor"></span></div>
     </div>
 
     <script>
-        // DATABASE 10.000+ JAWABAN XREXZO AI
-        const xrexzoBrain = {
-            // CODING (3000+)
-            'html': ['HTML itu bahasa markup buat bikin struktur web. Contoh: <div>Hello</div>', 'Tag <div> buat container, <span> buat inline text.'],
-            'css': ['CSS buat styling. Contoh: body { background: red; }', 'Flexbox: display: flex; justify-content: center;'],
-            'javascript': ['JS buat interaksi. Contoh: console.log("Hello");', 'let x = 10; function halo() { return "hi"; }'],
-            'python': ['Python gampang banget! print("Hello World")', 'def function(): return "ok"'],
-            'react': ['React buat SPA. npx create-react-app myapp', 'const [state, setState] = useState("")'],
+        // Mobile optimized matrix
+        const matrixCanvas = document.getElementById('matrix');
+        const matrixCtx = matrixCanvas.getContext('2d');
+        let cols, drops = [];
+
+        function resizeMatrix() {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+            cols = Math.floor(matrixCanvas.width / 10) * 2;
+            drops = Array(cols).fill(1);
+        }
+        resizeMatrix();
+
+        const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ";
+        
+        function drawMatrix() {
+            matrixCtx.fillStyle = 'rgba(0,0,0,0.08)';
+            matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
             
-            // CPNS & UJIAN (2000+)
-            'cpns': ['CPNS tes TWK, TIU, TKP. Baca soal tahun lalu', 'Pancasila sila 1: Ketuhanan Yang Maha Esa'],
-            'tkp': ['TKP nilai integritas, profesional, pelayanan', 'Jawab sesuai nilai ASN yang baik'],
-            'tiu': ['TIU: deret angka, logika, matematika dasar', 'Contoh: 2, 4, 6, ? = 8'],
+            matrixCtx.fillStyle = 'rgba(0,255,65,0.9)';
+            matrixCtx.font = '10px monospace';
             
-            // MATEMATIKA (1500+)
-            'luas': ['Luas persegi: s², lingkaran: πr²', 'Volume kubus: s³'],
-            'pythagoras': ['a² + b² = c². Coba hitung sendiri!'],
-            
-            // MOTIVASI & HARIAN (2000+)
-            'motivasi': ['Kamu bisa bro! Konsisten aja tiap hari 1% better', 'Gagal itu guru terbaik. Bangkit terus! 💪'],
-            'cara': ['Cara sukses: 1. Mulai sekarang 2. Belajar terus 3. Jangan nyerah'],
-            'gimana': ['Gimana caranya? Langkah 1 dulu, jangan mikir semuanya perfect'],
-            
-            // JUALAN & BISNIS (1000+)
-            'jualan': ['Jualan online: Shopee/Tiktok Shop + konten viral', 'Foto produk bagus + caption menarik = laris!'],
-            'dropship': ['Dropship: cari supplier terpercaya di Tokopedia/1688'],
-            
-            // DEFAULT JAWABAN
-            'default': [
-                'Wah menarik nih! Ceritain lebih detail dong?',
-                'Oke bro, aku paham. Mau tanya apa lagi?',
-                'Keren! Ada hubungannya sama apa nih?',
-                'Sip! XREXZO siap bantu 24/7 🔥',
-                'Haha iya bener! Pengalamanmu gimana?',
-                'Wah seru! Mau share tipsnya gak?',
-                'Mantap! Next stepnya apa nih?',
-                'Nice! Aku suka topik ini. Lanjut yuk!',
-                'Betul banget! Real talk nih. 👍',
-                'Asik! Obrolan kita makin seru nih!'
-            ]
-        };
-
-        // EXTEND KE 10.000+ VARIASI
-        const fullBrain = { ...xrexzoBrain };
-        Object.keys(xrexzoBrain).forEach(key => {
-            fullBrain[key + '_2'] = xrexzoBrain[key].map(a => a + ' (detail lengkap)');
-            fullBrain[key + '_3'] = xrexzoBrain[key].map(a => 'Pro tips: ' + a);
-        });
-
-        const splash = document.getElementById('splash');
-        const chatContainer = document.getElementById('chatContainer');
-        const messageInput = document.getElementById('messageInput');
-        const chatMessages = document.getElementById('chatMessages');
-
-        // Hide splash after 3s
-        setTimeout(() => {
-            splash.style.display = 'none';
-            chatContainer.classList.add('show');
-            messageInput.focus();
-        }, 3200);
-
-        // Send message
-        function sendMessage() {
-            const text = messageInput.value.trim();
-            if (!text) return;
-
-            // Add user message
-            addMessage(text, 'user');
-            messageInput.value = '';
-
-            // Show typing
-            showTyping();
-
-            // AI Response
-            setTimeout(() => {
-                hideTyping();
-                const response = getAIResponse(text);
-                addMessage(response, 'ai');
-            }, 1500 + Math.random() * 1000);
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                matrixCtx.fillText(text, i * 10, drops[i] * 10);
+                if (drops[i] * 10 > matrixCanvas.height && Math.random() > 0.95) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
         }
 
-        function addMessage(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            messageDiv.innerHTML = `<div class="message-content">${text}</div>`;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Glitch effect
+        const glitchCanvas = document.getElementById('glitch');
+        const glitchCtx = glitchCanvas.getContext('2d');
+        
+        function drawGlitch() {
+            glitchCtx.clearRect(0, 0, glitchCanvas.width, glitchCanvas.height);
+            if (Math.random() < 0.1) {
+                glitchCtx.fillStyle = `rgba(255,0,64,${Math.random() * 0.3})`;
+                glitchCtx.fillRect(0, 0, glitchCanvas.width, glitchCanvas.height * 0.02);
+            }
         }
 
-        function showTyping() {
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message ai typing';
-            typingDiv.id = 'typing';
-            typingDiv.innerHTML = `
-                <div class="message-content">
-                    <div class="typing">
-                        XREXZO AI sedang mikir...
-                        <div class="typing-dots">
-                            <span></span><span></span><span></span>
-                        </div>
-                    </div>
-                </div>
-            `;
-            chatMessages.appendChild(typingDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Terminal logic
+        const terminal = document.getElementById('terminal');
+        const cursor = document.getElementById('cursor');
+        const stats = document.getElementById('stats');
+
+        const prompts = [
+            "root@xrexz0b:~# ", "hacker@ghost:~$ ", "pwn@target:~# ", 
+            "scan@net:~$ ", "root@payload:~# ", "xrexz0b@dark:~# "
+        ];
+
+        const codeLines = [];
+        const templates = [
+            "exploit = b'\\\\x90' * 100 + shellcode",
+            "sock.connect(('target.com', 1337))",
+            "payload = base64.b64decode('...')",
+            "for port in range(1,65536): scan(port)",
+            "hashcat -m 0 hash.txt rockyou.txt",
+            "msfvenom -p windows/shell_reverse_tcp",
+            "'; DROP TABLE users; --",
+            "buffer = 'A'*1024 + shellcode",
+            "python -c 'import pty;pty.spawn(\"/bin/bash\")'"
+        ];
+
+        // Generate 20k lines untuk mobile (lebih cepat)
+        for (let i = 0; i < 20000; i++) {
+            const randTemplate = templates[Math.floor(Math.random()*templates.length)];
+            codeLines.push(`${String(i).padStart(5,'0')} ${randTemplate.replace('...', Math.random().toString(36).substr(2,8))}`);
         }
 
-        function hideTyping() {
-            const typing = document.getElementById('typing');
-            if (typing) typing.remove();
-        }
+        let lineIdx = 0, charIdx = 0, promptIdx = 0;
+        let speed = 25; // Faster untuk mobile
+        let isAccelerated = false;
 
-        function getAIResponse(text) {
-            const lowerText = text.toLowerCase();
+        function typeNextLine() {
+            const lineEl = document.createElement('div');
+            lineEl.className = 'line';
             
-            // Cari keyword match
-            for (let key in fullBrain) {
-                if (lowerText.includes(key)) {
-                    return fullBrain[key][Math.floor(Math.random() * fullBrain[key].length)];
+            const prompt = prompts[promptIdx % prompts.length];
+            const cmd = ['nmap -sS', 'hydra -l admin', 'sqlmap -u', 'msfvenom'][Math.floor(Math.random()*4)];
+            
+            lineEl.innerHTML = `<span class="prompt">${prompt}</span>`;
+            terminal.appendChild(lineEl);
+            scrollBottom();
+
+            const text = cmd + codeLines[lineIdx].slice(25);
+            
+            function typeChar() {
+                if (charIdx < text.length) {
+                    lineEl.innerHTML += text[charIdx];
+                    charIdx++;
+                    scrollBottom();
+                    
+                    const delay = isAccelerated ? speed/3 : speed;
+                    setTimeout(typeChar, delay + Math.random()*10);
+                } else {
+                    // Fake output
+                    setTimeout(() => {
+                        const outEl = document.createElement('div');
+                        outEl.className = `line ${['success','error','warning'][Math.floor(Math.random()*3)]}`;
+                        outEl.textContent = `[${['+','-','!'][Math.floor(Math.random()*3)]}] ${Math.random().toString(36).substr(2,12)} (${Math.floor(Math.random()*9999)}B)`;
+                        terminal.appendChild(outEl);
+                        scrollBottom();
+                        
+                        lineIdx++; charIdx = 0; promptIdx++;
+                        
+                        if (lineIdx < 100) {
+                            setTimeout(typeNextLine, isAccelerated ? 200 : 800);
+                        }
+                    }, 150);
                 }
             }
-            
-            // Random default
-            return xrexzoBrain.default[Math.floor(Math.random() * xrexzoBrain.default.length)];
+            typeChar();
         }
 
-        // Enter key
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        function scrollBottom() {
+            terminal.scrollTop = terminal.scrollHeight;
+        }
 
-        // Auto focus
-        messageInput.focus();
+        // Update stats
+        setInterval(() => {
+            const cpu = Math.floor(Math.random()*100);
+            const ram = Math.floor(Math.random()*16);
+            stats.textContent = `CPU:${cpu}% RAM:${ram}GB NET:${(Math.random()*10).toFixed(1)}Gbps`;
+        }, 2000);
+
+        // Animation loop
+        function animate() {
+            drawMatrix();
+            drawGlitch();
+            requestAnimationFrame(animate);
+        }
+
+        // Touch controls
+        document.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            document.body.classList.add('vibration');
+            isAccelerated = true;
+            speed = 8;
+            setTimeout(() => {
+                document.body.classList.remove('vibration');
+                isAccelerated = false;
+                speed = 25;
+            }, 3000);
+        }, {passive: false});
+
+        // Start
+        resizeMatrix();
+        setTimeout(typeNextLine, 800);
+        animate();
+
+        // Resize handler
+        window.addEventListener('resize', resizeMatrix);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(resizeMatrix, 300);
+        });
     </script>
 </body>
 </html>
