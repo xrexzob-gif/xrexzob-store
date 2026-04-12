@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xrexzob - Premium Digital Solutions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -17,17 +17,32 @@
             font-family: 'Poppins', sans-serif;
             line-height: 1.6;
             color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 10px;
         }
 
         /* Navbar */
         .navbar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
             padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
         .nav-container {
@@ -42,15 +57,12 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: white;
-            text-decoration: none;
-        }
-
-        .logo span {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            background: linear-gradient(45deg, #667eea, #764ba2, #ff6b6b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .nav-menu {
@@ -60,26 +72,35 @@
         }
 
         .nav-menu a {
-            color: white;
+            color: #333;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
+            position: relative;
         }
 
-        .nav-menu a:hover {
-            color: #feca57;
-            transform: translateY(-2px);
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(45deg, #667eea, #ff6b6b);
+            transition: width 0.3s ease;
         }
 
-        /* Hero Section */
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section - Coding Vibe */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            color: white;
+            background: #0a0a0a;
             position: relative;
             overflow: hidden;
         }
@@ -91,176 +112,212 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><polygon fill="rgba(255,255,255,0.1)" points="0,1000 1000,0 1000,1000"/></svg>');
-            animation: float 20s infinite linear;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120,219,255,0.3) 0%, transparent 50%);
+            animation: matrixRain 10s infinite linear;
         }
 
-        @keyframes float {
-            0% { transform: translateX(-100%) translateY(0%); }
-            100% { transform: translateX(100%) translateY(100%); }
+        @keyframes matrixRain {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(2deg); }
         }
 
         .hero-content {
-            max-width: 800px;
+            max-width: 1000px;
             padding: 0 2rem;
+            text-align: center;
             position: relative;
             z-index: 2;
+        }
+
+        .terminal {
+            background: rgba(0,0,0,0.9);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(90deg, #ff5f56, #ffbd2e, #27ca3f);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .terminal-dots {
+            position: absolute;
+            top: 8px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        .dot:nth-child(1) { background: #ff5f56; }
+        .dot:nth-child(2) { background: #ffbd2e; animation-delay: 0.3s; }
+        .dot:nth-child(3) { background: #27ca3f; animation-delay: 0.6s; }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        .code-line {
+            color: #00ff88;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            opacity: 0;
+            animation: type 2s forwards;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid #00ff88;
+        }
+
+        .code-line:nth-child(1) { animation-delay: 0.5s; }
+        .code-line:nth-child(2) { animation-delay: 1.5s; }
+        .code-line:nth-child(3) { animation-delay: 2.5s; }
+        .code-line:nth-child(4) { animation-delay: 3.5s; }
+
+        @keyframes type {
+            from { width: 0; }
+            to { width: 100%; }
         }
 
         .hero h1 {
             font-size: 4rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.95;
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(255,107,107,0.6);
-        }
-
-        /* Sections */
-        .section {
-            padding: 100px 0;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-left: 2rem;
-            padding-right: 2rem;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #00ff88, #667eea, #ff6b6b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Services */
+        /* Social Media Section */
+        .social-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            padding: 1rem;
+        }
+
+        .social-link i {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+        }
+
+        .social-link:hover {
+            transform: translateY(-10px) scale(1.1);
+        }
+
+        .ig-link {
+            position: relative;
+        }
+
+        .ig-link::after {
+            content: 'FOLLOW NOW!';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #E4405F;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .ig-link:hover::after {
+            opacity: 1;
+            bottom: -40px;
+        }
+
+        /* Services - Hacker Style */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
             margin-top: 4rem;
         }
 
         .service-card {
-            background: white;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
             padding: 2.5rem;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
             text-align: center;
             transition: all 0.4s ease;
-            border-top: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
         }
 
         .service-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
-        }
-
-        .service-card i {
-            font-size: 3rem;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1.5rem;
-        }
-
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        /* Contact */
-        .contact {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-        }
-
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            padding: 1rem;
-            border: none;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 1rem;
-        }
-
-        /* Footer */
-        .footer {
-            background: #1a1a1a;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            transform: translateY(-20px) scale(1.02);
+            border-color: #00ff88;
+            box-shadow: 0 30px 80px rgba(0,255,136,0.3);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .section {
-                padding: 60px 0;
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
+            .hero h1 { font-size: 2.5rem; }
+            .nav-menu { display: none; }
+            .social-links { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
@@ -268,98 +325,127 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">Xre<span>xzob</span></a>
+            <a href="#" class="logo">$ xrexzob</a>
             <ul class="nav-menu">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#services">Skills</a></li>
+                <li><a href="#social">Social</a></li>
+                <li><a href="#contact">Hire Me</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero - Terminal Style -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Welcome to <span>Xrexzob</span></h1>
-            <p>Membawa ide digital Anda ke tingkat berikutnya dengan solusi premium dan inovatif</p>
-            <a href="#contact" class="cta-button">Mulai Sekarang</a>
+            <div class="terminal">
+                <div class="terminal-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <div class="code-line">user@xrexzob:~$ whoami</div>
+                <div class="code-line">root developer / elite coder</div>
+                <div class="code-line">user@xrexzob:~$ skills</div>
+                <div class="code-line">[HTML/CSS/JS] [React/Node] [Python/Go] [Hacking Vibe]</div>
+            </div>
+            <h1>NGODING SAMPE SUBUH</h1>
+            <p>Real coder ga ada iklan, cuma skill doang 🔥</p>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="section">
-        <h2 class="section-title">Layanan Kami</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <i class="fas fa-code"></i>
-                <h3>Web Development</h3>
-                <p>Website modern, cepat, dan responsive yang siap bersaing di era digital</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-mobile-alt"></i>
-                <h3>Mobile Apps</h3>
-                <p>Aplikasi mobile native dan hybrid untuk iOS & Android dengan performa optimal</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-chart-line"></i>
-                <h3>Digital Marketing</h3>
-                <p>Strategi marketing digital yang terukur untuk meningkatkan konversi bisnis Anda</p>
+    <!-- Social Media PROMO -->
+    <section id="social" class="social-section">
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; font-family: 'JetBrains Mono';">FOLLOW BRO</h2>
+        <p style="font-size: 1.2rem; opacity: 0.9;">Liat project real-time & tips coding gratis</p>
+        
+        <div class="social-links">
+            <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" target="_blank" class="social-link ig-link">
+                <i class="fab fa-instagram"></i>
+                <span>@xrexzob</span>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fab fa-github"></i>
+                <span>Github</span>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fab fa-discord"></i>
+                <span>Discord</span>
+            </a>
+        </div>
+        
+        <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" target="_blank" class="cta-button" style="
+            display: inline-block;
+            background: linear-gradient(45deg, #E4405F, #F77737);
+            color: white;
+            padding: 1.2rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(228,64,95,0.5);
+            animation: pulse 2s infinite;
+        ">
+            <i class="fab fa-instagram"></i> OPEN IG NOW
+        </a>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="section" style="background: #0f0f0f; color: white; padding: 100px 0;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+            <h2 class="section-title" style="color: #00ff88; font-family: 'JetBrains Mono'; text-align: center; font-size: 3rem;">
+                MY HACKS
+            </h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-laptop-code" style="font-size: 4rem; color: #00ff88; margin-bottom: 1rem;"></i>
+                    <h3>Fullstack Dev</h3>
+                    <p>Frontend + Backend = Money</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-robot" style="font-size: 4rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h3>AI/ML</h3>
+                    <p>Python + Tensorflow = Future</p>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-shield-alt" style="font-size: 4rem; color: #ff6b6b; margin-bottom: 1rem;"></i>
+                    <h3>CyberSec</h3>
+                    <p>Ethical hacking = High pay</p>
+                </div>
             </div>
         </div>
     </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section contact">
-        <h2 class="section-title" style="color: white;">Hubungi Kami</h2>
-        <form class="contact-form">
-            <div class="form-group">
-                <input type="text" placeholder="Nama Lengkap" required>
-            </div>
-            <div class="form-group">
-                <input type="email" placeholder="Email" required>
-            </div>
-            <div class="form-group">
-                <textarea rows="5" placeholder="Pesan Anda..." required></textarea>
-            </div>
-            <button type="submit" class="cta-button">Kirim Pesan</button>
-        </form>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2024 Xrexzob. All rights reserved. | Made with <i class="fas fa-heart" style="color: #ff6b6b;"></i> for digital future</p>
-    </footer>
 
     <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Form submission
-        document.querySelector('.contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Terima kasih! Pesan Anda telah dikirim. Kami akan segera menghubungi Anda.');
-            this.reset();
-        });
-
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
             const navbar = document.querySelector('.navbar');
             if (window.scrollY > 100) {
-                navbar.style.background = 'rgba(102, 126, 234, 0.95)';
-                navbar.style.backdropFilter = 'blur(10px)';
+                navbar.style.background = 'rgba(15,15,15,0.95)';
+                navbar.style.backdropFilter = 'blur(20px)';
             } else {
-                navbar.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-                navbar.style.backdropFilter = 'none';
+                navbar.style.background = 'rgba(255,255,255,0.95)';
             }
         });
+
+        // Terminal typing effect loop
+        const codes = [
+            "user@xrexzob:~$ whoami",
+            "root developer / elite coder",
+            "user@xrexzob:~$ skills",
+            "[HTML/CSS/JS] [React/Node] [Python/Go]"
+        ];
+
+        setInterval(() => {
+            document.querySelectorAll('.code-line').forEach((line, index) => {
+                setTimeout(() => {
+                    line.style.animation = 'none';
+                    line.offsetHeight;
+                    line.style.animation = 'type 2s forwards';
+                }, index * 500);
+            });
+        }, 8000);
     </script>
 </body>
 </html>
