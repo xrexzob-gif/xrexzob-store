@@ -3,58 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xrexzob - Premium Web Studio</title>
+    <title>XREXZOB - Official Website</title>
+    <meta name="description" content="XREXZOB Official - Follow Instagram @xrexzob | WA 083135445588 | Email xrexzob@gmail.com">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <i class="fas fa-bolt"></i>
-                <span>Xrexzob</span>
+                <a href="#home">XREXZOB</a>
             </div>
-            <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#services" class="nav-link">Services</a></li>
-                <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    <span class="gradient-text">Xrexzob</span>
-                    <br>
-                    <span>Web Studio</span>
-                </h1>
-                <p class="hero-desc">Membuat website modern, cepat, dan responsive yang bikin brand kamu standout!</p>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">XREXZOB</h1>
+                <p class="hero-subtitle">Creator | Content | Digital</p>
                 <div class="hero-buttons">
-                    <a href="#contact" class="btn btn-primary">Mulai Project</a>
-                    <a href="#portfolio" class="btn btn-secondary">Lihat Portfolio</a>
+                    <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" class="btn btn-primary" target="_blank">
+                        <i class="fab fa-instagram"></i> Instagram
+                    </a>
+                    <a href="https://wa.me/6283135445588" class="btn btn-secondary" target="_blank">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
                 </div>
             </div>
             <div class="hero-image">
-                <div class="floating-card card-1">
-                    <i class="fas fa-code"></i>
-                </div>
-                <div class="floating-card card-2">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <div class="floating-card card-3">
-                    <i class="fas fa-chart-line"></i>
+                <div class="profile-pic">
+                    <i class="fas fa-user"></i>
                 </div>
             </div>
         </div>
@@ -63,109 +55,24 @@
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
-            <h2 class="section-title">Tentang Xrexzob</h2>
+            <h2 class="section-title">About Me</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <h3>Kami Membuat Website yang <span class="gradient-text">Keren</span></h3>
-                    <p>Xrexzob adalah web studio yang fokus menciptakan pengalaman digital luar biasa. Dari desain yang eye-catching sampai performa lightning-fast, kami handle semuanya!</p>
-                    <div class="stats">
-                        <div class="stat">
-                            <h4>100+</h4>
-                            <span>Projects</span>
-                        </div>
-                        <div class="stat">
-                            <h4>50+</h4>
-                            <span>Clients</span>
-                        </div>
-                        <div class="stat">
-                            <h4>99%</h4>
-                            <span>Satisfaction</span>
-                        </div>
-                    </div>
+                    <p>Halo! Saya <strong>XREXZOB</strong>, content creator dan digital enthusiast yang passionate dalam menciptakan konten kreatif dan inovatif.</p>
+                    <p>Follow journey saya di Instagram dan hubungi saya untuk kolaborasi seru!</p>
                 </div>
-                <div class="about-image">
-                    <div class="mockup">
-                        <div class="screen"></div>
-                        <div class="browser-bar"></div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <h3>Instagram</h3>
+                        <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" target="_blank">@xrexzob</a>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <div class="container">
-            <h2 class="section-title">Layanan Kami</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-paint-brush"></i>
+                    <div class="stat-item">
+                        <h3>Email</h3>
+                        <a href="mailto:xrexzob@gmail.com">xrexzob@gmail.com</a>
                     </div>
-                    <h3>UI/UX Design</h3>
-                    <p>Desain modern yang user-friendly dan sesuai brand identity</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3>Web Development</h3>
-                    <p>Website responsif dengan teknologi terbaru (React, Next.js, Tailwind)</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Mobile App</h3>
-                    <p>Progressive Web App dan Mobile App native (React Native)</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3>SEO & Marketing</h3>
-                    <p>Optimasi SEO dan digital marketing untuk ranking #1 Google</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio">
-        <div class="container">
-            <h2 class="section-title">Portfolio Terbaik</h2>
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&h=300&fit=crop" alt="Project 1">
-                    <div class="portfolio-overlay">
-                        <h3>E-Commerce</h3>
-                        <p>Platform belanja online modern</p>
-                        <div class="portfolio-links">
-                            <a href="#" class="link">Live Demo</a>
-                            <a href="#" class="link">View Code</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=500&h=300&fit=crop" alt="Project 2">
-                    <div class="portfolio-overlay">
-                        <h3>Dashboard Admin</h3>
-                        <p>Analytics dashboard interaktif</p>
-                        <div class="portfolio-links">
-                            <a href="#" class="link">Live Demo</a>
-                            <a href="#" class="link">View Code</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="portfolio-item">
-                    <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500&h=300&fit=crop" alt="Project 3">
-                    <div class="portfolio-overlay">
-                        <h3>Landing Page</h3>
-                        <p>High-conversion landing page</p>
-                        <div class="portfolio-links">
-                            <a href="#" class="link">Live Demo</a>
-                            <a href="#" class="link">View Code</a>
-                        </div>
+                    <div class="stat-item">
+                        <h3>WhatsApp</h3>
+                        <a href="https://wa.me/6283135445588" target="_blank">083135445588</a>
                     </div>
                 </div>
             </div>
@@ -175,31 +82,35 @@
     <!-- Contact Section -->
     <section id="contact" class="contact">
         <div class="container">
-            <h2 class="section-title">Mulai Project Kamu</h2>
-            <p class="contact-subtitle">Siap bikin website impian? Hubungi kami sekarang!</p>
+            <h2 class="section-title">Get In Touch</h2>
             <div class="contact-content">
                 <div class="contact-info">
                     <div class="contact-item">
                         <i class="fas fa-envelope"></i>
-                        <h3>Email</h3>
-                        <p>hello@xrexzob.com</p>
+                        <div>
+                            <h4>Email</h4>
+                            <a href="mailto:xrexzob@gmail.com">xrexzob@gmail.com</a>
+                        </div>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <h3>Phone</h3>
-                        <p>+62 812-3456-7890</p>
+                        <i class="fab fa-instagram"></i>
+                        <div>
+                            <h4>Instagram</h4>
+                            <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" target="_blank">@xrexzob</a>
+                        </div>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <h3>Location</h3>
-                        <p>Jakarta, Indonesia</p>
+                        <i class="fab fa-whatsapp"></i>
+                        <div>
+                            <h4>WhatsApp</h4>
+                            <a href="https://wa.me/6283135445588" target="_blank">0831-3544-5588</a>
+                        </div>
                     </div>
                 </div>
-                <form class="contact-form">
-                    <input type="text" placeholder="Nama Lengkap" required>
-                    <input type="email" placeholder="Email" required>
-                    <input type="text" placeholder="Subjek">
-                    <textarea placeholder="Pesan kamu..." rows="5" required></textarea>
+                <form class="contact-form" id="contactForm">
+                    <input type="text" placeholder="Nama Anda" required>
+                    <input type="email" placeholder="Email Anda" required>
+                    <textarea placeholder="Pesan Anda..." rows="5" required></textarea>
                     <button type="submit" class="btn btn-primary">Kirim Pesan</button>
                 </form>
             </div>
@@ -209,23 +120,11 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="nav-logo">
-                        <i class="fas fa-bolt"></i>
-                        <span>Xrexzob</span>
-                    </div>
-                    <p>Web Studio Premium untuk Brand Modern</p>
-                </div>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-github"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Xrexzob. All rights reserved.</p>
+            <p>&copy; 2024 XREXZOB. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/6283135445588" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="mailto:xrexzob@gmail.com"><i class="fas fa-envelope"></i></a>
             </div>
         </div>
     </footer>
