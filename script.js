@@ -1,12 +1,11 @@
-// Animate numbers
-function animateNumbers() {
-    const numbers = document.querySelectorAll('.number');
-    
-    numbers.forEach(number => {
-        const target = parseFloat(number.getAttribute('data-target'));
-        const updateNumber = () => {
-            const current = parseFloat(number.innerText.replace(/[^0-9.-]+/g, ''));
-            const increment = target / 100;
-            
-            if (current < target) {
-                number.innerText = Math.floor(current + increment) + number.classList.contains('has
+// Efek sederhana saat scroll supaya kelihatan canggih
+document.addEventListener("DOMContentLoaded", function() {
+    const cards = document.querySelectorAll('.service-card');
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.style.opacity = "1";
+            card.style.transform = "translateY(0)";
+        }, 200 * index);
+    });
+    console.log("X-REXZOB System Ready.");
+});
