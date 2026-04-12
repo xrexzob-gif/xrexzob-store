@@ -1,88 +1,12 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xrexzob - Profil</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="profile-pic">
-                <img src="on.jpg" alt="Xrexzob" id="profileImg">
-            </div>
-            <h1 class="name">xrexzob</h1>
-            <p class="bio">Creator | Designer | Instagram: @xrexzob</p>
-            <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" target="_blank" class="ig-link">
-                <svg viewBox="0 0 24 24" class="ig-icon">
-                    <path fill="#fff" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-                Ikuti @xrexzob
-            </a>
-        </header>
-
-        <!-- Stats -->
-        <div class="stats">
-            <div class="stat">
-                <span class="number" data-target="1.2">0</span>
-                <span class="label">K</span>
-                <span class="stat-label">Followers</span>
-            </div>
-            <div class="stat">
-                <span class="number" data-target="150">0</span>
-                <span class="label">+</span>
-                <span class="stat-label">Posts</span>
-            </div>
-            <div class="stat">
-                <span class="number" data-target="99">0</span>
-                <span class="label">%</span>
-                <span class="stat-label">Engagement</span>
-            </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="buttons">
-            <button class="btn btn-primary">Download Portfolio</button>
-            <button class="btn btn-secondary">Hubungi Saya</button>
-        </div>
-
-        <!-- Social Links -->
-        <div class="social-links">
-            <a href="#" class="social-link">📱 WhatsApp</a>
-            <a href="#" class="social-link">💬 Telegram</a>
-            <a href="#" class="social-link">✉️ Email</a>
-        </div>
-
-        <!-- Skills -->
-        <div class="skills">
-            <h3>Skills</h3>
-            <div class="skill-bars">
-                <div class="skill-bar">
-                    <span class="skill-name">Design</span>
-                    <div class="skill-progress" data-width="95%"></div>
-                </div>
-                <div class="skill-bar">
-                    <span class="skill-name">Editing</span>
-                    <div class="skill-progress" data-width="90%"></div>
-                </div>
-                <div class="skill-bar">
-                    <span class="skill-name">Content</span>
-                    <div class="skill-progress" data-width="85%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Floating Instagram Button -->
-    <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" class="floating-ig" target="_blank">
-        <svg viewBox="0 0 24 24" class="floating-ig-icon">
-            <path fill="#E4405F" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-        </svg>
-    </a>
-
-    <script src="script.js"></script>
-</body>
-</html>
+// Animate numbers
+function animateNumbers() {
+    const numbers = document.querySelectorAll('.number');
+    
+    numbers.forEach(number => {
+        const target = parseFloat(number.getAttribute('data-target'));
+        const updateNumber = () => {
+            const current = parseFloat(number.innerText.replace(/[^0-9.-]+/g, ''));
+            const increment = target / 100;
+            
+            if (current < target) {
+                number.innerText = Math.floor(current + increment) + number.classList.contains('has
