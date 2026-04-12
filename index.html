@@ -3,51 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-PROJECT | DIGITAL SOLUTION</title>
+    <title>XREXZOB | Official Website</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="background-overlay"></div>
-
-    <nav>
-        <div class="logo">X-REXZOB<span>.DIGITAL</span></div>
-        <div class="server-status"><span class="dot"></span> System Active</div>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>XREXZOB</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#social">Social</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
     </nav>
 
-    <section class="hero">
-        <h1>Digital Services <span class="gold">&</span> SMM Panel</h1>
-        <p>Solusi terbaik untuk pertumbuhan media sosial dan kebutuhan website profesional Anda.</p>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">XREXZOB</h1>
+            <p class="hero-subtitle">Welcome to the Future</p>
+            <div class="hero-buttons">
+                <a href="#social" class="btn-primary">Follow Me</a>
+                <a href="#contact" class="btn-secondary">Contact</a>
+            </div>
+        </div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
     </section>
 
-    <div class="main-container">
-        <div class="service-card">
-            <div class="icon-header"><i class="fas fa-chart-line"></i></div>
-            <h2>SMM Booster</h2>
-            <p>Tingkatkan Followers, Likes, & Views secara instan di Instagram, TikTok, & FB.</p>
-            <div class="feature-list">
-                <span><i class="fas fa-check"></i> High Quality</span>
-                <span><i class="fas fa-check"></i> Fast Process</span>
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About XREXZOB</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Welcome to XREXZOB - where creativity meets technology. This is my personal space to showcase my work, passion, and journey in the digital world.</p>
+                    <p>Follow my Instagram for daily updates, behind-the-scenes content, and more!</p>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <h3>24/7</h3>
+                        <p>Online</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>100%</h3>
+                        <p>Creative</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>∞</h3>
+                        <p>Ideas</p>
+                    </div>
+                </div>
             </div>
-            <div class="price-tag">Harga: <span>Tanya di DM</span></div>
-            <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" class="btn-main" target="_blank">Order SMM</a>
         </div>
+    </section>
 
-        <div class="service-card highlight">
-            <div class="icon-header"><i class="fas fa-code"></i></div>
-            <h2>Web Development</h2>
-            <p>Jasa pembuatan website landing page, portfolio, atau toko online profesional.</p>
-            <div class="feature-list">
-                <span><i class="fas fa-check"></i> SEO Friendly</span>
-                <span><i class="fas fa-check"></i> Modern Design</span>
+    <!-- Social Section -->
+    <section id="social" class="social">
+        <div class="container">
+            <h2 class="section-title">Connect With Me</h2>
+            <div class="social-grid">
+                <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" target="_blank" class="social-card instagram">
+                    <i class="fab fa-instagram"></i>
+                    <h3>Instagram</h3>
+                    <p>@xrexzob</p>
+                    <span class="follow-btn">Follow Now</span>
+                </a>
+                <div class="social-card coming-soon">
+                    <i class="fas fa-globe"></i>
+                    <h3>Website</h3>
+                    <p>Coming Soon</p>
+                    <span class="coming-soon-text">Stay Tuned</span>
+                </div>
+                <div class="social-card coming-soon">
+                    <i class="fab fa-tiktok"></i>
+                    <h3>TikTok</h3>
+                    <p>Coming Soon</p>
+                    <span class="coming-soon-text">Stay Tuned</span>
+                </div>
             </div>
-            <div class="price-tag">Harga: <span>Konsultasi via IG</span></div>
-            <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" class="btn-main" target="_blank">Buat Website</a>
         </div>
-    </div>
+    </section>
 
-    <footer>
-        <p>Built with <i class="fas fa-heart"></i> by xrexzob</p>
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>xrexzob@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-instagram"></i>
+                        <span>@xrexzob</span>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit" class="btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 XREXZOB. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
     </footer>
 
     <script src="script.js"></script>
