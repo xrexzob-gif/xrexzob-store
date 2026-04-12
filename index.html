@@ -3,87 +3,553 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xrexzob - Jasa Suntik Sosmed & Website Pro</title>
-    <link rel="stylesheet" href="style.css">
+    <title>xrexzob - Web Developer Pro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #6366f1;
+            --dark: #0a0a0a;
+            --dark-secondary: #1a1a1a;
+            --light: #f8fafc;
+            --accent: #06b6d4;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #ffffff, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .hero-text p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #b3b3b3;
+            line-height: 1.7;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Terminal */
+        .terminal-container {
+            position: relative;
+            height: 500px;
+        }
+
+        .terminal {
+            position: absolute;
+            top: 10%;
+            right: 0;
+            width: 650px;
+            height: 420px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 25px;
+            border: 2px solid var(--primary);
+            padding: 2rem;
+            box-shadow: 0 25px 70px rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27ca3f; }
+
+        .terminal-content {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            height: 300px;
+            overflow: hidden;
+            white-space: pre-wrap;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            background: var(--primary);
+            width: 3px;
+            height: 1.4rem;
+            animation: blink 1s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Sections */
+        .section {
+            padding: 120px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 4rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .service-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 35px 70px rgba(0, 212, 255, 0.25);
+        }
+
+        .service-icon {
+            font-size: 4.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Portfolio */
+        .portfolio {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .portfolio-item {
+            position: relative;
+            height: 280px;
+            border-radius: 25px;
+            overflow: hidden;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.95), rgba(99, 102, 241, 0.95));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: all 0.4s ease;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Contact */
+        .contact-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem 3rem;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            min-width: 220px;
+            justify-content: center;
+        }
+
+        .contact-link:hover {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+        }
+
+        .contact-link i {
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-secondary);
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+
+            .terminal {
+                display: none;
+            }
+
+            .section {
+                padding: 80px 5%;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">Xrexzob 🚀</div>
-            <div class="tagline">Jasa Digital #1 Terpercaya</div>
-            <img src="on.jpg" alt="Xrexzob" class="profile-pic">
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">xrexzob</div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
         </div>
+    </nav>
 
-        <div class="hero">
-            <h1>💥 BOOST BISNIS ANDA SEKARANG!</h1>
-            <p><strong>Suntik Followers, Likes & Views</strong> + <strong>Website Pro Custom</strong><br>
-            Hasil Real • Murah • Cepat • 100% Aman!</p>
-            <a href="https://wa.me/6281234567890?text=Halo%20Xrexzob!" class="cta-button">
-                📲 ORDER SEKARANG
-            </a>
-        </div>
-
-        <div class="services">
-            <div class="service-card">
-                <div class="service-icon">📈</div>
-                <h3>Suntik Instagram</h3>
-                <div class="price">Rp 10K - 500K</div>
-                <p>Followers Real • Likes • Views • Comments<br><strong>INSTANT & GARANSI!</strong></p>
-                <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" class="portofolio-link">👉 Lihat Portofolio IG</a>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <div data-aos="fade-right" data-aos-duration="1000">
+                <h1>
+                    Web Developer <br>
+                    <span class="gradient-text">xrexzob</span>
+                </h1>
+                <p>
+                    Spesialis membuat website profesional dengan teknologi terkini. 
+                    Landing page, e-commerce, dashboard, sampai aplikasi web fullstack.
+                </p>
+                <a href="#contact" class="cta-button">
+                    <i class="fas fa-rocket"></i>
+                    Mulai Project Saya
+                </a>
             </div>
-
-            <div class="service-card">
-                <div class="service-icon">📱</div>
-                <h3>Suntik TikTok</h3>
-                <div class="price">Rp 15K - 1Jt</div>
-                <p>Views Viral • Followers • Likes<br><strong>Trend & FYP Terjamin!</strong></p>
-                <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" class="portofolio-link">👉 Lihat Portofolio IG</a>
-            </div>
-
-            <div class="service-card">
-                <div class="service-icon">💻</div>
-                <h3>Website Custom</h3>
-                <div class="price">Rp 500K - 5Jt</div>
-                <p>Website Jualan • Portfolio • Company<br><strong>Responsive + SEO Ready!</strong></p>
-                <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" class="portofolio-link">👉 Lihat Portofolio IG</a>
-            </div>
-
-            <div class="service-card">
-                <div class="service-icon">🎯</div>
-                <h3>Ads & SEO</h3>
-                <div class="price">Rp 300K - 10Jt</div>
-                <p>Google Ads • FB Ads • SEO Ranking #1<br><strong>ROI Maksimal!</strong></p>
-                <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl" class="portofolio-link">👉 Lihat Portofolio IG</a>
+            <div class="terminal-container" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="300">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="terminal-content" id="terminal">
+                        <div id="terminal-output"></div>
+                        <span class="typing-cursor" id="cursor">|</span>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div class="testimonials">
-            <div class="testimonial">
-                <p>"🔥 Followers IG naik 10K dalam 1 hari! Xrexzob mantap jiwa!"</p>
-                <strong>- @budi_jualan</strong>
+    <!-- Services -->
+    <section id="services" class="section">
+        <h2 class="section-title" data-aos="fade-up">Services</h2>
+        <div class="services-grid">
+            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-laptop-code service-icon"></i>
+                <h3>Frontend Development</h3>
+                <p>React, Next.js, Vue.js, Tailwind CSS, responsive design yang modern dan cepat</p>
             </div>
-            <div class="testimonial">
-                <p>"💯 Website toko online jadi premium, orderan langsung banjir!"</p>
-                <strong>- @dewi_boutique</strong>
+            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-server service-icon"></i>
+                <h3>Backend Development</h3>
+                <p>Node.js, Express, MongoDB, MySQL, API RESTful yang scalable dan secure</p>
+            </div>
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-mobile-alt service-icon"></i>
+                <h3>Mobile Responsive</h3>
+                <p>PWA, mobile-first design, kompatibel semua device dan browser</p>
+            </div>
+            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                <i class="fas fa-rocket service-icon"></i>
+                <h3>Performance & SEO</h3>
+                <p>Optimasi Lighthouse 100%, Core Web Vitals, SEO on-page yang powerful</p>
             </div>
         </div>
+    </section>
 
-        <div class="final-cta">
-            <h3>⏰ BONUS SPESIAL HARI INI!</h3>
-            <p>Order minimal 100K = <strong>Gratis Konsultasi Bisnis 30 menit!</strong></p>
-            <a href="https://wa.me/6281234567890?text=Halo%20Xrexzob!%20Mau%20order%20+BONUS" class="cta-button">
-                💰 PESAN SEKARANG - LIMITED!
-            </a>
-            <p class="ig-footer">
-                📸 Portofolio lengkap: <a href="https://www.instagram.com/xrexzob?igsh=cTV1ODZxcHM5dGVl">@xrexzob</a>
-            </p>
-        </div>
-    </div>
-
-    <a href="https://wa.me/6281234567890?text=Halo%20Xrexzob!" class="whatsapp-float" target="_blank">
-        💬
-    </a>
-
-    <script src="script.js"></script>
-</body>
-</html>
+    <!-- Portfolio -->
+    <section id="portfolio" class="portfolio section">
+        <h2 class="section-title" data-aos="fade-up">Portfolio</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="100">
+                <div class="portfolio-overlay">
+                    <i class="fas fa-external-link-alt" style="font-size: 3rem; margin-bottom: 1rem; color: white;"></i>
+                    <h3>E-Commerce Platform</h3>
+                    <p>Next.js + Tailwind + Stripe</p>
+                </div>
+            </div>
+            <div class="portfolio-item" data-aos="zoom-in" data-aos-delay="200">
+                <div class="portfolio-overlay">
+                    <i class="fas fa-external-link-alt" style="font-size:
