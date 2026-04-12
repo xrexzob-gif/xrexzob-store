@@ -1,51 +1,53 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { 
-    font-family: system-ui, -apple-system, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    height: 100vh; padding: 10px;
-}
+// Mobile Navigation Toggle
+const hamburger = document.getElementById('hamburger');
+const navMenu = document.getElementById('nav-menu');
+const navbar = document.getElementById('navbar');
 
-.chatbot { 
-    height: 100vh; 
-    background: white; 
-    border-radius: 20px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    display: flex; flex-direction: column; 
-    max-width: 100%; margin: 0 auto;
-}
+hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active');
+});
 
-.header { 
-    background: linear-gradient(45deg, #ff6b6b, #4ecdc4); 
-    color: white; padding: 20px; text-align: center;
-    border-radius: 20px 20px 0 0;
-}
-.header h2 { font-size: 1.3rem; margin-bottom: 5px; }
-.status { font-size: 0.8rem; opacity: 0.9; }
+// Close mobile menu when clicking on a link
+document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+    hamburger.classList.remove('active');
+    navMenu.classList.remove('active');
+}));
 
-#messages { 
-    flex: 1; padding: 20px; overflow-y: auto; 
-    background: #f8f9fa;
-}
-.msg { 
-    margin: 10px 0; padding: 12px 16px; 
-    border-radius: 20px; max-width: 85%; 
-    word-wrap: break-word;
-}
-.you { background: #4ecdc4; color: white; margin-left: auto; }
-.ai { background: white; border: 1px solid #e0e0e0; }
+// Navbar background on scroll
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+        navbar.style.background = 'rgba(0, 0, 0, 0.98)';
+    } else {
+        navbar.style.background = 'rgba(0, 0, 0, 0.95)';
+    }
+});
 
-.input-box { 
-    padding: 20px; display: flex; gap: 10px; 
-    border-top: 1px solid #eee; background: white;
-    border-radius: 0 0 20px 20px;
-}
-#input { 
-    flex: 1; padding: 15px; border: 2px solid #e0e0e0; 
-    border-radius: 25px; font-size: 16px; /* Mobile keyboard */
-}
-button { 
-    width: 50px; height: 50px; border: none; 
-    background: #ff6b6b; color: white; border-radius: 50%; 
-    font-size: 1.2rem;
-}
-button:active { transform: scale(0.95); }
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Contact form handling
+const contactForm = document.getElementById('contactForm');
+contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Simulate form submission
+    const btn = this.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+        alert('Pes
