@@ -3,92 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>XREXZOB | Digital Solutions</title>
+    <title>XREXZOB | DIGITAL AUTHENTIC</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body>
 
-    <div class="app-shell">
+    <div class="app">
         <header>
-            <div class="logo">XREXZOB<span>.</span></div>
-            <div class="verified"><i class="ri-shield-check-line"></i> SYSTEM SECURE</div>
+            <div class="logo">XREXZOB<span>SYSTEM</span></div>
+            <div class="server-tag"><span class="blink">●</span> ENCRYPTED</div>
         </header>
 
-        <div class="hero-visual">
-            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop" alt="High Tech Server">
-            <div class="hero-overlay">
-                <div class="status-pill">RUNNING SYSTEM v2.6</div>
-                <h1>Kualitas Premium <br>Bukan Janji Manis.</h1>
+        <div class="hero">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop" alt="Server">
+            <div class="hero-text">
+                <p class="small">#1 PREMIUM DIGITAL VENDOR</p>
+                <h1>Solusi Tanpa Batas <br>Untuk Asset Digital.</h1>
+                <button onclick="location.href='#services'">LIHAT FITUR</button>
             </div>
         </div>
 
-        <section class="marketing-words">
-            <div class="word-card">
-                <i class="ri-cpu-line"></i>
-                <h3>Sistem Otomatis</h3>
-                <p>Semua pesanan diproses oleh sistem script pribadi, menjamin kecepatan dan keamanan akun Anda.</p>
-            </div>
-            <div class="word-card">
-                <i class="ri-customer-service-2-line"></i>
-                <h3>Privasi Terjaga</h3>
-                <p>Kami bekerja di balik layar. Identitas dan data client adalah prioritas utama bagi kami.</p>
+        <section class="trust-bar">
+            <div class="trust-item"><i class="ri-flashlight-fill"></i> Fast Process</div>
+            <div class="trust-item"><i class="ri-shield-keyhole-fill"></i> Secure API</div>
+            <div class="trust-item"><i class="ri-customer-service-fill"></i> 24/7 Support</div>
+        </section>
+
+        <section id="services" class="services">
+            <h2 class="section-title">FITUR UNGGULAN</h2>
+            
+            <div class="accordion">
+                <div class="acc-item" onclick="toggleAcc(this)">
+                    <div class="acc-header">
+                        <div class="acc-title"><i class="ri-instagram-line"></i> SMM Booster</div>
+                        <i class="ri-add-line"></i>
+                    </div>
+                    <div class="acc-content">
+                        <p>Optimasi akun Instagram, TikTok, & FB. Followers permanen, likes real, dan views instan via server pribadi.</p>
+                        <a href="https://www.instagram.com/xrexzob">Cek Pricelist via DM →</a>
+                    </div>
+                </div>
+
+                <div class="acc-item" onclick="toggleAcc(this)">
+                    <div class="acc-header">
+                        <div class="acc-title"><i class="ri-code-s-slash-line"></i> Web Development</div>
+                        <i class="ri-add-line"></i>
+                    </div>
+                    <div class="acc-content">
+                        <p>Pembuatan Landing Page, Portfolio, atau Web Sistem custom dengan teknologi React/NextJS terbaru.</p>
+                        <a href="https://www.instagram.com/xrexzob">Konsultasi Web →</a>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <div class="gallery-title">DEVELOPMENT PROCESS</div>
-        <div class="image-grid">
-            <div class="grid-item">
-                <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=400&auto=format&fit=crop" alt="Coding">
+        <section class="gallery">
+            <p class="label">DEVELOPMENT GALLERY</p>
+            <div class="grid">
+                <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=300" alt="Code">
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=300" alt="Program">
+                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=300" alt="Hacker">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=300" alt="Laptop">
             </div>
-            <div class="grid-item">
-                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=400&auto=format&fit=crop" alt="Server">
-            </div>
-            <div class="grid-item">
-                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=400&auto=format&fit=crop" alt="Workspace">
-            </div>
-            <div class="grid-item">
-                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=400&auto=format&fit=crop" alt="Laptop">
-            </div>
-        </div>
+        </section>
 
-        <div class="section-label">SERVICES INDEX</div>
-        <div class="services-list">
-            <div class="card" onclick="location.href='https://www.instagram.com/xrexzob'">
-                <div class="card-content">
-                    <span class="index">01</span>
-                    <div class="info">
-                        <h3>SMM Booster Premium</h3>
-                        <p>Followers & Engagement Real Human.</p>
-                    </div>
-                </div>
-                <i class="ri-arrow-right-s-line"></i>
-            </div>
-
-            <div class="card" onclick="location.href='https://www.instagram.com/xrexzob'">
-                <div class="card-content">
-                    <span class="index">02</span>
-                    <div class="info">
-                        <h3>Professional Web Dev</h3>
-                        <p>Website Landing Page & Portfolio.</p>
-                    </div>
-                </div>
-                <i class="ri-arrow-right-s-line"></i>
-            </div>
-        </div>
-
-        <div class="cta-section">
-            <h2>Siap Jadi Pusat Perhatian?</h2>
-            <p>Klik tombol di bawah untuk konsultasi langsung via DM Instagram.</p>
-            <a href="https://www.instagram.com/xrexzob" class="cta-btn">
-                <i class="ri-instagram-line"></i> HUBUNGI ADMIN
+        <div class="final-cta">
+            <h3>Tertarik Bekerja Sama?</h3>
+            <p>Langsung chat melalui official Instagram kami.</p>
+            <a href="https://www.instagram.com/xrexzob" class="ig-btn">
+                <i class="ri-instagram-fill"></i> HUBUNGI @XREXZOB
             </a>
         </div>
 
-        <footer>
-            <p>XREXZOB DIGITAL SOLUTION — SINCE 2026</p>
-        </footer>
+        <footer>© 2026 XREXZOB — ALL RIGHTS RESERVED</footer>
     </div>
 
+    <script>
+        function toggleAcc(element) {
+            element.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
