@@ -1,86 +1,44 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>XREXZOB | Digital News & Service</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <title>XREXZOB Oprek Terminal</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
+        .input-box { border: 1px solid #0f0; background: #000; color: #0f0; width: 100%; }
+        #log { margin-top: 20px; color: #00ff00; }
+    </style>
 </head>
 <body>
+    <h1>[ XREXZOB-TERMINAL ]</h1>
+    <p>Target: fayupedia.id</p>
+    
+    <div>
+        <label>Cookie:</label><br>
+        <textarea id="cookie" class="input-box" rows="3">Masukin cookie dari HttpCanary</textarea>
+    </div>
+    <br>
+    <div>
+        <label>XSRF-Token:</label><br>
+        <input type="text" id="token" class="input-box" value="Masukin token dari HttpCanary">
+    </div>
+    
+    <button onclick="gasOprek()" style="margin-top:10px;">EKSEKUSI JALUR KIRI</button>
 
-    <div class="app">
-        <nav class="top-nav">
-            <div class="logo">XREXZOB<span>.DOCS</span></div>
-            <i class="ri-menu-4-line"></i>
-        </nav>
+    <div id="log">> Siap ngoprek...</div>
 
-        <div class="trending-news">
-            <span class="label">TRENDING</span>
-            <marquee>Update Server SMM v4.2: Kecepatan Naik 200% • Jasa Pembuatan Web Portfolio Open Order • </marquee>
-        </div>
+    <script>
+        function gasOprek() {
+            const cookie = document.getElementById('cookie').value;
+            const token = document.getElementById('token').value;
+            const log = document.getElementById('log');
 
-        <section class="main-card">
-            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800" alt="Hacker Visual">
-            <div class="card-info">
-                <span class="category">SECURITY & TECH</span>
-                <h1>Kenapa Jasa Kami Lebih Aman Dari Vendor Lain?</h1>
-                <p>Simak rahasia sistem enkripsi kami dalam memproses pesanan Anda tanpa resiko banned.</p>
-            </div>
-        </section>
-
-        <section class="service-section">
-            <h2 class="section-title">LAYANAN UNGGULAN</h2>
+            log.innerHTML += "<br>> Mengirim payload dengan token: " + token.substring(0, 10) + "...";
             
-            <div class="news-item" onclick="openFeature('smm')">
-                <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=200" alt="SMM">
-                <div class="news-text">
-                    <span class="tag">SOCIAL MEDIA</span>
-                    <h3>SMM Booster: Optimasi Akun ke Level Global</h3>
-                    <p>Cek fitur followers, likes, dan views premium kami...</p>
-                </div>
-            </div>
-
-            <div class="news-item" onclick="openFeature('web')">
-                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=200" alt="Web">
-                <div class="news-text">
-                    <span class="tag">DEVELOPMENT</span>
-                    <h3>Web Dev: Bikin Web yang Bikin Kompetitor Iri</h3>
-                    <p>Custom design, SEO friendly, dan performa kencang...</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="facts-grid">
-            <div class="fact-card">
-                <i class="ri-code-box-line"></i>
-                <h4>500+ Project</h4>
-                <p>Website sukses rilis.</p>
-            </div>
-            <div class="fact-card">
-                <i class="ri-user-heart-line"></i>
-                <h4>1k+ Client</h4>
-                <p>Puas dengan SMM kami.</p>
-            </div>
-        </section>
-
-        <div class="bottom-cta">
-            <p>Butuh konsultasi private?</p>
-            <a href="https://www.instagram.com/xrexzob" class="btn-chat">Kirim Pesan di Instagram</a>
-        </div>
-
-        <footer>
-            <p>© 2026 XREXZOB | Tech & Digital Solutions</p>
-        </footer>
-    </div>
-
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <div id="popup-body"></div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+            // Catatan: Ini akan kena blokir CORS kalau langsung ke fayupedia.
+            // Solusinya: Lo harus pake Proxy atau jalankan lewat aplikasi 'Acode'
+            log.innerHTML += "<br>> Error: Browser memblokir akses (CORS).";
+            log.innerHTML += "<br>> Saran: Salin kode ini ke Acode/Termux buat bypass.";
+        }
+    </script>
 </body>
 </html>
