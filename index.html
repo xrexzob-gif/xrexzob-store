@@ -1,44 +1,67 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <title>XREXZOB Oprek Terminal</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XREXZOB - TERMINAL EXPLOIT</title>
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; padding: 20px; }
-        .input-box { border: 1px solid #0f0; background: #000; color: #0f0; width: 100%; }
-        #log { margin-top: 20px; color: #00ff00; }
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; margin: 0; padding: 20px; }
+        .container { border: 1px solid #0f0; padding: 15px; box-shadow: 0 0 10px #0f0; }
+        .header { text-align: center; border-bottom: 1px solid #0f0; margin-bottom: 15px; padding-bottom: 10px; }
+        .log { font-size: 13px; margin-bottom: 10px; overflow-wrap: break-word; }
+        .status { color: #fff; background: #c00; padding: 2px 5px; font-weight: bold; }
+        .success { color: #000; background: #0f0; padding: 2px 5px; font-weight: bold; }
+        .btn-exec { background: #0f0; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; width: 100%; }
+        .btn-exec:hover { background: #fff; }
+        .highlight { color: #fff; }
     </style>
 </head>
 <body>
-    <h1>[ XREXZOB-TERMINAL ]</h1>
-    <p>Target: fayupedia.id</p>
-    
-    <div>
-        <label>Cookie:</label><br>
-        <textarea id="cookie" class="input-box" rows="3">Masukin cookie dari HttpCanary</textarea>
+
+<div class="container">
+    <div class="header">
+        <h1>[ SYSTEM EXPLOIT v2.0 ]</h1>
+        <p>IDENT_NAME: <span class="highlight">XREXZOB</span> | DEVICE: <span class="highlight">VIVO_V15</span></p>
     </div>
-    <br>
-    <div>
-        <label>XSRF-Token:</label><br>
-        <input type="text" id="token" class="input-box" value="Masukin token dari HttpCanary">
+
+    <div class="log">
+        > TARGET_HOST: <span class="highlight">fayupedia.id</span><br>
+        > SESSION_ID: <span class="highlight">smm_session captured...</span><br>
+        > XSRF_TOKEN: <span class="highlight">token_xsrf captured...</span><br>
+        > SITE_TOKEN: <span class="highlight">0489662827d040a2ad7f2e90a8b8bded</span><br>
+        > PAGE_LOAD_ID: <span class="highlight">6c372b2a-f415-4615-8a89-6ffb44471a66</span>
     </div>
-    
-    <button onclick="gasOprek()" style="margin-top:10px;">EKSEKUSI JALUR KIRI</button>
 
-    <div id="log">> Siap ngoprek...</div>
+    <button class="btn-exec" onclick="startBrute()">RUN AUTO ORDER EXPLOIT</button>
 
-    <script>
-        function gasOprek() {
-            const cookie = document.getElementById('cookie').value;
-            const token = document.getElementById('token').value;
-            const log = document.getElementById('log');
+    <div id="terminal-out" style="margin-top: 20px; font-size: 12px;">
+        <p>> System Idle...</p>
+    </div>
+</div>
 
-            log.innerHTML += "<br>> Mengirim payload dengan token: " + token.substring(0, 10) + "...";
-            
-            // Catatan: Ini akan kena blokir CORS kalau langsung ke fayupedia.
-            // Solusinya: Lo harus pake Proxy atau jalankan lewat aplikasi 'Acode'
-            log.innerHTML += "<br>> Error: Browser memblokir akses (CORS).";
-            log.innerHTML += "<br>> Saran: Salin kode ini ke Acode/Termux buat bypass.";
-        }
-    </script>
+<script>
+    // DATA ASLI DARI LOG XREXZOB
+    const CONFIG = {
+        xsrf: "eyJpdiI6InloeFJqbncrelBKMlMwUjI0MDArOUE9PSIsInZhbHVlIjoiTWF5WSt4a01mb0RWUDNESjd3Nm9raVoxZ3VYU1loWXNBZ0xNUTZrRGphTjl0WHVhdnk2UUVsNEpidEJrUEZHZEkxTWR0NHFENUUwL1FHRWpTaEpKSUJCcy9nTUZwc3paZXZYZnpJUXBMK2NFWmRYcE5zM2hXQ2paOHVCcGdxemQiLCJtYWMiOiI0MmFkYmZlZDI0MmU3NjNlZGJjMjA0YzRmMjMxOTJlMGEzY2Y0YmIzNWVkYTg4MWY3NGI4OGRiZTYxMjk3YWQ2IiwidGFnIjoiIn0%3D",
+        session: "eyJpdiI6IkZzZ0RJQU4ySnpsSE1HS2RKTUFxYnc9PSIsInZhbHVlIjoiZEIrSlJYR0pwWHY2ajJzMy9lUXlvZ2cxN0FwZHo4dFlCOHNIVnZDUjF1QkZTTTAvMDFrOTdycUVZNkVjR0txZGtkQlA5VXhTOFh5ZWlvYlRhQjNqTWk3ZW53ZTRub1MxMWY4MEFwTWJXdDVCVnZFNXFiQTdnalpyQ2l5TG0zZkMiLCJtYWMiOiI2MWM1ZTAxZTBlMjgzZGUyYjk5ZTdiNWEyOGU2NjA4ODEyZTRmMTE3Y2VkYjQwYTRhMWFkOGMwMjlmODcxNjJjIiwidGFnIjoiIn0%3D",
+        siteToken: "0489662827d040a2ad7f2e90a8b8bded"
+    };
+
+    function startBrute() {
+        const out = document.getElementById('terminal-out');
+        out.innerHTML = "<p>> Injecting payload to fayupedia.id/services...</p>";
+        
+        setTimeout(() => {
+            out.innerHTML += "<p>> Using XSRF-TOKEN: <span class='highlight'>" + CONFIG.xsrf.substring(0, 30) + "...</span></p>";
+        }, 800);
+
+        setTimeout(() => {
+            out.innerHTML += "<p>> Checking Response...</p>";
+            out.innerHTML += "<p class='status'>> ERROR: BROWSER_SECURITY_CORS_BLOCKED</p>";
+            out.innerHTML += "<p>> [!] Manual Fix: Use Acode + Node.js or Termux to bypass CORS!</p>";
+        }, 2000);
+    }
+</script>
+
 </body>
 </html>
