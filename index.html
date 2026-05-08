@@ -3,65 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XREXZOB - TERMINAL EXPLOIT</title>
+    <title>Web Jam Digital</title>
     <style>
-        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; margin: 0; padding: 20px; }
-        .container { border: 1px solid #0f0; padding: 15px; box-shadow: 0 0 10px #0f0; }
-        .header { text-align: center; border-bottom: 1px solid #0f0; margin-bottom: 15px; padding-bottom: 10px; }
-        .log { font-size: 13px; margin-bottom: 10px; overflow-wrap: break-word; }
-        .status { color: #fff; background: #c00; padding: 2px 5px; font-weight: bold; }
-        .success { color: #000; background: #0f0; padding: 2px 5px; font-weight: bold; }
-        .btn-exec { background: #0f0; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; width: 100%; }
-        .btn-exec:hover { background: #fff; }
-        .highlight { color: #fff; }
+        /* Mengatur agar konten tepat di tengah layar */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000; /* Latar belakang hitam pekat */
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        /* Gaya angka jam */
+        .clock {
+            font-size: 12vw; /* Ukuran font fleksibel sesuai lebar layar */
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 5px;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Gaya untuk tanggal di bawah jam */
+        .date {
+            font-size: 2vw;
+            color: #888;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+        }
+
+        /* Animasi kedip pada titik dua (optional) */
+        .blink {
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>[ SYSTEM EXPLOIT v2.0 ]</h1>
-        <p>IDENT_NAME: <span class="highlight">XREXZOB</span> | DEVICE: <span class="highlight">VIVO_V15</span></p>
+    <div class="container">
+        <div class="clock" id="displayJam">00:00:00</div>
+        <div class="date" id="displayTanggal">SENIN, 01 JANUARI 2024</div>
     </div>
 
-    <div class="log">
-        > TARGET_HOST: <span class="highlight">fayupedia.id</span><br>
-        > SESSION_ID: <span class="highlight">smm_session captured...</span><br>
-        > XSRF_TOKEN: <span class="highlight">token_xsrf captured...</span><br>
-        > SITE_TOKEN: <span class="highlight">0489662827d040a2ad7f2e90a8b8bded</span><br>
-        > PAGE_LOAD_ID: <span class="highlight">6c372b2a-f415-4615-8a89-6ffb44471a66</span>
-    </div>
+    <script>
+        function tampilkanWaktu() {
+            const waktuSekarang = new Date();
+            
+            // Ambil Jam, Menit, dan Detik
+            let h = waktuSekarang.getHours();
+            let m = waktuSekarang.getMinutes();
+            let s = waktuSekarang.getSeconds();
+            
+            // Format 2 digit (misal: 09 bukan 9)
+            h = (h < 10) ? "0" + h : h;
+            m = (m < 10) ? "0" + m : m;
+            s = (s < 10) ? "0" + s : s;
 
-    <button class="btn-exec" onclick="startBrute()">RUN AUTO ORDER EXPLOIT</button>
+            // Masukkan ke dalam HTML
+            // Bagian m (menit) diapit titik dua
+            document.getElementById("displayJam").innerHTML = `${h}:${m}:${s}`;
 
-    <div id="terminal-out" style="margin-top: 20px; font-size: 12px;">
-        <p>> System Idle...</p>
-    </div>
-</div>
+            // Format Tanggal Indonesia
+            const opsiTanggal = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            const tanggalStr = waktuSekarang.toLocaleDateString('id-ID', opsiTanggal);
+            document.getElementById("displayTanggal").innerText = tanggalStr;
+        }
 
-<script>
-    // DATA ASLI DARI LOG XREXZOB
-    const CONFIG = {
-        xsrf: "eyJpdiI6InloeFJqbncrelBKMlMwUjI0MDArOUE9PSIsInZhbHVlIjoiTWF5WSt4a01mb0RWUDNESjd3Nm9raVoxZ3VYU1loWXNBZ0xNUTZrRGphTjl0WHVhdnk2UUVsNEpidEJrUEZHZEkxTWR0NHFENUUwL1FHRWpTaEpKSUJCcy9nTUZwc3paZXZYZnpJUXBMK2NFWmRYcE5zM2hXQ2paOHVCcGdxemQiLCJtYWMiOiI0MmFkYmZlZDI0MmU3NjNlZGJjMjA0YzRmMjMxOTJlMGEzY2Y0YmIzNWVkYTg4MWY3NGI4OGRiZTYxMjk3YWQ2IiwidGFnIjoiIn0%3D",
-        session: "eyJpdiI6IkZzZ0RJQU4ySnpsSE1HS2RKTUFxYnc9PSIsInZhbHVlIjoiZEIrSlJYR0pwWHY2ajJzMy9lUXlvZ2cxN0FwZHo4dFlCOHNIVnZDUjF1QkZTTTAvMDFrOTdycUVZNkVjR0txZGtkQlA5VXhTOFh5ZWlvYlRhQjNqTWk3ZW53ZTRub1MxMWY4MEFwTWJXdDVCVnZFNXFiQTdnalpyQ2l5TG0zZkMiLCJtYWMiOiI2MWM1ZTAxZTBlMjgzZGUyYjk5ZTdiNWEyOGU2NjA4ODEyZTRmMTE3Y2VkYjQwYTRhMWFkOGMwMjlmODcxNjJjIiwidGFnIjoiIn0%3D",
-        siteToken: "0489662827d040a2ad7f2e90a8b8bded"
-    };
+        // Update setiap detik (1000 milidetik)
+        setInterval(tampilkanWaktu, 1000);
 
-    function startBrute() {
-        const out = document.getElementById('terminal-out');
-        out.innerHTML = "<p>> Injecting payload to fayupedia.id/services...</p>";
-        
-        setTimeout(() => {
-            out.innerHTML += "<p>> Using XSRF-TOKEN: <span class='highlight'>" + CONFIG.xsrf.substring(0, 30) + "...</span></p>";
-        }, 800);
-
-        setTimeout(() => {
-            out.innerHTML += "<p>> Checking Response...</p>";
-            out.innerHTML += "<p class='status'>> ERROR: BROWSER_SECURITY_CORS_BLOCKED</p>";
-            out.innerHTML += "<p>> [!] Manual Fix: Use Acode + Node.js or Termux to bypass CORS!</p>";
-        }, 2000);
-    }
-</script>
-
+        // Jalankan langsung saat halaman dibuka
+        tampilkanWaktu();
+    </script>
 </body>
 </html>
