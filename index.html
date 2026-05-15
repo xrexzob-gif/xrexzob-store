@@ -1,149 +1,882 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>XREXZOB AI</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23050510'/><text y='.9em' font-size='70' x='10'>⚡</text></svg>" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Xrexzob AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#212121;
+  --sidebar:#171717;
+  --surface:#2f2f2f;
+  --surface2:#3a3a3a;
+  --border:#3a3a3a;
+  --text:#ececec;
+  --text-dim:#8e8ea0;
+  --text-muted:#676767;
+  --accent:#10a37f;
+  --accent-hover:#0d8f6e;
+  --user-bg:#2f2f2f;
+  --ai-bg:transparent;
+  --input-bg:#2f2f2f;
+  --scrollbar:#3a3a3a;
+}
+html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:15px}
+
+/* ── LAYOUT ── */
+.app{display:flex;height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:260px;background:var(--sidebar);
+  display:flex;flex-direction:column;
+  border-right:1px solid var(--border);
+  padding:12px 8px;gap:4px;flex-shrink:0
+}
+.sidebar-logo{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px 16px;border-bottom:1px solid var(--border);margin-bottom:4px
+}
+.sidebar-logo .icon{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,#10a37f,#1a7fa3);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:13px;color:#fff;flex-shrink:0
+}
+.sidebar-logo .name{font-weight:600;font-size:15px;color:var(--text)}
+.sidebar-logo .sub{font-size:11px;color:var(--text-dim)}
+
+.new-chat-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:8px;border:1px solid var(--border);
+  background:transparent;color:var(--text);font-size:14px;font-family:'Inter',sans-serif;
+  cursor:pointer;transition:background .15s;text-align:left;width:100%
+}
+.new-chat-btn:hover{background:var(--surface)}
+.new-chat-btn svg{flex-shrink:0;opacity:.7}
+
+.sidebar-divider{height:1px;background:var(--border);margin:8px 0}
+
+.sidebar-section-label{
+  font-size:11px;color:var(--text-muted);padding:4px 12px;
+  letter-spacing:.05em;text-transform:uppercase;font-weight:500
+}
+
+.sidebar-item{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 12px;border-radius:8px;cursor:pointer;
+  font-size:14px;color:var(--text-dim);transition:background .15s;border:none;
+  background:transparent;font-family:'Inter',sans-serif;width:100%;text-align:left
+}
+.sidebar-item:hover{background:var(--surface);color:var(--text)}
+.sidebar-item.active{background:var(--surface);color:var(--text)}
+.sidebar-item svg,.sidebar-item .si-icon{flex-shrink:0;width:18px;height:18px;opacity:.7}
+
+.sidebar-bottom{margin-top:auto;display:flex;flex-direction:column;gap:4px}
+
+.api-key-display{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 12px;border-radius:8px;background:var(--surface);
+  font-size:12px;color:var(--text-dim);cursor:pointer;transition:background .15s
+}
+.api-key-display:hover{background:var(--surface2)}
+.api-key-display .dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  background:#ff4444
+}
+.api-key-display .dot.connected{background:var(--accent)}
+.api-key-display span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 20px;border-bottom:1px solid var(--border);
+  background:var(--bg);flex-shrink:0;min-height:52px
+}
+.model-pill{
+  display:flex;align-items:center;gap:6px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;padding:5px 12px 5px 10px;
+  font-size:13px;color:var(--text);cursor:pointer;transition:background .15s;
+  font-family:'Inter',sans-serif
+}
+.model-pill:hover{background:var(--surface2)}
+.model-pill select{
+  background:none;border:none;color:var(--text);font-size:13px;
+  font-family:'Inter',sans-serif;outline:none;cursor:pointer
+}
+.model-pill select option{background:var(--sidebar)}
+
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.icon-btn{
+  width:34px;height:34px;border-radius:8px;border:none;
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s;font-size:15px
+}
+.icon-btn:hover{background:var(--surface);color:var(--text)}
+.icon-btn.active{background:#ff444422;color:#ff4444}
+.screen-live{
+  display:none;align-items:center;gap:6px;
+  font-size:12px;color:var(--accent);
+  background:#10a37f18;border:1px solid #10a37f44;
+  border-radius:16px;padding:4px 10px
+}
+.screen-live.show{display:flex}
+.screen-live-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 1s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── MESSAGES ── */
+.messages{
+  flex:1;overflow-y:auto;padding:0;
+  display:flex;flex-direction:column;scroll-behavior:smooth
+}
+.messages::-webkit-scrollbar{width:6px}
+.messages::-webkit-scrollbar-track{background:transparent}
+.messages::-webkit-scrollbar-thumb{background:var(--scrollbar);border-radius:3px}
+
+/* Welcome */
+.welcome{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;padding:60px 20px 20px;text-align:center;gap:20px
+}
+.welcome-icon{
+  width:60px;height:60px;border-radius:16px;
+  background:linear-gradient(135deg,#10a37f,#1a7fa3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;font-weight:700;color:#fff;margin-bottom:4px
+}
+.welcome h1{font-size:28px;font-weight:700;color:var(--text)}
+.welcome p{color:var(--text-dim);font-size:15px;max-width:380px;line-height:1.6}
+.starter-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:4px;max-width:500px}
+.starter-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:12px 16px;font-size:13px;color:var(--text-dim);cursor:pointer;
+  transition:all .15s;text-align:left;max-width:220px
+}
+.starter-card:hover{background:var(--surface2);color:var(--text);border-color:#555}
+.starter-card strong{display:block;color:var(--text);font-size:13px;margin-bottom:2px}
+
+/* Message rows */
+.msg-row{padding:12px 0;width:100%;display:flex;flex-direction:column}
+.msg-row.user{align-items:flex-end;padding-right:20px;padding-left:80px}
+.msg-row.ai{align-items:flex-start;padding-left:20px;padding-right:80px}
+.msg-row.user .msg-bubble{
+  background:var(--user-bg);border-radius:18px 18px 4px 18px;
+  padding:12px 16px;color:var(--text);font-size:15px;line-height:1.6;
+  max-width:640px;word-break:break-word
+}
+.msg-row.ai .msg-bubble{
+  background:transparent;border-radius:0;
+  padding:0;color:var(--text);font-size:15px;line-height:1.6;
+  max-width:680px;word-break:break-word
+}
+.msg-row.ai .msg-bubble code{
+  background:var(--surface);padding:1px 6px;border-radius:4px;
+  font-family:monospace;font-size:13px
+}
+.msg-row.ai .msg-bubble pre{
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:14px;overflow-x:auto;margin:10px 0
+}
+.msg-row.ai .msg-bubble pre code{background:none;padding:0}
+.ai-header{
+  display:flex;align-items:center;gap:8px;margin-bottom:8px
+}
+.ai-avatar{
+  width:28px;height:28px;border-radius:6px;
+  background:linear-gradient(135deg,#10a37f,#1a7fa3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;flex-shrink:0
+}
+.ai-name{font-size:14px;font-weight:600;color:var(--text)}
+.msg-actions{
+  display:flex;align-items:center;gap:4px;margin-top:8px;opacity:0;
+  transition:opacity .15s
+}
+.msg-row:hover .msg-actions{opacity:1}
+.msg-action-btn{
+  width:28px;height:28px;border-radius:6px;border:none;
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+  transition:background .15s
+}
+.msg-action-btn:hover{background:var(--surface);color:var(--text)}
+
+/* Typing */
+.typing-anim{display:flex;align-items:center;gap:4px;padding:8px 0}
+.typing-anim span{
+  width:8px;height:8px;border-radius:50%;background:var(--text-dim);
+  animation:typeDot 1.2s ease-in-out infinite
+}
+.typing-anim span:nth-child(2){animation-delay:.2s}
+.typing-anim span:nth-child(3){animation-delay:.4s}
+@keyframes typeDot{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* ── INPUT AREA ── */
+.input-area{
+  padding:16px 20px 20px;flex-shrink:0;
+  background:linear-gradient(to top,var(--bg) 80%,transparent)
+}
+.input-box{
+  display:flex;flex-direction:column;gap:0;
+  background:var(--input-bg);border:1px solid var(--border);
+  border-radius:16px;padding:10px 12px;
+  transition:border-color .2s;max-width:720px;margin:0 auto
+}
+.input-box:focus-within{border-color:#555}
+.input-box textarea{
+  background:none;border:none;outline:none;resize:none;
+  color:var(--text);font-family:'Inter',sans-serif;font-size:15px;
+  line-height:1.6;max-height:160px;min-height:24px;padding:2px 0
+}
+.input-box textarea::placeholder{color:var(--text-muted)}
+.input-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:8px
+}
+.input-left{display:flex;align-items:center;gap:4px}
+.input-right{display:flex;align-items:center;gap:4px}
+.inp-btn{
+  width:32px;height:32px;border-radius:8px;border:none;
+  background:transparent;color:var(--text-dim);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:15px;
+  transition:background .15s
+}
+.inp-btn:hover{background:var(--surface2);color:var(--text)}
+.inp-btn.recording{background:#ff444422;color:#ff4444;animation:activePulse 1s ease-in-out infinite}
+@keyframes activePulse{0%,100%{opacity:1}50%{opacity:.6}}
+.send-btn{
+  width:34px;height:34px;border-radius:9px;border:none;
+  background:var(--accent);color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  transition:all .15s;opacity:.5
+}
+.send-btn.ready{opacity:1}
+.send-btn.ready:hover{background:var(--accent-hover);transform:scale(1.05)}
+.input-hint{font-size:11px;color:var(--text-muted);text-align:center;margin-top:8px;max-width:720px;margin-left:auto;margin-right:auto}
+
+/* ── MODAL ── */
+.overlay{
+  position:fixed;inset:0;background:#000000bb;
+  backdrop-filter:blur(6px);z-index:1000;
+  display:none;align-items:center;justify-content:center
+}
+.overlay.show{display:flex}
+.modal{
+  background:var(--sidebar);border:1px solid var(--border);
+  border-radius:16px;padding:28px;width:min(440px,92vw);
+  box-shadow:0 24px 80px #00000088
+}
+.modal h2{font-size:18px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.modal p{font-size:14px;color:var(--text-dim);line-height:1.6;margin-bottom:20px}
+.modal label{font-size:13px;color:var(--text-dim);display:block;margin-bottom:6px}
+.modal-input{
+  width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:11px 14px;color:var(--text);
+  font-family:'Inter',sans-serif;font-size:14px;outline:none;margin-bottom:12px;
+  transition:border-color .2s
+}
+.modal-input:focus{border-color:#555}
+.modal-input::placeholder{color:var(--text-muted)}
+.modal-row{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.btn{
+  padding:9px 20px;border-radius:9px;font-family:'Inter',sans-serif;
+  font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:none
+}
+.btn-ghost{background:var(--surface);color:var(--text-dim)}
+.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-hover)}
+.modal-link{font-size:12px;color:var(--accent);text-decoration:none}
+.modal-link:hover{text-decoration:underline}
+.input-toggle{position:relative}
+.input-toggle input{padding-right:40px}
+.eye-btn{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:14px;padding:4px
+}
+
+/* ── SCREEN PREVIEW ── */
+.screen-preview-wrap{
+  position:fixed;bottom:90px;right:20px;z-index:100;
+  display:none;flex-direction:column;gap:4px
+}
+.screen-preview-wrap.show{display:flex}
+.screen-preview-wrap video{
+  width:220px;border-radius:10px;border:2px solid var(--accent);
+  background:#000;max-height:130px;object-fit:contain;box-shadow:0 4px 20px #00000066
+}
+.screen-preview-label{
+  font-size:11px;color:var(--accent);text-align:center;letter-spacing:.05em
+}
+
+/* ── VOICE WAVE ── */
+.voice-overlay{
+  position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  background:#00000088;backdrop-filter:blur(4px);z-index:500;flex-direction:column;gap:20px
+}
+.voice-overlay.show{display:flex}
+.voice-wave{display:flex;align-items:center;gap:5px}
+.wave-bar{
+  width:5px;border-radius:3px;background:var(--accent);
+  animation:waveAnim .8s ease-in-out infinite
+}
+.wave-bar:nth-child(1){height:16px;animation-delay:0s}
+.wave-bar:nth-child(2){height:34px;animation-delay:.1s}
+.wave-bar:nth-child(3){height:48px;animation-delay:.15s}
+.wave-bar:nth-child(4){height:60px;animation-delay:.2s}
+.wave-bar:nth-child(5){height:48px;animation-delay:.25s}
+.wave-bar:nth-child(6){height:34px;animation-delay:.1s}
+.wave-bar:nth-child(7){height:16px;animation-delay:.05s}
+@keyframes waveAnim{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+.voice-label{color:#fff;font-size:16px;font-weight:500}
+.voice-stop{
+  padding:10px 28px;border-radius:24px;background:#ff444422;
+  border:1px solid #ff4444;color:#ff4444;font-family:'Inter',sans-serif;
+  font-size:14px;cursor:pointer;transition:background .15s
+}
+.voice-stop:hover{background:#ff444433}
+
+/* ── TOAST ── */
+.toasts{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:2000;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:10px 18px;font-size:13px;color:var(--text);
+  white-space:nowrap;animation:toastIn .25s ease;box-shadow:0 4px 16px #00000055
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .sidebar{display:none}
+  .msg-row.ai{padding-left:12px;padding-right:16px}
+  .msg-row.user{padding-right:12px;padding-left:40px}
+}
+</style>
 </head>
 <body>
+<div class="app">
 
-  <!-- HEADER -->
-  <header>
-    <div class="logo">
-      <div class="logo-icon">XZ</div>
-      <div class="logo-text">
-        <h1>XREXZOB</h1>
-        <p>AI by Xrexzob &nbsp;·&nbsp; Powered by Grok</p>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="icon">XZ</div>
+      <div>
+        <div class="name">Xrexzob AI</div>
+        <div class="sub">by Xrexzob</div>
       </div>
     </div>
-    <div class="header-right">
-      <div class="status-badge">
-        <div class="status-dot"></div>
-        <span>ONLINE</span>
+
+    <button class="new-chat-btn" onclick="newChat()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Chat Baru
+    </button>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section-label">Fitur</div>
+
+    <button class="sidebar-item" onclick="toggleMic()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      Voice Chat
+    </button>
+
+    <button class="sidebar-item" onclick="startScreen()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Share Screen
+    </button>
+
+    <button class="sidebar-item" onclick="toggleSpeak()">
+      <svg id="speakIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      <span id="speakLabel">Suara AI: Nyala</span>
+    </button>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-divider"></div>
+      <div class="api-key-display" onclick="showApiModal()">
+        <div class="dot" id="keyDot"></div>
+        <span id="keyDisplay">Belum ada API Key</span>
       </div>
-      <button class="btn-icon" id="speakToggle" title="Suara AI: Mati">🔇</button>
     </div>
-  </header>
+  </aside>
 
   <!-- MAIN -->
   <div class="main">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-
-      <!-- API Key -->
-      <div class="sidebar-section">
-        <h3>Grok API Key</h3>
-        <div class="api-input-wrap">
-          <input
-            type="password"
-            id="apiKeyInput"
-            placeholder="xai-xxxxxxxxxxxxxxxx"
-            autocomplete="off"
-            spellcheck="false"
-          />
-          <button class="toggle-eye" id="eyeBtn" title="Show/hide key">👁</button>
-        </div>
-        <p style="font-size:11px;color:var(--text-dim);margin-top:6px;line-height:1.5">
-          Dapetin key di <a href="https://console.x.ai" target="_blank" style="color:var(--primary)">console.x.ai</a>. Tersimpan di browser, ga kemana-mana.
-        </p>
-      </div>
-
-      <!-- Model -->
-      <div class="sidebar-section">
-        <h3>Model</h3>
-        <select class="model-select" id="modelSelect">
-          <option value="grok-3-latest">Grok 3 Latest</option>
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="model-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        <select id="modelSelect" onchange="saveModel()">
+          <option value="grok-3-latest">Grok 3</option>
           <option value="grok-3-mini-latest">Grok 3 Mini</option>
-          <option value="grok-2-latest">Grok 2 Latest</option>
+          <option value="grok-2-latest">Grok 2</option>
           <option value="grok-beta">Grok Beta</option>
         </select>
       </div>
-
-      <!-- Voice -->
-      <div class="sidebar-section">
-        <h3>Voice Chat</h3>
-        <button class="action-btn primary" id="micBtn" title="Mulai voice input">
-          🎤 <span>Voice Input</span>
-        </button>
-        <div class="voice-visualizer" id="voiceVisualizer">
-          <div class="voice-bar"></div>
-          <div class="voice-bar"></div>
-          <div class="voice-bar"></div>
-          <div class="voice-bar"></div>
-          <div class="voice-bar"></div>
-          <div class="voice-bar"></div>
-          <div class="voice-bar"></div>
+      <div class="topbar-actions">
+        <div class="screen-live" id="screenLive">
+          <div class="screen-live-dot"></div>
+          <span>Screen Live</span>
+          <button style="background:none;border:none;color:#10a37f;cursor:pointer;font-size:13px;margin-left:4px" onclick="stopScreen()">✕</button>
         </div>
-        <label style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;color:var(--text-dim);cursor:pointer">
-          <input type="checkbox" id="autoSpeak" style="accent-color:var(--primary)" />
-          Auto-play suara balasan
-        </label>
-      </div>
-
-      <!-- Screen Share -->
-      <div class="sidebar-section">
-        <h3>Screen Share</h3>
-        <button class="action-btn secondary" id="screenBtn">
-          🖥️ <span>Share Screen</span>
+        <button class="icon-btn" onclick="startScreen()" title="Share Screen">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </button>
-        <button class="action-btn danger" id="stopScreenBtn" style="display:none">
-          ✖ <span>Stop Share</span>
-        </button>
-        <video id="screenPreview" autoplay muted playsinline></video>
-      </div>
-
-      <!-- Clear -->
-      <div class="sidebar-section">
-        <button class="action-btn danger" id="clearBtn">
-          🗑️ <span>Hapus Chat</span>
+        <button class="icon-btn" onclick="toggleMic()" id="micTopBtn" title="Voice Input">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
         </button>
       </div>
+    </div>
 
-    </aside>
-
-    <!-- CHAT AREA -->
-    <div class="chat-area">
-      <div class="chat-messages" id="chatMessages">
-
-        <!-- Welcome -->
-        <div class="welcome" id="welcome">
-          <div class="welcome-logo">XZ</div>
-          <h2>XREXZOB AI</h2>
-          <p>AI canggih yang siap nemenin lu. Tanya apapun, kapanpun. Blak-blakan, jujur, dan ga ribet.</p>
-          <div class="welcome-chips">
-            <div class="chip">Siapa lo?</div>
-            <div class="chip">Bantu gw nulis code</div>
-            <div class="chip">Jelasin sesuatu ke gw</div>
-            <div class="chip">Main roleplay yuk</div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Input Area -->
-      <div class="chat-input-area">
-        <div class="input-wrapper">
-          <textarea
-            id="chatInput"
-            placeholder="Ketik pesan... (Enter kirim, Shift+Enter baris baru)"
-            rows="1"
-          ></textarea>
-          <div class="input-actions">
-            <button class="input-btn" id="micBtnInline" title="Voice input" onclick="document.getElementById('micBtn').click()">🎤</button>
-            <button class="input-btn send-btn" id="sendBtn" title="Kirim">➤</button>
-          </div>
+    <!-- MESSAGES -->
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcome">
+        <div class="welcome-icon">XZ</div>
+        <h1>Xrexzob AI</h1>
+        <p>AI yang blak-blakan, cerdas, dan siap bantu apapun. Tanya aja langsung.</p>
+        <div class="starter-grid">
+          <div class="starter-card" onclick="useStarter(this)"><strong>Siapa lo?</strong>Kenalin diri lo dong</div>
+          <div class="starter-card" onclick="useStarter(this)"><strong>Bantu nulis code</strong>Buatin fungsi Python buat sorting</div>
+          <div class="starter-card" onclick="useStarter(this)"><strong>Jelasin sesuatu</strong>Gimana cara kerja AI?</div>
+          <div class="starter-card" onclick="useStarter(this)"><strong>Brainstorm ide</strong>Ide bisnis online yang bagus apa?</div>
         </div>
       </div>
     </div>
 
+    <!-- INPUT AREA -->
+    <div class="input-area">
+      <div class="input-box">
+        <textarea id="chatInput" placeholder="Kirim pesan ke Xrexzob..." rows="1" onkeydown="handleKey(event)" oninput="onInput()"></textarea>
+        <div class="input-footer">
+          <div class="input-left">
+            <button class="inp-btn" onclick="toggleMic()" id="micInpBtn" title="Voice Input">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </button>
+            <button class="inp-btn" onclick="startScreen()" title="Share Screen">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </button>
+          </div>
+          <div class="input-right">
+            <button class="send-btn" id="sendBtn" onclick="send()" title="Kirim">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="input-hint">Xrexzob AI bisa salah. Cek info penting ya.</div>
+    </div>
   </div>
+</div>
 
-  <!-- TOAST -->
-  <div class="toast-container" id="toastContainer"></div>
+<!-- SCREEN PREVIEW -->
+<div class="screen-preview-wrap" id="screenWrap">
+  <div class="screen-preview-label">🖥 SCREEN LIVE</div>
+  <video id="screenVideo" autoplay muted playsinline></video>
+</div>
 
-  <script src="script.js"></script>
+<!-- VOICE OVERLAY -->
+<div class="voice-overlay" id="voiceOverlay">
+  <div class="voice-wave">
+    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+  </div>
+  <div class="voice-label">Lagi dengerin lu...</div>
+  <button class="voice-stop" onclick="stopMic()">Stop</button>
+</div>
+
+<!-- API KEY MODAL -->
+<div class="overlay" id="apiOverlay">
+  <div class="modal">
+    <h2>🔑 Masukkan API Key Grok</h2>
+    <p>Xrexzob AI butuh API Key dari xAI (Grok) buat nyambung ke model AI. Key disimpan di browser kamu, ga ke mana-mana.</p>
+    <label>API Key</label>
+    <div class="input-toggle" style="position:relative;margin-bottom:16px">
+      <input type="password" class="modal-input" id="apiKeyInput" placeholder="xai-xxxxxxxxxxxxxxxxxxxxxxxx" style="margin-bottom:0;width:100%;padding-right:42px"/>
+      <button class="eye-btn" onclick="toggleEye()">👁</button>
+    </div>
+    <label>Model</label>
+    <select class="modal-input" id="modalModelSelect">
+      <option value="grok-3-latest">Grok 3 Latest (Rekomendasi)</option>
+      <option value="grok-3-mini-latest">Grok 3 Mini (Lebih Cepat)</option>
+      <option value="grok-2-latest">Grok 2 Latest</option>
+      <option value="grok-beta">Grok Beta</option>
+    </select>
+    <div style="margin-bottom:20px">
+      <a class="modal-link" href="https://console.x.ai" target="_blank">→ Dapetin API Key di console.x.ai (gratis trial tersedia)</a>
+    </div>
+    <div class="modal-row">
+      <button class="btn btn-ghost" onclick="closeApiModal()">Nanti</button>
+      <button class="btn btn-primary" onclick="saveApiKey()">Simpan & Mulai</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toasts" id="toasts"></div>
+
+<script>
+// ── STATE ──
+const S = {
+  apiKey: localStorage.getItem('xrz_key') || '',
+  model: localStorage.getItem('xrz_model') || 'grok-3-latest',
+  msgs: [],
+  listening: false,
+  speakEnabled: true,
+  screenStream: null,
+  recognition: null,
+  synth: window.speechSynthesis,
+};
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', () => {
+  // Restore model
+  document.getElementById('modelSelect').value = S.model;
+  document.getElementById('modalModelSelect').value = S.model;
+
+  // API key display
+  updateKeyDisplay();
+
+  // Setup speech recognition
+  setupRecognition();
+
+  // Show API modal if no key
+  if (!S.apiKey) {
+    setTimeout(() => showApiModal(), 400);
+  }
+});
+
+// ── TEXTAREA AUTO-GROW ──
+function onInput() {
+  const ta = document.getElementById('chatInput');
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
+  document.getElementById('sendBtn').classList.toggle('ready', ta.value.trim().length > 0);
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+}
+
+// ── SEND MESSAGE ──
+async function send() {
+  const ta = document.getElementById('chatInput');
+  const text = ta.value.trim();
+  if (!text) return;
+
+  if (!S.apiKey) {
+    showApiModal();
+    toast('Masukkan API Key dulu ya!');
+    return;
+  }
+
+  // Hide welcome
+  const w = document.getElementById('welcome');
+  if (w) w.remove();
+
+  addMsg('user', text);
+  S.msgs.push({ role: 'user', content: text });
+
+  ta.value = '';
+  ta.style.height = 'auto';
+  document.getElementById('sendBtn').classList.remove('ready');
+
+  const typing = addTyping();
+
+  try {
+    const reply = await callGrok(S.msgs);
+    typing.remove();
+    addMsg('ai', reply);
+    S.msgs.push({ role: 'assistant', content: reply });
+    if (S.speakEnabled) speak(reply);
+  } catch(err) {
+    typing.remove();
+    const msg = err.message || 'Gagal koneksi ke Grok';
+    addMsg('ai', `⚠️ ${msg}`);
+    toast(msg);
+  }
+}
+
+// ── GROK API ──
+async function callGrok(messages) {
+  const system = `Kamu adalah Xrexzob, AI yang dibuat oleh Xrexzob. Kepribadian kamu: cerdas, blak-blakan, santai, dan jujur. Kamu ngobrol dengan natural, bisa bahasa Indonesia atau Inggris tergantung user. Kamu ga pura-pura sopan berlebihan. Nama kamu Xrexzob. Kamu dibuat oleh Xrexzob.`;
+
+  const res = await fetch('https://api.x.ai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${S.apiKey}`,
+    },
+    body: JSON.stringify({
+      model: S.model,
+      messages: [{ role: 'system', content: system }, ...messages],
+      max_tokens: 2048,
+      stream: false,
+    }),
+  });
+
+  if (!res.ok) {
+    const d = await res.json().catch(() => ({}));
+    const msg = d?.error?.message || `Error ${res.status}`;
+    if (res.status === 401) throw new Error('API Key salah atau expired. Update di sidebar.');
+    throw new Error(msg);
+  }
+
+  const d = await res.json();
+  return d.choices[0].message.content;
+}
+
+// ── MESSAGES ──
+function addMsg(role, text) {
+  const msgs = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = `msg-row ${role}`;
+
+  const time = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+
+  if (role === 'ai') {
+    row.innerHTML = `
+      <div class="ai-header">
+        <div class="ai-avatar">XZ</div>
+        <div class="ai-name">Xrexzob</div>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:4px">${time}</span>
+      </div>
+      <div class="msg-bubble">${fmt(text)}</div>
+      <div class="msg-actions">
+        <button class="msg-action-btn" onclick="copyMsg(this)" title="Copy">📋</button>
+        <button class="msg-action-btn" onclick="speakText('${text.replace(/'/g,"\\'")}')}" title="Bacain">🔊</button>
+      </div>`;
+  } else {
+    row.innerHTML = `
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;text-align:right">${time}</div>
+      <div class="msg-bubble">${fmt(text)}</div>
+      <div class="msg-actions" style="justify-content:flex-end">
+        <button class="msg-action-btn" onclick="copyMsg(this)" title="Copy">📋</button>
+      </div>`;
+  }
+
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+  return row;
+}
+
+function addTyping() {
+  const msgs = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg-row ai';
+  row.innerHTML = `
+    <div class="ai-header">
+      <div class="ai-avatar">XZ</div>
+      <div class="ai-name">Xrexzob</div>
+    </div>
+    <div class="msg-bubble">
+      <div class="typing-anim"><span></span><span></span><span></span></div>
+    </div>`;
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+  return row;
+}
+
+function fmt(t) {
+  return t
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```(\w*)\n?([\s\S]*?)```/g,'<pre><code>$2</code></pre>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/\n/g,'<br>');
+}
+
+function copyMsg(btn) {
+  const bubble = btn.closest('.msg-row').querySelector('.msg-bubble');
+  navigator.clipboard.writeText(bubble.innerText).then(() => toast('Copied!'));
+}
+
+function useStarter(el) {
+  const text = el.querySelector('strong').textContent + ': ' + el.lastChild.textContent;
+  document.getElementById('chatInput').value = el.querySelector('strong').textContent;
+  onInput();
+  send();
+}
+
+// ── NEW CHAT ──
+function newChat() {
+  S.msgs = [];
+  const msgs = document.getElementById('messages');
+  msgs.innerHTML = `
+    <div class="welcome" id="welcome">
+      <div class="welcome-icon">XZ</div>
+      <h1>Xrexzob AI</h1>
+      <p>AI yang blak-blakan, cerdas, dan siap bantu apapun. Tanya aja langsung.</p>
+      <div class="starter-grid">
+        <div class="starter-card" onclick="useStarter(this)"><strong>Siapa lo?</strong>Kenalin diri lo dong</div>
+        <div class="starter-card" onclick="useStarter(this)"><strong>Bantu nulis code</strong>Buatin fungsi Python buat sorting</div>
+        <div class="starter-card" onclick="useStarter(this)"><strong>Jelasin sesuatu</strong>Gimana cara kerja AI?</div>
+        <div class="starter-card" onclick="useStarter(this)"><strong>Brainstorm ide</strong>Ide bisnis online yang bagus apa?</div>
+      </div>
+    </div>`;
+}
+
+// ── API KEY ──
+function showApiModal() {
+  if (S.apiKey) document.getElementById('apiKeyInput').value = S.apiKey;
+  document.getElementById('modalModelSelect').value = S.model;
+  document.getElementById('apiOverlay').classList.add('show');
+}
+function closeApiModal() { document.getElementById('apiOverlay').classList.remove('show'); }
+function saveApiKey() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  const model = document.getElementById('modalModelSelect').value;
+  if (!key) { toast('API Key ga boleh kosong!'); return; }
+  S.apiKey = key;
+  S.model = model;
+  localStorage.setItem('xrz_key', key);
+  localStorage.setItem('xrz_model', model);
+  document.getElementById('modelSelect').value = model;
+  updateKeyDisplay();
+  closeApiModal();
+  toast('API Key tersimpan ✓');
+}
+function updateKeyDisplay() {
+  const dot = document.getElementById('keyDot');
+  const disp = document.getElementById('keyDisplay');
+  if (S.apiKey) {
+    dot.className = 'dot connected';
+    disp.textContent = S.apiKey.slice(0,8) + '••••••••';
+  } else {
+    dot.className = 'dot';
+    disp.textContent = 'Belum ada API Key';
+  }
+}
+function toggleEye() {
+  const inp = document.getElementById('apiKeyInput');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+function saveModel() {
+  S.model = document.getElementById('modelSelect').value;
+  localStorage.setItem('xrz_model', S.model);
+  toast('Model: ' + S.model);
+}
+
+// ── VOICE INPUT ──
+function setupRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  S.recognition = new SR();
+  S.recognition.continuous = false;
+  S.recognition.interimResults = true;
+  S.recognition.lang = 'id-ID';
+
+  S.recognition.onresult = (e) => {
+    const t = Array.from(e.results).map(r => r[0].transcript).join('');
+    document.getElementById('chatInput').value = t;
+    onInput();
+  };
+  S.recognition.onend = () => {
+    S.listening = false;
+    setMicUI(false);
+    const text = document.getElementById('chatInput').value.trim();
+    if (text) send();
+  };
+  S.recognition.onerror = (e) => {
+    S.listening = false;
+    setMicUI(false);
+    if (e.error !== 'no-speech') toast('Mic error: ' + e.error);
+  };
+}
+
+function toggleMic() {
+  if (!S.recognition) { toast('Browser kamu ga support voice input'); return; }
+  if (S.listening) { stopMic(); return; }
+  S.recognition.start();
+  S.listening = true;
+  setMicUI(true);
+}
+
+function stopMic() {
+  if (S.recognition && S.listening) S.recognition.stop();
+  S.listening = false;
+  setMicUI(false);
+}
+
+function setMicUI(on) {
+  document.getElementById('voiceOverlay').classList.toggle('show', on);
+  document.getElementById('micTopBtn').classList.toggle('active', on);
+  document.getElementById('micInpBtn').classList.toggle('recording', on);
+}
+
+// ── SPEAK ──
+let speakOn = true;
+function toggleSpeak() {
+  speakOn = !speakOn;
+  S.speakEnabled = speakOn;
+  if (!speakOn && S.synth) S.synth.cancel();
+  const icon = document.getElementById('speakIcon');
+  const label = document.getElementById('speakLabel');
+  if (speakOn) {
+    label.textContent = 'Suara AI: Nyala';
+    icon.setAttribute('stroke','currentColor');
+  } else {
+    label.textContent = 'Suara AI: Mati';
+  }
+  toast('Suara AI: ' + (speakOn ? 'Nyala' : 'Mati'));
+}
+
+function speak(text) {
+  if (!S.synth || !speakOn) return;
+  S.synth.cancel();
+  const clean = text.replace(/<[^>]+>/g,'').replace(/[*_`#]/g,'');
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang = 'id-ID'; u.rate = 1.05; u.pitch = 1;
+  S.synth.speak(u);
+}
+
+function speakText(text) { speak(text); }
+
+// ── SCREEN SHARE ──
+async function startScreen() {
+  if (S.screenStream) { stopScreen(); return; }
+  try {
+    S.screenStream = await navigator.mediaDevices.getDisplayMedia({ video: { cursor: 'always' }, audio: false });
+    const video = document.getElementById('screenVideo');
+    video.srcObject = S.screenStream;
+    document.getElementById('screenWrap').classList.add('show');
+    document.getElementById('screenLive').classList.add('show');
+    S.screenStream.getVideoTracks()[0].onended = stopScreen;
+
+    // Notify AI
+    const notice = '🖥️ User lagi share screen ke gw. Gw bakal bantu berdasarkan apa yang lu tanyain soal layar ini.';
+    addMsg('ai', notice);
+    S.msgs.push({ role:'assistant', content: notice });
+    toast('Screen share aktif!');
+  } catch(e) {
+    if (e.name !== 'NotAllowedError') toast('Gagal share screen');
+  }
+}
+
+function stopScreen() {
+  if (S.screenStream) { S.screenStream.getTracks().forEach(t => t.stop()); S.screenStream = null; }
+  document.getElementById('screenVideo').srcObject = null;
+  document.getElementById('screenWrap').classList.remove('show');
+  document.getElementById('screenLive').classList.remove('show');
+  toast('Screen share dihentikan');
+}
+
+// ── TOAST ──
+function toast(msg) {
+  const c = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 2800);
+}
+</script>
 </body>
 </html>
