@@ -3,231 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto-Responder Chatbot</title>
+    <title>Delta & Ad-Link Bypasser</title>
     <style>
-        /* ─── STYLE THEME HITAM & ESTETIK ─── */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: #0b0b12;
+            background-color: #0d0d0d;
             color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
-            position: relative;
+            margin: 0;
         }
-
-        /* Efek Bintang Samar di Background */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
-            background-size: 550px 550px, 350px 350px;
-            background-position: 0 0, 40px 60px;
-            opacity: 0.3;
-            z-index: 1;
-        }
-
-        /* Container Chat Box */
-        .chat-container {
-            width: 100%;
-            max-width: 450px;
-            height: 85vh;
-            background: rgba(20, 20, 30, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            z-index: 2;
-        }
-
-        /* Header Chat */
-        .chat-header {
-            background: rgba(30, 30, 50, 0.9);
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chat-header h2 {
-            font-size: 1.2rem;
-            color: #00ffcc;
-            letter-spacing: 1px;
-        }
-
-        .chat-header p {
-            font-size: 0.8rem;
-            color: #aaa;
-        }
-
-        /* Area Chat Log */
-        .chat-box {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        /* Bubble Chat Base */
-        .message {
-            max-width: 75%;
-            padding: 10px 14px;
+        .container {
+            background-color: #1a1a1a;
+            padding: 30px;
             border-radius: 12px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            word-wrap: break-word;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid #2a2a2a;
         }
-
-        /* Chat dari User (Kanan) */
-        .user-msg {
-            background: #00ffcc;
-            color: #0b0b12;
-            align-self: flex-end;
-            border-bottom-right-radius: 2px;
-            font-weight: 500;
+        h1 {
+            color: #00ff87;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
-
-        /* Chat dari Bot (Kiri) */
-        .bot-msg {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            align-self: flex-start;
-            border-bottom-left-radius: 2px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Area Input Ketik Pesan */
-        .chat-input-area {
-            padding: 15px;
-            background: rgba(15, 15, 25, 0.9);
-            display: flex;
-            gap: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chat-input-area input {
-            flex: 1;
+        input[type="text"] {
+            width: 100%;
             padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: white;
-            font-size: 0.95rem;
-            outline: none;
-            transition: 0.3s;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            background-color: #111;
+            color: #fff;
+            box-sizing: border-box;
         }
-
-        .chat-input-area input:focus {
-            border-color: #00ffcc;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .chat-input-area button {
-            padding: 0 20px;
-            background: #00ffcc;
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #00ff87;
+            color: #000;
             border: none;
-            border-radius: 8px;
-            color: #0b0b12;
+            border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
+            transition: background 0.3s;
         }
-
-        .chat-input-area button:hover {
-            background: #00cca3;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        button:hover {
+            background-color: #00cc6a;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #111;
+            border-radius: 6px;
+            border: 1px solid #333;
+            display: none;
+            word-break: break-all;
+        }
+        .result-title {
+            color: #00ff87;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="chat-container">
-        <div class="chat-header">
-            <h2>XREXZOB AI BOT</h2>
-            <p>Online 24/7 • Auto Responder</p>
-        </div>
+<div class="container">
+    <h1>Delta Key Bypasser</h1>
+    <p style="color: #aaa; font-size: 14px;">Tempel link checkpoint Delta atau ad-link lo di bawah ini:</p>
+    
+    <input type="text" id="targetLink" placeholder="https://gateway.platoboost.com/a/8?id=...">
+    <button onclick="processBypass()">Bypass Link</button>
 
-        <div class="chat-box" id="chatBox">
-            <div class="message bot-msg">Halo! Ada yang bisa dibantu? 😊</div>
-        </div>
-
-        <div class="chat-input-area">
-            <input type="text" id="userInput" placeholder="Ketik sesuatu di sini..." autocomplete="off">
-            <button id="sendBtn">Kirim</button>
-        </div>
+    <div class="result-box" id="resultBox">
+        <div class="result-title">Hasil Bypass:</div>
+        <p id="resultText" style="margin: 5px 0;"></p>
     </div>
+</div>
 
-    <script type="module">
-        // Import database dari file index.js lu
-        import autoResponder from './index.js';
+<script>
+async function processBypass() {
+    const inputUrl = document.getElementById('targetLink').value.trim();
+    const resultBox = document.getElementById('resultBox');
+    const resultText = document.getElementById('resultText');
 
-        const chatBox = document.getElementById('chatBox');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
+    if (!inputUrl) {
+        alert('Harap masukkan link terlebih dahulu!');
+        return;
+    }
 
-        // Fungsi nyari jawaban berdasarkan input user
-        function getResponse(textInput) {
-            const input = textInput.toLowerCase().trim();
-            for (const entry of autoResponder) {
-                if (entry.keywords.some(kw => input.includes(kw))) {
-                    return entry.response;
-                }
-            }
-            return "Maaf, saya tidak mengerti maksud kamu. Bisa diulang dengan kalimat lain? 😊";
+    resultBox.style.display = 'block';
+    resultText.innerHTML = '<span style="color: #ffaa00;">Sedang memproses, mohon tunggu...</span>';
+
+    try {
+        // Menggunakan penyedia API pihak ketiga gratisan yang mendukung bypass platoboost/adlink
+        // Catatan: Endpoint API eksternal ini bisa berubah sewaktu-waktu tergantung penyedia jasanya
+        const apiUrl = `https://api.bypass.vip/bypass?url=${encodeURIComponent(inputUrl)}`;
+        
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data && data.status === "success" && data.result) {
+            resultText.innerHTML = `<a href="${data.result}" target="_blank" style="color: #00ff87; text-decoration: none;">${data.result}</a>`;
+        } else if (data && data.destination) {
+            resultText.innerHTML = `<a href="${data.destination}" target="_blank" style="color: #00ff87; text-decoration: none;">${data.destination}</a>`;
+        } else {
+            resultText.innerHTML = '<span style="color: #ff3333;">Gagal mengekstrak link. Pastikan link yang dimasukkan valid atau coba lagi nanti.</span>';
         }
+    } catch (error) {
+        console.error(error);
+        resultText.innerHTML = '<span style="color: #ff3333;">Terjadi kesalahan koneksi ke server bypasser.</span>';
+    }
+}
+</script>
 
-        // Fungsi buat nampilin bubble chat ke layar
-        function appendMessage(text, sender) {
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message', sender === 'user' ? 'user-msg' : 'bot-msg');
-            msgDiv.innerText = text;
-            chatBox.appendChild(msgDiv);
-            
-            // Auto scroll ke bawah tiap ada chat baru
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        // Fungsi eksekusi kirim pesan
-        function handleSendMessage() {
-            const text = userInput.value.trim();
-            if (!text) return;
-
-            // 1. Tampilkan chat user
-            appendMessage(text, 'user');
-            userInput.value = '';
-
-            // 2. Kasih jeda dikit biar kyk bot mikir, trs tampilin balesan bot
-            setTimeout(() => {
-                const botReply = getResponse(text);
-                appendMessage(botReply, 'bot');
-            }, 400);
-        }
-
-        // Trigger klik tombol kirim
-        sendBtn.addEventListener('click', handleSendMessage);
-
-        // Trigger tombol Enter di keyboard
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleSendMessage();
-            }
-        });
-    </script>
 </body>
 </html>
