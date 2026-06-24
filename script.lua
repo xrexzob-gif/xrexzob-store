@@ -1,139 +1,73 @@
---[[
-    xrex zob - Emote & Animasi GUI
-    - Tab EMOT dan ANIMASI TERPISAH
-    - Grid 5 kolom, kartu kotak
-    - Tombol "Mainkan", bintang favorit, search
-    - Bisa drag, minimize
-    - Tidak ada yang dihapus
-]]
+-- =====================================================
+--          xrex zob - Premium Emote GUI v5
+--   Auto-load emot & animasi dari 7yd7 GitHub
+--   Tab EMOT & ANIMASI terpisah
+--   Sticker bulat floating (klik buka/tutup)
+--   Speed control emote/animasi
+-- =====================================================
 
 if _G.XRexZobRunning then return end
 _G.XRexZobRunning = true
 
+-- =====================================================
+-- URL DATA (dari 7yd7 sniper-Emote repository)
+-- =====================================================
+local URL_EMOT = "https://raw.githubusercontent.com/7yd7/sniper-Emote/refs/heads/test/EmoteSniper.json"
+local URL_ANIM = "https://raw.githubusercontent.com/7yd7/sniper-Emote/refs/heads/test/AnimationSniper.json"
+
+-- =====================================================
+-- ICON STICKER (ganti ID asset gambar lo di sini)
+-- =====================================================
+local STICKER_IMAGE = "rbxassetid://4483361525"
+
+-- =====================================================
+-- DATA FALLBACK (dipakai kalau GitHub gagal)
+-- =====================================================
+local FALLBACK_EMOTES = {
+    {id=3360686498, name="Stadium"},   {id=3360692915, name="Tilt"},
+    {id=3576968026, name="Shrug"},     {id=3360689775, name="Salute"},
+    {id=507770239,  name="Wave"},      {id=507770677,  name="Cheer"},
+    {id=507770818,  name="Laugh"},     {id=507771019,  name="Dance"},
+    {id=507776043,  name="Dance2"},    {id=507777268,  name="Dance3"},
+    {id=3576823,    name="Robot"},     {id=4052796268, name="Clapping"},
+    {id=4197966900, name="Air Guitar"},{id=4806381674, name="Old School"},
+    {id=5261950170, name="Samba"},     {id=5610118060, name="Breakdance"},
+    {id=6056875955, name="Moonwalk"},  {id=6519551651, name="Headbang"},
+    {id=7393164870, name="Floss"},     {id=7712012531, name="Dab"},
+    {id=7831712567, name="Worm"},      {id=8158547440, name="Griddy"},
+    {id=8308296113, name="Savage"},    {id=8472614831, name="Renegade"},
+    {id=8639614157, name="Woah"},      {id=6637501979, name="Gangnam Style"},
+}
+local FALLBACK_ANIMS = {
+    {id=507766388, name="Idle"},       {id=507777826, name="Walk"},
+    {id=507767714, name="Run"},        {id=507765000, name="Jump"},
+    {id=507767968, name="Fall"},       {id=507765644, name="Climb"},
+    {id=507784897, name="Swim"},       {id=507785072, name="Swim Idle"},
+    {id=2506281703,name="Sit"},        {id=182393478, name="Tool None"},
+    {id=129631525, name="Tool Slash"}, {id=616906778, name="Ninja Walk"},
+    {id=616945932, name="Ninja Idle"}, {id=616944091, name="Ninja Jump"},
+    {id=616163682, name="Zombie Walk"},{id=616158929, name="Zombie Idle"},
+    {id=616009598, name="Robot Walk"}, {id=616008369, name="Robot Idle"},
+}
+
+-- =====================================================
+-- SERVICES
+-- =====================================================
 local Players          = game:GetService("Players")
 local CoreGui          = game:GetService("CoreGui")
+local HttpService      = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
-local PAGE   = 15  -- 15 per halaman (3 baris x 5 kolom)
+local PAGE   = 15  -- kartu per halaman
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  DATA EMOT
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-local EMOTES = {
-    {name="Wave",                id=3576519},
-    {name="Tilt",                id=3585369},
-    {name="Shrug",               id=3576625},
-    {name="Cheer",               id=3576517},
-    {name="Salute",              id=3576690},
-    {name="Point",               id=3576628},
-    {name="Laugh",               id=3576567},
-    {name="Dance",               id=3576516},
-    {name="Dance2",              id=3576521},
-    {name="Dance3",              id=3576524},
-    {name="Stadium",             id=3576630},
-    {name="Zombie Walk",         id=3576795},
-    {name="Ninja Run",           id=616945806},
-    {name="Robot",               id=3576823},
-    {name="Superpose",           id=4849487550},
-    {name="Hyped",               id=5915779043},
-    {name="Bawl",                id=7715078963},
-    {name="Confused",            id=7719258686},
-    {name="Clapping",            id=4052796268},
-    {name="Air Guitar",          id=4197966900},
-    {name="Pop Lock",            id=4740219636},
-    {name="Old School",          id=4806381674},
-    {name="Spooky",              id=4925758807},
-    {name="Samba",               id=5261950170},
-    {name="Breakdance",          id=5610118060},
-    {name="Flip",                id=5699995704},
-    {name="Shuffle",             id=5915779043},
-    {name="Moonwalk",            id=6056875955},
-    {name="Splits",              id=6152312069},
-    {name="Cartwheel",           id=6399178571},
-    {name="Headbang",            id=6519551651},
-    {name="Running Man",         id=6763252898},
-    {name="Electric Slide",      id=6906211573},
-    {name="Whip",                id=7019763349},
-    {name="Nae Nae",             id=7225765484},
-    {name="Floss",               id=7393164870},
-    {name="Dab",                 id=7712012531},
-    {name="Worm",                id=7831712567},
-    {name="Griddy",              id=8158547440},
-    {name="Savage",              id=8308296113},
-    {name="Renegade",            id=8472614831},
-    {name="Woah",                id=8639614157},
-    {name="Macarena",            id=8808614889},
-    {name="Thriller",            id=8979614789},
-    {name="Harlem Shake",        id=9152614789},
-    {name="Jump On It",          id=9325614789},
-    {name="Gangnam Style",       id=6637501979},
-    {name="Backflip",            id=5699995704},
-    {name="Best Friends",        id=4608310012},
-    {name="Twerk",               id=5004685692},
-}
-
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  DATA ANIMASI
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-local ANIMATIONS = {
-    {name="Idle 1",              id=180435571},
-    {name="Idle 2",              id=180435792},
-    {name="Walk",                id=180426354},
-    {name="Run",                 id=180426839},
-    {name="Jump",                id=125750702},
-    {name="Fall",                id=180436148},
-    {name="Climb",               id=180436334},
-    {name="Swim",                id=180436463},
-    {name="Swim Idle",           id=180436922},
-    {name="Sit",                 id=2506281703},
-    {name="Tool None",           id=182393478},
-    {name="Tool Slash",          id=129631525},
-    {name="Tool Lunge",          id=129632391},
-    {name="Ninja Walk",          id=616906778},
-    {name="Ninja Idle",          id=616945932},
-    {name="Ninja Jump",          id=616944091},
-    {name="Ninja Fall",          id=616943774},
-    {name="Zombie Walk",         id=616163682},
-    {name="Zombie Idle",         id=616158929},
-    {name="Robot Walk",          id=616009598},
-    {name="Robot Idle",          id=616008369},
-    {name="Superhero Idle",      id=616163682},
-    {name="Superhero Walk",      id=616009598},
-    {name="Superhero Run",       id=616906778},
-    {name="Mage Walk",           id=616906778},
-    {name="Pirate Idle",         id=616945932},
-    {name="Pirate Walk",         id=616906778},
-    {name="Werewolf Walk",       id=616906778},
-    {name="Dragon Walk",         id=616163682},
-    {name="Dragon Idle",         id=616158929},
-    {name="Vampire Walk",        id=616009598},
-    {name="Vampire Idle",        id=616008369},
-    {name="Knight Walk",         id=616906778},
-    {name="Elf Walk",            id=616163682},
-    {name="Witch Walk",          id=616009598},
-    {name="Alien Walk",          id=616906778},
-    {name="Ghost Walk",          id=616163682},
-    {name="Ghost Idle",          id=616158929},
-    {name="Troll Walk",          id=616009598},
-    {name="Troll Idle",          id=616008369},
-    {name="Bunny Hop",           id=616906778},
-    {name="Slide",               id=616906778},
-    {name="Crouch Walk",         id=616163682},
-    {name="Sneak Walk",          id=616158929},
-    {name="Tip Toe Walk",        id=616009598},
-    {name="Stumble Walk",        id=616008369},
-    {name="Monkey Walk",         id=616906778},
-    {name="Crab Walk",           id=616163682},
-    {name="Bear Walk",           id=616158929},
-    {name="Duck Walk",           id=616009598},
-}
-
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  STATE
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+-- =====================================================
+-- STATE
+-- =====================================================
 local State = {
     tab         = "emot",
+    EMOTES      = FALLBACK_EMOTES,
+    ANIMATIONS  = FALLBACK_ANIMS,
     searchEmot  = "",
     searchAnim  = "",
     favEmot     = {},
@@ -143,528 +77,424 @@ local State = {
     pageEmot    = 1,
     pageAnim    = 1,
     curTrack    = nil,
+    speed       = 1,
+    open        = true,
+    loadingEmot = false,
+    loadingAnim = false,
 }
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  PLAY ANIMATION
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+-- =====================================================
+-- PLAY + SPEED
+-- =====================================================
 local function playAnim(id)
-    local char = player.Character
-    if not char then return end
-    local hum  = char:FindFirstChildOfClass("Humanoid")
-    if not hum then return end
-    local anim = char:FindFirstChildOfClass("Animator")
-              or hum:FindFirstChildOfClass("Animator")
-    if not anim then return end
+    local char = player.Character; if not char then return end
+    local hum  = char:FindFirstChildOfClass("Humanoid"); if not hum then return end
+    local anim = hum:FindFirstChildOfClass("Animator"); if not anim then return end
+    if State.curTrack then
+        pcall(function() State.curTrack:Stop(); State.curTrack:Destroy() end)
+        State.curTrack = nil
+    end
+    local obj = Instance.new("Animation")
+    obj.AnimationId = "rbxassetid://" .. tostring(id)
+    local ok, track = pcall(function() return anim:LoadAnimation(obj) end)
+    if ok and track then
+        track.Priority = Enum.AnimationPriority.Action
+        track.Looped   = true
+        track:Play()
+        track:AdjustSpeed(State.speed)
+        State.curTrack = track
+    end
+end
 
+local function stopAnim()
     if State.curTrack then
         pcall(function() State.curTrack:Stop() end)
         State.curTrack = nil
     end
-
-    local animObj = Instance.new("Animation")
-    animObj.AnimationId = "rbxassetid://" .. tostring(id)
-    local ok, track = pcall(function() return anim:LoadAnimation(animObj) end)
-    if ok and track then
-        State.curTrack = track
-        track:Play()
-    end
 end
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  BUILD SCREEN GUI
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+-- =====================================================
+-- CLEAR OLD GUI
+-- =====================================================
 local OLD = CoreGui:FindFirstChild("XRexZobGUI")
 if OLD then OLD:Destroy() end
 
 local Screen = Instance.new("ScreenGui")
-Screen.Name            = "XRexZobGUI"
-Screen.ResetOnSpawn    = false
-Screen.ZIndexBehavior  = Enum.ZIndexBehavior.Sibling
-Screen.Parent          = CoreGui
+Screen.Name="XRexZobGUI"; Screen.ResetOnSpawn=false
+Screen.ZIndexBehavior=Enum.ZIndexBehavior.Sibling; Screen.Parent=CoreGui
 
--- â”€â”€ MAIN PANEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-local Main = Instance.new("Frame")
-Main.Name              = "Main"
-Main.Size              = UDim2.new(0, 680, 0, 570)
-Main.Position          = UDim2.new(0.5, -340, 0.5, -285)
-Main.BackgroundColor3  = Color3.fromRGB(22, 22, 28)
-Main.BorderSizePixel   = 0
-Main.ClipsDescendants  = true
-Main.Parent            = Screen
+-- helpers
+local function corner(r,p) Instance.new("UICorner",p).CornerRadius=UDim.new(0,r) end
+local function stroke(col,th,p) local s=Instance.new("UIStroke",p); s.Color=col; s.Thickness=th end
 
-local MainCorner = Instance.new("UICorner")
-MainCorner.CornerRadius = UDim.new(0, 14)
-MainCorner.Parent       = Main
+-- WARNA
+local C_BG     = Color3.fromRGB(13,13,18)
+local C_HDR    = Color3.fromRGB(20,20,28)
+local C_CARD   = Color3.fromRGB(30,18,54)
+local C_PURPLE = Color3.fromRGB(115,45,215)
+local C_BORDER = Color3.fromRGB(45,35,75)
+local C_ORANGE = Color3.fromRGB(245,155,35)
+local C_WHITE  = Color3.new(1,1,1)
+local C_GRAY   = Color3.fromRGB(155,155,175)
+local C_GOLD   = Color3.fromRGB(255,210,0)
+local C_GREEN  = Color3.fromRGB(50,200,100)
+local C_RED    = Color3.fromRGB(220,55,55)
+local C_DKPURP = Color3.fromRGB(28,20,50)
 
-local MainStroke = Instance.new("UIStroke")
-MainStroke.Color     = Color3.fromRGB(100, 50, 200)
-MainStroke.Thickness = 2
-MainStroke.Parent    = Main
+-- =====================================================
+-- STICKER (tombol bulat floating)
+-- =====================================================
+local Sticker = Instance.new("ImageButton")
+Sticker.Name="Sticker"; Sticker.Size=UDim2.new(0,54,0,54)
+Sticker.Position=UDim2.new(0.5,-27,0.07,0)
+Sticker.Image=STICKER_IMAGE
+Sticker.BackgroundColor3=Color3.fromRGB(20,12,36); Sticker.BorderSizePixel=0
+Sticker.ZIndex=10; Sticker.Parent=Screen; corner(999,Sticker)
+local StickerStroke = Instance.new("UIStroke",Sticker)
+StickerStroke.Color=C_PURPLE; StickerStroke.Thickness=2.5
 
--- â”€â”€ HEADER (drag + title + search + fav + stop) â”€â”€
-local Header = Instance.new("Frame")
-Header.Size             = UDim2.new(1, 0, 0, 54)
-Header.Position         = UDim2.new(0, 0, 0, 0)
-Header.BackgroundColor3 = Color3.fromRGB(28, 28, 36)
-Header.BorderSizePixel  = 0
-Header.Parent           = Main
+local StickerLbl=Instance.new("TextLabel")
+StickerLbl.Size=UDim2.new(0,62,0,14); StickerLbl.Position=UDim2.new(0.5,-31,1,3)
+StickerLbl.BackgroundTransparency=1; StickerLbl.Text="xrex zob"
+StickerLbl.TextColor3=Color3.fromRGB(200,180,255); StickerLbl.Font=Enum.Font.GothamBold
+StickerLbl.TextSize=8; StickerLbl.ZIndex=10; StickerLbl.Parent=Sticker
 
-local HeaderCorner = Instance.new("UICorner")
-HeaderCorner.CornerRadius = UDim.new(0, 14)
-HeaderCorner.Parent       = Header
+-- =====================================================
+-- MAIN FRAME
+-- =====================================================
+local Main=Instance.new("Frame")
+Main.Name="Main"; Main.Size=UDim2.new(0,680,0,620)
+Main.Position=UDim2.new(0.5,-340,0.5,-310)
+Main.BackgroundColor3=C_BG; Main.BackgroundTransparency=0.04
+Main.BorderSizePixel=0; Main.ClipsDescendants=true; Main.Parent=Screen
+corner(14,Main); stroke(C_BORDER,1.5,Main)
 
--- patch bawah header biar nyambung ke bawah
-local HeaderPatch = Instance.new("Frame")
-HeaderPatch.Size            = UDim2.new(1, 0, 0, 14)
-HeaderPatch.Position        = UDim2.new(0, 0, 1, -14)
-HeaderPatch.BackgroundColor3= Color3.fromRGB(28, 28, 36)
-HeaderPatch.BorderSizePixel = 0
-HeaderPatch.Parent          = Header
+-- â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+local Hdr=Instance.new("Frame")
+Hdr.Size=UDim2.new(1,0,0,58); Hdr.BackgroundColor3=C_HDR; Hdr.BorderSizePixel=0; Hdr.Parent=Main
+corner(14,Hdr)
+-- patch bawah
+local HP=Instance.new("Frame",Hdr); HP.Size=UDim2.new(1,0,0,14); HP.Position=UDim2.new(0,0,1,-14)
+HP.BackgroundColor3=C_HDR; HP.BorderSizePixel=0
 
--- icon emot
-local HeaderIcon = Instance.new("ImageLabel")
-HeaderIcon.Size                = UDim2.new(0, 30, 0, 30)
-HeaderIcon.Position            = UDim2.new(0, 12, 0.5, -15)
-HeaderIcon.BackgroundTransparency = 1
-HeaderIcon.Image               = "rbxassetid://7072706796"
-HeaderIcon.Parent              = Header
+-- icon kecil
+local HIcon=Instance.new("ImageLabel")
+HIcon.Size=UDim2.new(0,28,0,28); HIcon.Position=UDim2.new(0,12,0.5,-14)
+HIcon.BackgroundTransparency=1; HIcon.Image=STICKER_IMAGE; HIcon.Parent=Hdr
 
 -- title
-local HeaderTitle = Instance.new("TextLabel")
-HeaderTitle.Size              = UDim2.new(0, 160, 1, 0)
-HeaderTitle.Position          = UDim2.new(0, 48, 0, 0)
-HeaderTitle.BackgroundTransparency = 1
-HeaderTitle.Text              = "EMOTES | xrex zob"
-HeaderTitle.TextColor3        = Color3.fromRGB(200, 200, 255)
-HeaderTitle.Font              = Enum.Font.GothamBold
-HeaderTitle.TextSize          = 15
-HeaderTitle.TextXAlignment    = Enum.TextXAlignment.Left
-HeaderTitle.Parent            = Header
+local HTitle=Instance.new("TextLabel")
+HTitle.Size=UDim2.new(0,220,1,0); HTitle.Position=UDim2.new(0,46,0,0)
+HTitle.BackgroundTransparency=1; HTitle.Text="EMOTES | xrex zob"
+HTitle.TextColor3=C_ORANGE; HTitle.Font=Enum.Font.GothamBold
+HTitle.TextSize=16; HTitle.TextXAlignment=Enum.TextXAlignment.Left; HTitle.Parent=Hdr
 
 -- search box
-local SearchBox = Instance.new("TextBox")
-SearchBox.Size              = UDim2.new(0, 200, 0, 32)
-SearchBox.Position          = UDim2.new(0, 215, 0.5, -16)
-SearchBox.BackgroundColor3  = Color3.fromRGB(38, 38, 50)
-SearchBox.BorderSizePixel   = 0
-SearchBox.PlaceholderText   = "Search emotes..."
-SearchBox.PlaceholderColor3 = Color3.fromRGB(140, 120, 200)
-SearchBox.Text              = ""
-SearchBox.TextColor3        = Color3.new(1, 1, 1)
-SearchBox.Font              = Enum.Font.Gotham
-SearchBox.TextSize          = 13
-SearchBox.ClearTextOnFocus  = false
-SearchBox.Parent            = Header
+local SBox=Instance.new("TextBox")
+SBox.Size=UDim2.new(0,178,0,32); SBox.Position=UDim2.new(0,272,0.5,-16)
+SBox.BackgroundColor3=Color3.fromRGB(22,22,30); SBox.BorderSizePixel=0
+SBox.PlaceholderText="Cari emote..."; SBox.PlaceholderColor3=Color3.fromRGB(100,85,150)
+SBox.Text=""; SBox.TextColor3=C_WHITE; SBox.Font=Enum.Font.Gotham; SBox.TextSize=12
+SBox.ClearTextOnFocus=false; SBox.Parent=Hdr; corner(8,SBox)
+stroke(Color3.fromRGB(40,40,58),1,SBox)
 
-local SearchCorner = Instance.new("UICorner")
-SearchCorner.CornerRadius = UDim.new(0, 8)
-SearchCorner.Parent       = SearchBox
+-- FAV
+local FavBtn=Instance.new("TextButton")
+FavBtn.Size=UDim2.new(0,44,0,32); FavBtn.Position=UDim2.new(0,454,0.5,-16)
+FavBtn.BackgroundColor3=Color3.fromRGB(36,28,52); FavBtn.BorderSizePixel=0
+FavBtn.Text="FAV"; FavBtn.TextColor3=C_GOLD
+FavBtn.Font=Enum.Font.GothamBold; FavBtn.TextSize=11; FavBtn.Parent=Hdr; corner(6,FavBtn)
 
--- favorit star button
-local FavBtn = Instance.new("TextButton")
-FavBtn.Size              = UDim2.new(0, 38, 0, 38)
-FavBtn.Position          = UDim2.new(0, 422, 0.5, -19)
-FavBtn.BackgroundTransparency = 1
-FavBtn.BorderSizePixel   = 0
-FavBtn.Text              = "â˜†"
-FavBtn.TextColor3        = Color3.fromRGB(220, 220, 60)
-FavBtn.Font              = Enum.Font.GothamBold
-FavBtn.TextSize          = 24
-FavBtn.Parent            = Header
+-- STOP
+local StopBtn=Instance.new("TextButton")
+StopBtn.Size=UDim2.new(0,50,0,32); StopBtn.Position=UDim2.new(0,502,0.5,-16)
+StopBtn.BackgroundColor3=Color3.fromRGB(48,18,18); StopBtn.BorderSizePixel=0
+StopBtn.Text="STOP"; StopBtn.TextColor3=C_RED
+StopBtn.Font=Enum.Font.GothamBold; StopBtn.TextSize=11; StopBtn.Parent=Hdr; corner(6,StopBtn)
 
--- stop animasi
-local StopBtn = Instance.new("TextButton")
-StopBtn.Size             = UDim2.new(0, 36, 0, 32)
-StopBtn.Position         = UDim2.new(0, 464, 0.5, -16)
-StopBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 62)
-StopBtn.BorderSizePixel  = 0
-StopBtn.Text             = "â– "
-StopBtn.TextColor3       = Color3.fromRGB(255, 80, 80)
-StopBtn.Font             = Enum.Font.GothamBold
-StopBtn.TextSize         = 16
-StopBtn.Parent           = Header
+-- CLOSE X
+local CloseBtn=Instance.new("TextButton")
+CloseBtn.Size=UDim2.new(0,36,0,32); CloseBtn.Position=UDim2.new(1,-42,0.5,-16)
+CloseBtn.BackgroundColor3=Color3.fromRGB(50,50,62); CloseBtn.BorderSizePixel=0
+CloseBtn.Text="X"; CloseBtn.TextColor3=C_WHITE
+CloseBtn.Font=Enum.Font.GothamBold; CloseBtn.TextSize=14; CloseBtn.Parent=Hdr; corner(6,CloseBtn)
 
-local StopCorner = Instance.new("UICorner")
-StopCorner.CornerRadius = UDim.new(0, 6)
-StopCorner.Parent       = StopBtn
+-- â”€â”€ TAB BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+local TabBar=Instance.new("Frame")
+TabBar.Size=UDim2.new(1,0,0,40); TabBar.Position=UDim2.new(0,0,0,58)
+TabBar.BackgroundColor3=C_HDR; TabBar.BorderSizePixel=0; TabBar.Parent=Main
 
--- minimize button
-local MinBtn = Instance.new("TextButton")
-MinBtn.Size             = UDim2.new(0, 36, 0, 32)
-MinBtn.Position         = UDim2.new(1, -44, 0.5, -16)
-MinBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 62)
-MinBtn.BorderSizePixel  = 0
-MinBtn.Text             = "â€”"
-MinBtn.TextColor3       = Color3.new(1, 1, 1)
-MinBtn.Font             = Enum.Font.GothamBold
-MinBtn.TextSize         = 18
-MinBtn.Parent           = Header
+local TabEmot=Instance.new("TextButton")
+TabEmot.Size=UDim2.new(0.5,-3,0,32); TabEmot.Position=UDim2.new(0,2,0,4)
+TabEmot.BackgroundColor3=C_PURPLE; TabEmot.BorderSizePixel=0
+TabEmot.Text="EMOT"; TabEmot.TextColor3=C_WHITE
+TabEmot.Font=Enum.Font.GothamBold; TabEmot.TextSize=14; TabEmot.Parent=TabBar; corner(7,TabEmot)
 
-local MinCorner = Instance.new("UICorner")
-MinCorner.CornerRadius = UDim.new(0, 6)
-MinCorner.Parent       = MinBtn
+local TabAnim=Instance.new("TextButton")
+TabAnim.Size=UDim2.new(0.5,-3,0,32); TabAnim.Position=UDim2.new(0.5,1,0,4)
+TabAnim.BackgroundColor3=C_DKPURP; TabAnim.BorderSizePixel=0
+TabAnim.Text="ANIMASI"; TabAnim.TextColor3=C_GRAY
+TabAnim.Font=Enum.Font.GothamBold; TabAnim.TextSize=14; TabAnim.Parent=TabBar; corner(7,TabAnim)
 
--- â”€â”€ TAB BAR (EMOT | ANIMASI) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-local TabBar = Instance.new("Frame")
-TabBar.Size            = UDim2.new(1, 0, 0, 38)
-TabBar.Position        = UDim2.new(0, 0, 0, 54)
-TabBar.BackgroundColor3= Color3.fromRGB(28, 28, 36)
-TabBar.BorderSizePixel = 0
-TabBar.Parent          = Main
+-- â”€â”€ SPEED BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+local SpeedBar=Instance.new("Frame")
+SpeedBar.Size=UDim2.new(1,0,0,36); SpeedBar.Position=UDim2.new(0,0,0,98)
+SpeedBar.BackgroundColor3=C_DKPURP; SpeedBar.BorderSizePixel=0; SpeedBar.Parent=Main
 
-local TabEmot = Instance.new("TextButton")
-TabEmot.Size             = UDim2.new(0.5, -2, 0, 30)
-TabEmot.Position         = UDim2.new(0, 2, 0, 4)
-TabEmot.BackgroundColor3 = Color3.fromRGB(100, 50, 200)
-TabEmot.BorderSizePixel  = 0
-TabEmot.Text             = "ðŸ˜Š  EMOT"
-TabEmot.TextColor3       = Color3.new(1, 1, 1)
-TabEmot.Font             = Enum.Font.GothamBold
-TabEmot.TextSize         = 13
-TabEmot.Parent           = TabBar
+local SpeedLbl=Instance.new("TextLabel")
+SpeedLbl.Size=UDim2.new(0,110,1,0); SpeedLbl.Position=UDim2.new(0,10,0,0)
+SpeedLbl.BackgroundTransparency=1; SpeedLbl.Text="Kecepatan Emot:"
+SpeedLbl.TextColor3=C_GRAY; SpeedLbl.Font=Enum.Font.GothamBold; SpeedLbl.TextSize=12
+SpeedLbl.TextXAlignment=Enum.TextXAlignment.Left; SpeedLbl.Parent=SpeedBar
 
-local TabEmotCorner = Instance.new("UICorner")
-TabEmotCorner.CornerRadius = UDim.new(0, 6)
-TabEmotCorner.Parent       = TabEmot
+-- tombol - 
+local BtnSlow=Instance.new("TextButton")
+BtnSlow.Size=UDim2.new(0,30,0,26); BtnSlow.Position=UDim2.new(0,120,0.5,-13)
+BtnSlow.BackgroundColor3=Color3.fromRGB(40,30,65); BtnSlow.BorderSizePixel=0
+BtnSlow.Text="-"; BtnSlow.TextColor3=C_WHITE; BtnSlow.Font=Enum.Font.GothamBold; BtnSlow.TextSize=16
+BtnSlow.Parent=SpeedBar; corner(5,BtnSlow)
 
-local TabAnim = Instance.new("TextButton")
-TabAnim.Size             = UDim2.new(0.5, -2, 0, 30)
-TabAnim.Position         = UDim2.new(0.5, 0, 0, 4)
-TabAnim.BackgroundColor3 = Color3.fromRGB(36, 36, 46)
-TabAnim.BorderSizePixel  = 0
-TabAnim.Text             = "ðŸŽ¬  ANIMASI"
-TabAnim.TextColor3       = Color3.fromRGB(160, 160, 180)
-TabAnim.Font             = Enum.Font.GothamBold
-TabAnim.TextSize         = 13
-TabAnim.Parent           = TabBar
+-- speed display box
+local SpeedBox=Instance.new("TextBox")
+SpeedBox.Size=UDim2.new(0,56,0,26); SpeedBox.Position=UDim2.new(0,154,0.5,-13)
+SpeedBox.BackgroundColor3=Color3.fromRGB(22,18,36); SpeedBox.BorderSizePixel=0
+SpeedBox.Text="1"; SpeedBox.TextColor3=C_ORANGE
+SpeedBox.Font=Enum.Font.GothamBold; SpeedBox.TextSize=14; SpeedBox.TextXAlignment=Enum.TextXAlignment.Center
+SpeedBox.Parent=SpeedBar; corner(6,SpeedBox)
+stroke(C_PURPLE,1,SpeedBox)
 
-local TabAnimCorner = Instance.new("UICorner")
-TabAnimCorner.CornerRadius = UDim.new(0, 6)
-TabAnimCorner.Parent       = TabAnim
+-- tombol +
+local BtnFast=Instance.new("TextButton")
+BtnFast.Size=UDim2.new(0,30,0,26); BtnFast.Position=UDim2.new(0,214,0.5,-13)
+BtnFast.BackgroundColor3=Color3.fromRGB(40,30,65); BtnFast.BorderSizePixel=0
+BtnFast.Text="+"; BtnFast.TextColor3=C_WHITE; BtnFast.Font=Enum.Font.GothamBold; BtnFast.TextSize=16
+BtnFast.Parent=SpeedBar; corner(5,BtnFast)
 
--- â”€â”€ SCROLL GRID â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-local GridScroll = Instance.new("ScrollingFrame")
-GridScroll.Size                = UDim2.new(1, -10, 1, -148)
-GridScroll.Position            = UDim2.new(0, 5, 0, 96)
-GridScroll.BackgroundTransparency = 1
-GridScroll.BorderSizePixel     = 0
-GridScroll.ScrollBarThickness  = 4
-GridScroll.ScrollBarImageColor3= Color3.fromRGB(100, 50, 200)
-GridScroll.CanvasSize          = UDim2.new(0, 0, 0, 0)
-GridScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-GridScroll.Parent              = Main
-
-local GridLayout = Instance.new("UIGridLayout")
-GridLayout.CellSize           = UDim2.new(0, 122, 0, 168)
-GridLayout.CellPadding        = UDim2.new(0, 6, 0, 8)
-GridLayout.HorizontalAlignment= Enum.HorizontalAlignment.Center
-GridLayout.SortOrder          = Enum.SortOrder.LayoutOrder
-GridLayout.Parent             = GridScroll
-
-local GridPad = Instance.new("UIPadding")
-GridPad.PaddingTop    = UDim.new(0, 8)
-GridPad.PaddingBottom = UDim.new(0, 8)
-GridPad.Parent        = GridScroll
-
--- â”€â”€ BOTTOM NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-local BottomBar = Instance.new("Frame")
-BottomBar.Size            = UDim2.new(1, 0, 0, 46)
-BottomBar.Position        = UDim2.new(0, 0, 1, -46)
-BottomBar.BackgroundColor3= Color3.fromRGB(28, 28, 36)
-BottomBar.BorderSizePixel = 0
-BottomBar.Parent          = Main
-
-local BtnPrev = Instance.new("TextButton")
-BtnPrev.Size             = UDim2.new(0, 90, 0, 32)
-BtnPrev.Position         = UDim2.new(0, 10, 0.5, -16)
-BtnPrev.BackgroundColor3 = Color3.fromRGB(44, 44, 56)
-BtnPrev.BorderSizePixel  = 0
-BtnPrev.Text             = "â—€  Prev"
-BtnPrev.TextColor3       = Color3.new(1, 1, 1)
-BtnPrev.Font             = Enum.Font.GothamBold
-BtnPrev.TextSize         = 13
-BtnPrev.Parent           = BottomBar
-
-local BtnPrevCorner = Instance.new("UICorner")
-BtnPrevCorner.CornerRadius = UDim.new(0, 6)
-BtnPrevCorner.Parent       = BtnPrev
-
-local PageLabel = Instance.new("TextLabel")
-PageLabel.Size              = UDim2.new(0, 140, 1, 0)
-PageLabel.Position          = UDim2.new(0.5, -70, 0, 0)
-PageLabel.BackgroundTransparency = 1
-PageLabel.Text              = "Hal 1 / 1"
-PageLabel.TextColor3        = Color3.fromRGB(180, 170, 210)
-PageLabel.Font              = Enum.Font.GothamBold
-PageLabel.TextSize          = 13
-PageLabel.Parent            = BottomBar
-
-local BtnNext = Instance.new("TextButton")
-BtnNext.Size             = UDim2.new(0, 90, 0, 32)
-BtnNext.Position         = UDim2.new(1, -100, 0.5, -16)
-BtnNext.BackgroundColor3 = Color3.fromRGB(44, 44, 56)
-BtnNext.BorderSizePixel  = 0
-BtnNext.Text             = "Next  â–¶"
-BtnNext.TextColor3       = Color3.new(1, 1, 1)
-BtnNext.Font             = Enum.Font.GothamBold
-BtnNext.TextSize         = 13
-BtnNext.Parent           = BottomBar
-
-local BtnNextCorner = Instance.new("UICorner")
-BtnNextCorner.CornerRadius = UDim.new(0, 6)
-BtnNextCorner.Parent       = BtnNext
-
--- â”€â”€ MINI BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-local MiniBar = Instance.new("Frame")
-MiniBar.Name            = "MiniBar"
-MiniBar.Size            = UDim2.new(0, 230, 0, 40)
-MiniBar.Position        = Main.Position
-MiniBar.BackgroundColor3= Color3.fromRGB(28, 28, 36)
-MiniBar.BorderSizePixel = 0
-MiniBar.Visible         = false
-MiniBar.Parent          = Screen
-
-local MiniCornerFrame = Instance.new("UICorner")
-MiniCornerFrame.CornerRadius = UDim.new(0, 10)
-MiniCornerFrame.Parent       = MiniBar
-
-local MiniStroke = Instance.new("UIStroke")
-MiniStroke.Color     = Color3.fromRGB(100, 50, 200)
-MiniStroke.Thickness = 2
-MiniStroke.Parent    = MiniBar
-
-local MiniLabel = Instance.new("TextLabel")
-MiniLabel.Size              = UDim2.new(1, -50, 1, 0)
-MiniLabel.Position          = UDim2.new(0, 12, 0, 0)
-MiniLabel.BackgroundTransparency = 1
-MiniLabel.Text              = "ðŸ˜Š  xrex zob"
-MiniLabel.TextColor3        = Color3.fromRGB(0, 230, 140)
-MiniLabel.Font              = Enum.Font.GothamBold
-MiniLabel.TextSize          = 14
-MiniLabel.TextXAlignment    = Enum.TextXAlignment.Left
-MiniLabel.Parent            = MiniBar
-
-local MiniOpenBtn = Instance.new("TextButton")
-MiniOpenBtn.Size             = UDim2.new(0, 36, 0, 30)
-MiniOpenBtn.Position         = UDim2.new(1, -42, 0.5, -15)
-MiniOpenBtn.BackgroundColor3 = Color3.fromRGB(0, 160, 90)
-MiniOpenBtn.BorderSizePixel  = 0
-MiniOpenBtn.Text             = "â–²"
-MiniOpenBtn.TextColor3       = Color3.new(1, 1, 1)
-MiniOpenBtn.Font             = Enum.Font.GothamBold
-MiniOpenBtn.TextSize         = 16
-MiniOpenBtn.Parent           = MiniBar
-
-local MiniOpenCorner = Instance.new("UICorner")
-MiniOpenCorner.CornerRadius = UDim.new(0, 6)
-MiniOpenCorner.Parent       = MiniOpenBtn
-
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  DRAG
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-local function makeDraggable(handle, target, companion)
-    local drag, ds, dp = false, nil, nil
-    handle.InputBegan:Connect(function(i)
-        if i.UserInputType == Enum.UserInputType.MouseButton1 then
-            drag = true
-            ds   = i.Position
-            dp   = target.Position
-        end
-    end)
-    UserInputService.InputChanged:Connect(function(i)
-        if not drag then return end
-        if i.UserInputType ~= Enum.UserInputType.MouseMovement then return end
-        local d = i.Position - ds
-        local np = UDim2.new(dp.X.Scale, dp.X.Offset + d.X, dp.Y.Scale, dp.Y.Offset + d.Y)
-        target.Position = np
-        if companion then companion.Position = np end
-    end)
-    UserInputService.InputEnded:Connect(function(i)
-        if i.UserInputType == Enum.UserInputType.MouseButton1 then drag = false end
+-- preset speed buttons
+local PRESETS = {{t="0.5x",v=0.5},{t="1x",v=1},{t="1.5x",v=1.5},{t="2x",v=2},{t="3x",v=3}}
+for i,pr in ipairs(PRESETS) do
+    local pb=Instance.new("TextButton")
+    pb.Size=UDim2.new(0,40,0,22); pb.Position=UDim2.new(0,250+(i-1)*46,0.5,-11)
+    pb.BackgroundColor3=Color3.fromRGB(36,26,58); pb.BorderSizePixel=0
+    pb.Text=pr.t; pb.TextColor3=Color3.fromRGB(190,170,240)
+    pb.Font=Enum.Font.GothamBold; pb.TextSize=10; pb.Parent=SpeedBar; corner(5,pb)
+    local pv=pr.v
+    pb.MouseButton1Click:Connect(function()
+        State.speed=pv; SpeedBox.Text=tostring(pv)
+        if State.curTrack then pcall(function() State.curTrack:AdjustSpeed(pv) end) end
     end)
 end
 
-makeDraggable(Header,  Main,    MiniBar)
-makeDraggable(MiniBar, MiniBar, nil)
+-- status label (loading, error)
+local StatusLbl=Instance.new("TextLabel")
+StatusLbl.Size=UDim2.new(1,-20,0,20); StatusLbl.Position=UDim2.new(0,10,0,134)
+StatusLbl.BackgroundTransparency=1; StatusLbl.Text=""
+StatusLbl.TextColor3=C_GREEN; StatusLbl.Font=Enum.Font.Gotham; StatusLbl.TextSize=11
+StatusLbl.TextXAlignment=Enum.TextXAlignment.Left; StatusLbl.Visible=false; StatusLbl.Parent=Main
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  RENDER GRID
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-local PURPLE  = Color3.fromRGB(100, 50, 200)
-local DARK_BG = Color3.fromRGB(28, 28, 36)
-local CARD_BG = Color3.fromRGB(30, 30, 40)
+-- â”€â”€ GRID SCROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+local GScroll=Instance.new("ScrollingFrame")
+GScroll.Size=UDim2.new(1,-16,1,-202); GScroll.Position=UDim2.new(0,8,0,138)
+GScroll.BackgroundTransparency=1; GScroll.BorderSizePixel=0
+GScroll.ScrollBarThickness=3; GScroll.ScrollBarImageColor3=Color3.fromRGB(120,90,230)
+GScroll.CanvasSize=UDim2.new(0,0,0,0); GScroll.AutomaticCanvasSize=Enum.AutomaticSize.Y
+GScroll.Parent=Main
 
+local GL=Instance.new("UIGridLayout",GScroll)
+GL.CellSize=UDim2.new(0,118,0,158); GL.CellPadding=UDim2.new(0,7,0,8)
+GL.HorizontalAlignment=Enum.HorizontalAlignment.Center; GL.SortOrder=Enum.SortOrder.LayoutOrder
+
+do local gp=Instance.new("UIPadding",GScroll)
+   gp.PaddingTop=UDim.new(0,8); gp.PaddingBottom=UDim.new(0,8) end
+
+-- â”€â”€ BOTTOM NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+local BBar=Instance.new("Frame")
+BBar.Size=UDim2.new(1,0,0,52); BBar.Position=UDim2.new(0,0,1,-52)
+BBar.BackgroundColor3=C_HDR; BBar.BorderSizePixel=0; BBar.Parent=Main
+
+local BPrev=Instance.new("TextButton")
+BPrev.Size=UDim2.new(0,88,0,36); BPrev.Position=UDim2.new(0,10,0.5,-18)
+BPrev.BackgroundColor3=Color3.fromRGB(38,28,62); BPrev.BorderSizePixel=0
+BPrev.Text="< Prev"; BPrev.TextColor3=C_WHITE
+BPrev.Font=Enum.Font.GothamBold; BPrev.TextSize=13; BPrev.Parent=BBar; corner(7,BPrev)
+
+local PageLbl=Instance.new("TextLabel")
+PageLbl.Size=UDim2.new(0,140,1,0); PageLbl.Position=UDim2.new(0.5,-70,0,0)
+PageLbl.BackgroundTransparency=1; PageLbl.Text="Hal 1 / 1"
+PageLbl.TextColor3=Color3.fromRGB(180,165,220); PageLbl.Font=Enum.Font.GothamBold; PageLbl.TextSize=13
+PageLbl.Parent=BBar
+
+local BNext=Instance.new("TextButton")
+BNext.Size=UDim2.new(0,88,0,36); BNext.Position=UDim2.new(1,-98,0.5,-18)
+BNext.BackgroundColor3=Color3.fromRGB(38,28,62); BNext.BorderSizePixel=0
+BNext.Text="Next >"; BNext.TextColor3=C_WHITE
+BNext.Font=Enum.Font.GothamBold; BNext.TextSize=13; BNext.Parent=BBar; corner(7,BNext)
+
+-- Reload button
+local ReloadBtn=Instance.new("TextButton")
+ReloadBtn.Size=UDim2.new(0,68,0,30); ReloadBtn.Position=UDim2.new(0.5,52,0.5,-15)
+ReloadBtn.BackgroundColor3=Color3.fromRGB(20,40,25); ReloadBtn.BorderSizePixel=0
+ReloadBtn.Text="Reload"; ReloadBtn.TextColor3=C_GREEN
+ReloadBtn.Font=Enum.Font.GothamBold; ReloadBtn.TextSize=11; ReloadBtn.Parent=BBar; corner(6,ReloadBtn)
+
+-- =====================================================
+-- DRAG (header drag main, sticker drag diri sendiri)
+-- =====================================================
+local function makeDrag(handle, target)
+    local dr,ds,dp=false,nil,nil
+    handle.InputBegan:Connect(function(i)
+        if i.UserInputType==Enum.UserInputType.MouseButton1 then
+            dr=true; ds=i.Position; dp=target.Position end end)
+    UserInputService.InputChanged:Connect(function(i)
+        if dr and i.UserInputType==Enum.UserInputType.MouseMovement then
+            local d=i.Position-ds
+            target.Position=UDim2.new(dp.X.Scale,dp.X.Offset+d.X,dp.Y.Scale,dp.Y.Offset+d.Y) end end)
+    UserInputService.InputEnded:Connect(function(i)
+        if i.UserInputType==Enum.UserInputType.MouseButton1 then dr=false end end)
+end
+makeDrag(Hdr, Main)
+
+-- sticker drag + klik toggle
+do
+    local dr,ds,dp,moved=false,nil,nil,false
+    Sticker.InputBegan:Connect(function(i)
+        if i.UserInputType==Enum.UserInputType.MouseButton1 then
+            dr=true; moved=false; ds=i.Position; dp=Sticker.Position end end)
+    UserInputService.InputChanged:Connect(function(i)
+        if dr and i.UserInputType==Enum.UserInputType.MouseMovement then
+            local d=i.Position-ds
+            if math.abs(d.X)>5 or math.abs(d.Y)>5 then moved=true end
+            Sticker.Position=UDim2.new(dp.X.Scale,dp.X.Offset+d.X,dp.Y.Scale,dp.Y.Offset+d.Y) end end)
+    UserInputService.InputEnded:Connect(function(i)
+        if i.UserInputType==Enum.UserInputType.MouseButton1 then
+            if not moved then
+                State.open=not State.open; Main.Visible=State.open
+                StickerStroke.Color = State.open and C_PURPLE or Color3.fromRGB(70,70,90)
+            end
+            dr=false end end)
+end
+
+CloseBtn.MouseButton1Click:Connect(function()
+    State.open=false; Main.Visible=false
+    StickerStroke.Color=Color3.fromRGB(70,70,90)
+end)
+
+-- =====================================================
+-- STATUS HELPER
+-- =====================================================
+local function showStatus(msg, col, secs)
+    StatusLbl.Text=msg; StatusLbl.TextColor3=col or C_GREEN; StatusLbl.Visible=true
+    task.delay(secs or 4, function()
+        pcall(function() if StatusLbl.Text==msg then StatusLbl.Visible=false end end) end)
+end
+
+-- =====================================================
+-- RENDER GRID
+-- =====================================================
 local function getList()
-    local isEmot  = State.tab == "emot"
-    local raw     = isEmot and EMOTES or ANIMATIONS
-    local search  = isEmot and State.searchEmot or State.searchAnim
-    local favSet  = isEmot and State.favEmot or State.favAnim
-    local showFav = isEmot and State.showFavEmot or State.showFavAnim
-
-    local out = {}
-    for _, item in ipairs(raw) do
-        local nameMatch = search == "" or item.name:lower():find(search:lower(), 1, true)
-        local favMatch  = not showFav or favSet[item.id]
-        if nameMatch and favMatch then
-            table.insert(out, item)
-        end
-    end
+    local isE  = State.tab=="emot"
+    local raw  = isE and State.EMOTES or State.ANIMATIONS
+    local srch = (isE and State.searchEmot or State.searchAnim):lower()
+    local fav  = isE and State.favEmot or State.favAnim
+    local sf   = isE and State.showFavEmot or State.showFavAnim
+    local out  = {}
+    for _,item in ipairs(raw) do
+        local nm=(item.name or ""):lower()
+        if (srch=="" or nm:find(srch,1,true)) and (not sf or fav[item.id]) then
+            table.insert(out,item) end end
     return out
 end
 
-local function totalPages(list)
-    return math.max(1, math.ceil(#list / PAGE))
-end
+local function totalPages(l) return math.max(1,math.ceil(#l/PAGE)) end
 
 local function renderGrid()
-    -- Hapus kartu lama saja (bukan layout)
-    for _, c in ipairs(GridScroll:GetChildren()) do
-        if not c:IsA("UIGridLayout") and not c:IsA("UIPadding") then
-            c:Destroy()
-        end
-    end
+    for _,c in ipairs(GScroll:GetChildren()) do
+        if not c:IsA("UIGridLayout") and not c:IsA("UIPadding") then c:Destroy() end end
 
-    local isEmot  = State.tab == "emot"
-    local favSet  = isEmot and State.favEmot or State.favAnim
-    local curPage = isEmot and State.pageEmot or State.pageAnim
-    local list    = getList()
-    local tp      = totalPages(list)
+    local isE = State.tab=="emot"
+    local fav = isE and State.favEmot or State.favAnim
+    local lst = getList()
+    local tp  = totalPages(lst)
+    local cur = isE and State.pageEmot or State.pageAnim
+    cur=math.max(1,math.min(cur,tp))
+    if isE then State.pageEmot=cur else State.pageAnim=cur end
+    PageLbl.Text="Hal "..cur.." / "..tp
 
-    curPage = math.max(1, math.min(curPage, tp))
-    if isEmot then State.pageEmot = curPage else State.pageAnim = curPage end
+    local s=(cur-1)*PAGE+1
+    local e=math.min(cur*PAGE,#lst)
 
-    PageLabel.Text = "Hal " .. curPage .. " / " .. tp
+    for i=s,e do
+        local item=lst[i]; if not item then break end
+        local iid=item.id
 
-    local startI = (curPage - 1) * PAGE + 1
-    local endI   = math.min(curPage * PAGE, #list)
+        -- KARTU
+        local Card=Instance.new("Frame")
+        Card.BackgroundColor3=C_CARD; Card.BorderSizePixel=0
+        Card.LayoutOrder=i; Card.Parent=GScroll; corner(9,Card)
+        do local cs=Instance.new("UIStroke",Card)
+           cs.Color=Color3.fromRGB(55,35,90); cs.Thickness=1 end
 
-    for i = startI, endI do
-        local item = list[i]
-        if not item then break end
+        -- FAV badge
+        local isFav=fav[iid]==true
+        local FB=Instance.new("TextButton")
+        FB.Size=UDim2.new(0,34,0,20); FB.Position=UDim2.new(0,2,0,3)
+        FB.BackgroundColor3=isFav and Color3.fromRGB(58,46,12) or Color3.fromRGB(32,22,52)
+        FB.BorderSizePixel=0; FB.Text=isFav and "FAV" or "fav"
+        FB.TextColor3=isFav and C_GOLD or C_GRAY
+        FB.Font=Enum.Font.GothamBold; FB.TextSize=9; FB.ZIndex=4; FB.Parent=Card; corner(4,FB)
+        FB.MouseButton1Click:Connect(function()
+            if fav[iid] then fav[iid]=nil; FB.Text="fav"; FB.TextColor3=C_GRAY
+                FB.BackgroundColor3=Color3.fromRGB(32,22,52)
+            else fav[iid]=true; FB.Text="FAV"; FB.TextColor3=C_GOLD
+                FB.BackgroundColor3=Color3.fromRGB(58,46,12) end end)
 
-        -- â”€â”€ KARTU â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        local Card = Instance.new("Frame")
-        Card.BackgroundColor3 = CARD_BG
-        Card.BorderSizePixel  = 0
-        Card.LayoutOrder      = i
-        Card.Parent           = GridScroll
+        -- THUMBNAIL
+        local TF=Instance.new("Frame")
+        TF.Size=UDim2.new(1,-12,0,80); TF.Position=UDim2.new(0,6,0,26)
+        TF.BackgroundColor3=Color3.fromRGB(16,10,28); TF.BorderSizePixel=0
+        TF.Parent=Card; corner(7,TF)
 
-        local CardCorner = Instance.new("UICorner")
-        CardCorner.CornerRadius = UDim.new(0, 10)
-        CardCorner.Parent       = Card
+        local Thumb=Instance.new("ImageLabel",TF)
+        Thumb.Size=UDim2.new(1,0,1,0); Thumb.BackgroundTransparency=1
+        Thumb.Image="rbxthumb://type=Asset&id="..tostring(iid).."&w=150&h=150"
+        Thumb.ScaleType=Enum.ScaleType.Fit
 
-        local CardStroke = Instance.new("UIStroke")
-        CardStroke.Color     = Color3.fromRGB(55, 55, 72)
-        CardStroke.Thickness = 1
-        CardStroke.Parent    = Card
+        -- NAMA
+        local Nm=Instance.new("TextLabel")
+        Nm.Size=UDim2.new(1,-6,0,26); Nm.Position=UDim2.new(0,3,0,108)
+        Nm.BackgroundTransparency=1; Nm.Text=item.name or "?"
+        Nm.TextColor3=Color3.fromRGB(228,218,248); Nm.Font=Enum.Font.GothamMedium; Nm.TextSize=9
+        Nm.TextWrapped=true; Nm.Parent=Card
 
-        -- Bintang favorit
-        local StarBtn = Instance.new("TextButton")
-        StarBtn.Size              = UDim2.new(0, 26, 0, 26)
-        StarBtn.Position          = UDim2.new(0, 4, 0, 4)
-        StarBtn.BackgroundTransparency = 1
-        StarBtn.BorderSizePixel   = 0
-        StarBtn.Text              = favSet[item.id] and "â˜…" or "â˜†"
-        StarBtn.TextColor3        = favSet[item.id]
-                                    and Color3.fromRGB(255, 215, 0)
-                                    or  Color3.fromRGB(160, 160, 170)
-        StarBtn.Font              = Enum.Font.GothamBold
-        StarBtn.TextSize          = 20
-        StarBtn.ZIndex            = 4
-        StarBtn.Parent            = Card
-
-        local iid = item.id
-        StarBtn.MouseButton1Click:Connect(function()
-            if favSet[iid] then
-                favSet[iid]          = nil
-                StarBtn.Text         = "â˜†"
-                StarBtn.TextColor3   = Color3.fromRGB(160, 160, 170)
-            else
-                favSet[iid]          = true
-                StarBtn.Text         = "â˜…"
-                StarBtn.TextColor3   = Color3.fromRGB(255, 215, 0)
-            end
-        end)
-
-        -- Preview gambar
-        local Img = Instance.new("ImageLabel")
-        Img.Size              = UDim2.new(1, -12, 0, 88)
-        Img.Position          = UDim2.new(0, 6, 0, 32)
-        Img.BackgroundColor3  = Color3.fromRGB(22, 22, 30)
-        Img.BorderSizePixel   = 0
-        Img.Image             = "rbxthumb://type=Asset&id=" .. tostring(iid) .. "&w=150&h=150"
-        Img.ScaleType         = Enum.ScaleType.Fit
-        Img.Parent            = Card
-
-        local ImgCorner = Instance.new("UICorner")
-        ImgCorner.CornerRadius = UDim.new(0, 6)
-        ImgCorner.Parent       = Img
-
-        -- Nama emot/animasi
-        local NameLbl = Instance.new("TextLabel")
-        NameLbl.Size              = UDim2.new(1, -8, 0, 30)
-        NameLbl.Position          = UDim2.new(0, 4, 0, 124)
-        NameLbl.BackgroundTransparency = 1
-        NameLbl.Text              = item.name
-        NameLbl.TextColor3        = Color3.fromRGB(210, 205, 230)
-        NameLbl.Font              = Enum.Font.Gotham
-        NameLbl.TextSize          = 11
-        NameLbl.TextWrapped       = true
-        NameLbl.Parent            = Card
-
-        -- Tombol MAINKAN
-        local PlayBtn = Instance.new("TextButton")
-        PlayBtn.Size             = UDim2.new(1, -12, 0, 28)
-        PlayBtn.Position         = UDim2.new(0, 6, 1, -32)
-        PlayBtn.BackgroundColor3 = PURPLE
-        PlayBtn.BorderSizePixel  = 0
-        PlayBtn.Text             = "Mainkan"
-        PlayBtn.TextColor3       = Color3.new(1, 1, 1)
-        PlayBtn.Font             = Enum.Font.GothamBold
-        PlayBtn.TextSize         = 12
-        PlayBtn.ZIndex           = 4
-        PlayBtn.Parent           = Card
-
-        local PlayCorner = Instance.new("UICorner")
-        PlayCorner.CornerRadius = UDim.new(0, 6)
-        PlayCorner.Parent       = PlayBtn
-
-        PlayBtn.MouseButton1Click:Connect(function()
-            playAnim(iid)
-            PlayBtn.BackgroundColor3 = Color3.fromRGB(60, 180, 100)
-            task.delay(0.5, function()
-                PlayBtn.BackgroundColor3 = PURPLE
-            end)
-        end)
+        -- MAINKAN
+        local Pl=Instance.new("TextButton")
+        Pl.Size=UDim2.new(0.84,0,0,20); Pl.Position=UDim2.new(0.08,0,1,-24)
+        Pl.BackgroundColor3=C_PURPLE; Pl.BorderSizePixel=0
+        Pl.Text="Mainkan"; Pl.TextColor3=C_WHITE
+        Pl.Font=Enum.Font.GothamBold; Pl.TextSize=9; Pl.ZIndex=4; Pl.Parent=Card; corner(4,Pl)
+        Pl.MouseButton1Click:Connect(function()
+            playAnim(iid); Pl.BackgroundColor3=C_GREEN
+            task.delay(0.6,function() pcall(function() Pl.BackgroundColor3=C_PURPLE end) end) end)
     end
 end
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  TAB SWITCH
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+-- =====================================================
+-- TAB SWITCH
+-- =====================================================
 local function switchTab(tab)
-    State.tab = tab
-    if tab == "emot" then
-        TabEmot.BackgroundColor3  = PURPLE
-        TabEmot.TextColor3        = Color3.new(1, 1, 1)
-        TabAnim.BackgroundColor3  = Color3.fromRGB(36, 36, 46)
-        TabAnim.TextColor3        = Color3.fromRGB(160, 160, 180)
-        SearchBox.PlaceholderText = "Search emotes..."
-        SearchBox.Text            = State.searchEmot
-        FavBtn.Text               = State.showFavEmot and "â˜…" or "â˜†"
-        HeaderTitle.Text          = "EMOTES | xrex zob"
-        MiniLabel.Text            = "ðŸ˜Š  xrex zob"
+    State.tab=tab
+    if tab=="emot" then
+        TabEmot.BackgroundColor3=C_PURPLE; TabEmot.TextColor3=C_WHITE
+        TabAnim.BackgroundColor3=C_DKPURP; TabAnim.TextColor3=C_GRAY
+        SBox.PlaceholderText="Cari emote..."; SBox.Text=State.searchEmot
+        HTitle.Text="EMOTES | xrex zob"
+        FavBtn.TextColor3=State.showFavEmot and C_GOLD or C_GRAY
     else
-        TabAnim.BackgroundColor3  = PURPLE
-        TabAnim.TextColor3        = Color3.new(1, 1, 1)
-        TabEmot.BackgroundColor3  = Color3.fromRGB(36, 36, 46)
-        TabEmot.TextColor3        = Color3.fromRGB(160, 160, 180)
-        SearchBox.PlaceholderText = "Search animasi..."
-        SearchBox.Text            = State.searchAnim
-        FavBtn.Text               = State.showFavAnim and "â˜…" or "â˜†"
-        HeaderTitle.Text          = "ANIMASI | xrex zob"
-        MiniLabel.Text            = "ðŸŽ¬  xrex zob"
+        TabAnim.BackgroundColor3=C_PURPLE; TabAnim.TextColor3=C_WHITE
+        TabEmot.BackgroundColor3=C_DKPURP; TabEmot.TextColor3=C_GRAY
+        SBox.PlaceholderText="Cari animasi..."; SBox.Text=State.searchAnim
+        HTitle.Text="ANIMASI | xrex zob"
+        FavBtn.TextColor3=State.showFavAnim and C_GOLD or C_GRAY
     end
     renderGrid()
 end
@@ -672,83 +502,105 @@ end
 TabEmot.MouseButton1Click:Connect(function() switchTab("emot") end)
 TabAnim.MouseButton1Click:Connect(function() switchTab("animasi") end)
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  SEARCH
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
-    if State.tab == "emot" then
-        State.searchEmot = SearchBox.Text
-        State.pageEmot   = 1
-    else
-        State.searchAnim = SearchBox.Text
-        State.pageAnim   = 1
-    end
-    renderGrid()
-end)
+-- =====================================================
+-- SEARCH
+-- =====================================================
+SBox:GetPropertyChangedSignal("Text"):Connect(function()
+    if State.tab=="emot" then State.searchEmot=SBox.Text; State.pageEmot=1
+    else State.searchAnim=SBox.Text; State.pageAnim=1 end; renderGrid() end)
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  FAVORIT
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+-- =====================================================
+-- FAV TOGGLE
+-- =====================================================
 FavBtn.MouseButton1Click:Connect(function()
-    if State.tab == "emot" then
-        State.showFavEmot = not State.showFavEmot
-        FavBtn.Text       = State.showFavEmot and "â˜…" or "â˜†"
-        State.pageEmot    = 1
+    if State.tab=="emot" then
+        State.showFavEmot=not State.showFavEmot
+        FavBtn.TextColor3=State.showFavEmot and C_GOLD or C_GRAY; State.pageEmot=1
     else
-        State.showFavAnim = not State.showFavAnim
-        FavBtn.Text       = State.showFavAnim and "â˜…" or "â˜†"
-        State.pageAnim    = 1
-    end
-    renderGrid()
-end)
+        State.showFavAnim=not State.showFavAnim
+        FavBtn.TextColor3=State.showFavAnim and C_GOLD or C_GRAY; State.pageAnim=1
+    end; renderGrid() end)
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  STOP
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-StopBtn.MouseButton1Click:Connect(function()
-    if State.curTrack then
-        pcall(function() State.curTrack:Stop() end)
-        State.curTrack = nil
-    end
-end)
+-- =====================================================
+-- STOP
+-- =====================================================
+StopBtn.MouseButton1Click:Connect(function() stopAnim() end)
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  NAVIGASI HALAMAN
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-BtnPrev.MouseButton1Click:Connect(function()
-    if State.tab == "emot" then
-        State.pageEmot = math.max(1, State.pageEmot - 1)
-    else
-        State.pageAnim = math.max(1, State.pageAnim - 1)
-    end
-    renderGrid()
-end)
+-- =====================================================
+-- SPEED CONTROLS
+-- =====================================================
+local function applySpeed(v)
+    v=math.max(0.1, math.min(10, v))
+    State.speed=v
+    SpeedBox.Text=string.format("%.1f",v)
+    if State.curTrack then pcall(function() State.curTrack:AdjustSpeed(v) end) end
+end
 
-BtnNext.MouseButton1Click:Connect(function()
-    local tp = totalPages(getList())
-    if State.tab == "emot" then
-        State.pageEmot = math.min(tp, State.pageEmot + 1)
-    else
-        State.pageAnim = math.min(tp, State.pageAnim + 1)
-    end
-    renderGrid()
-end)
+BtnSlow.MouseButton1Click:Connect(function()
+    applySpeed(math.max(0.1, State.speed - 0.25)) end)
+BtnFast.MouseButton1Click:Connect(function()
+    applySpeed(math.min(10, State.speed + 0.25)) end)
+SpeedBox.FocusLost:Connect(function()
+    local v=tonumber(SpeedBox.Text); if v then applySpeed(v)
+    else SpeedBox.Text=string.format("%.1f",State.speed) end end)
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  MINIMIZE / RESTORE
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-MinBtn.MouseButton1Click:Connect(function()
-    Main.Visible    = false
-    MiniBar.Visible = true
-    MiniBar.Position = Main.Position
-end)
+-- =====================================================
+-- NAVIGASI HALAMAN
+-- =====================================================
+BPrev.MouseButton1Click:Connect(function()
+    if State.tab=="emot" then State.pageEmot=math.max(1,State.pageEmot-1)
+    else State.pageAnim=math.max(1,State.pageAnim-1) end; renderGrid() end)
+BNext.MouseButton1Click:Connect(function()
+    local tp=totalPages(getList())
+    if State.tab=="emot" then State.pageEmot=math.min(tp,State.pageEmot+1)
+    else State.pageAnim=math.min(tp,State.pageAnim+1) end; renderGrid() end)
 
-MiniOpenBtn.MouseButton1Click:Connect(function()
-    MiniBar.Visible = false
-    Main.Visible    = true
-end)
+-- =====================================================
+-- GITHUB LOADER (format 7yd7: {data:[{id,name}]})
+-- =====================================================
+local function fetchData(url, onSuccess, label)
+    task.spawn(function()
+        showStatus("Loading "..label.." dari server...", C_ORANGE, 15)
+        local ok,res=pcall(function() return game:HttpGet(url) end)
+        if ok and res and res~="" then
+            local ok2,decoded=pcall(function() return HttpService:JSONDecode(res) end)
+            if ok2 and decoded then
+                local list = decoded.data or decoded
+                if type(list)=="table" and #list>0 then
+                    local out={}
+                    for _,item in ipairs(list) do
+                        local id=tonumber(item.id)
+                        if id and id>0 then
+                            table.insert(out,{id=id, name=item.name or ("ID:"..id)})
+                        end
+                    end
+                    if #out>0 then
+                        onSuccess(out)
+                        showStatus(label.." loaded: "..(#out).." item!", C_GREEN)
+                        return
+                    end
+                end
+            end
+        end
+        showStatus("Gagal load "..label..", pakai data default!", C_RED, 6)
+    end)
+end
 
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
---  INIT
--- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+local function loadAll()
+    fetchData(URL_EMOT, function(d)
+        State.EMOTES=d; State.pageEmot=1
+        if State.tab=="emot" then renderGrid() end
+    end, "Emote")
+    fetchData(URL_ANIM, function(d)
+        State.ANIMATIONS=d; State.pageAnim=1
+        if State.tab=="animasi" then renderGrid() end
+    end, "Animasi")
+end
+
+ReloadBtn.MouseButton1Click:Connect(loadAll)
+
+-- =====================================================
+-- INIT
+-- =====================================================
 switchTab("emot")
+task.delay(0.5, loadAll)  -- auto-load saat script dijalankan
