@@ -1,277 +1,37 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tes Kecepatan Mengetik</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f4f7f6;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 700px;
-            width: 100%;
-            text-align: center;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-
-        .stats-container {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            background: #ecf0f1;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .stat-box {
-            font-size: 1.1rem;
-        }
-
-        .stat-box span {
-            display: block;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #2980b9;
-        }
-
-        #text-display {
-            font-size: 1.3rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            text-align: left;
-            background: #fdfefe;
-            padding: 15px;
-            border: 1px solid #bdc3c7;
-            border-radius: 8px;
-            user-select: none;
-            letter-spacing: 0.5px;
-        }
-
-        .correct { color: #27ae60; }
-        .incorrect { color: #c0392b; background-color: #f9d5d5; }
-        .current { border-bottom: 2px solid #2980b9; }
-
-        #typing-input {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2rem;
-            border: 2px solid #bdc3c7;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.3s;
-            resize: none;
-        }
-
-        #typing-input:focus {
-            border-color: #2980b9;
-        }
-
-        #btn-reset {
-            margin-top: 20px;
-            padding: 12px 25px;
-            font-size: 1rem;
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        #btn-reset:hover {
-            background-color: #27ae60;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>Tes Kecepatan Mengetik</h1>
-    
-    <div class="stats-container">
-        <div class="stat-box">Waktu: <span id="timer">60</span>s</div>
-        <div class="stat-box">WPM: <span id="wpm">0</span></div>
-        <div class="stat-box">Akurasi: <span id="accuracy">100</span>%</div>
-    </div>
-
-    <div id="text-display">Memuat teks...</div>
-    
-    <textarea id="typing-input" rows="3" placeholder="Mulai mengetik di sini untuk memulai tes..."></textarea>
-    
-    <button id="btn-reset">Mulai Ulang / Teks Baru</button>
-</div>
-
-<script>
-    // Kumpulan paragraf teks untuk dites (tidak cuma satu atau dua)
-    const paragraphs = [
-        "Teknologi informasi berkembang dengan sangat pesat di era digital saat ini. Setiap orang dituntut untuk bisa beradaptasi dengan perubahan yang ada agar tidak tertinggal jauh.",
-        "Kunci utama dari kemampuan mengetik cepat adalah konsistensi dan posisi jari yang benar pada papan ketik. Latihan yang rutin akan membentuk memori otot secara alami.",
-        "Matahari terbit dari ufuk timur membawa kehangatan di pagi hari yang cerah. Burung-burung berkicau riang menyambut datangnya lembaran hari yang baru penuh harapan.",
-        "Belajar pemrograman komputer membutuhkan logika yang kuat dan kesabaran tingkat tinggi. Masalah atau kutu dalam kode adalah hal biasa yang harus diselesaikan dengan tenang.",
-        "Kesehatan adalah aset paling berharga yang dimiliki oleh manusia. Menjaga pola makan yang seimbang dan berolahraga secara teratur adalah investasi jangka panjang yang terbaik.",
-        "Hutan hujan tropis memiliki keanekaragaman hayati yang sangat kaya. Banyak spesies flora dan fauna langka yang menggantungkan hidupnya pada kelestarian ekosistem hutan ini."
-    ];
-
-    let timer = 60;
-    let maxTime = 60;
-    let timeLeft = maxTime;
-    let timeElapsed = 0;
-    let timerInterval = null;
-    let isTypingStarted = false;
-    
-    let currentParagraph = "";
-    let totalCharactersTyped = 0;
-    let errors = 0;
-
-    const textDisplay = document.getElementById('text-display');
-    const typingInput = document.getElementById('typing-input');
-    const timerEl = document.getElementById('timer');
-    const wpmEl = document.getElementById('wpm');
-    const accuracyEl = document.getElementById('accuracy');
-    const btnReset = document.getElementById('btn-reset');
-
-    // Inisialisasi game
-    function initTest() {
-        clearInterval(timerInterval);
-        timeLeft = maxTime;
-        timeElapsed = 0;
-        errors = 0;
-        totalCharactersTyped = 0;
-        isTypingStarted = false;
-        
-        timerEl.innerText = timeLeft;
-        wpmEl.innerText = 0;
-        accuracyEl.innerText = 100;
-        typingInput.value = "";
-        typingInput.disabled = false;
-
-        // Ambil paragraf acak
-        const randomIndex = Math.floor(Math.random() * paragraphs.length);
-        currentParagraph = paragraphs[randomIndex];
-        
-        // Bungkus setiap karakter dengan tag span untuk efek warna nanti
-        textDisplay.innerHTML = "";
-        currentParagraph.split("").forEach(char => {
-            const span = document.createElement('span');
-            span.innerText = char;
-            textDisplay.appendChild(span);
-        });
-        
-        // Tandai karakter pertama
-        if(textDisplay.children.length > 0) {
-            textDisplay.children[0].classList.add('current');
-        }
-    }
-
-    // Fungsi Timer
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            if (timeLeft > 0) {
-                timeLeft--;
-                timeElapsed++;
-                timerEl.innerText = timeLeft;
-                
-                // Hitung WPM real-time
-                let wpm = Math.round(((totalCharactersTyped / 5) / timeElapsed) * 60);
-                wpmEl.innerText = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
-            } else {
-                endTest();
-            }
-        }, 1000);
-    }
-
-    // Logika ketika mengetik
-    typingInput.addEventListener('input', () => {
-        const charactersSpans = textDisplay.querySelectorAll('span');
-        const inputValue = typingInput.value.split('');
-        
-        if (!isTypingStarted) {
-            startTimer();
-            isTypingStarted = true;
-        }
-
-        errors = 0;
-        totalCharactersTyped = inputValue.length;
-
-        charactersSpans.forEach((charSpan, index) => {
-            const typedChar = inputValue[index];
-            
-            // Hapus kelas penanda posisi saat ini
-            charSpan.classList.remove('current');
-
-            if (typedChar == null) {
-                // Belum diketik
-                charSpan.classList.remove('correct', 'incorrect');
-            } else if (typedChar === charSpan.innerText) {
-                // Ketikan benar
-                charSpan.classList.add('correct');
-                charSpan.classList.remove('incorrect');
-            } else {
-                // Ketikan salah
-                charSpan.classList.add('incorrect');
-                charSpan.classList.remove('correct');
-                errors++;
-            }
-        });
-
-        // Kasih penanda bawah (underline) di karakter yang harus diketik selanjutnya
-        if (inputValue.length < charactersSpans.length) {
-            charactersSpans[inputValue.length].classList.add('current');
-        }
-
-        // Hitung Akurasi
-        let accuracy = 0;
-        if (totalCharactersTyped > 0) {
-            accuracy = Math.round(((totalCharactersTyped - errors) / totalCharactersTyped) * 100);
-        }
-        accuracyEl.innerText = accuracy < 0 ? 0 : accuracy;
-
-        // Jika teks sudah selesai diketik semua sebelum waktu habis
-        if (inputValue.length === charactersSpans.length) {
-            endTest();
-        }
-    });
-
-    function endTest() {
-        clearInterval(timerInterval);
-        typingInput.disabled = true;
-        
-        // Final WPM Score
-        let finalWpm = Math.round(((totalCharactersTyped / 5) / (timeElapsed || 1)) * 60);
-        wpmEl.innerText = finalWpm;
-        
-        alert(`Tes Selesai!\nKecepatan Anda: ${wpmEl.innerText} WPM\nAkurasi: ${accuracyEl.innerText}%`);
-    }
-
-    btnReset.addEventListener('click', initTest);
-
-    // Jalankan pertama kali saat web dibuka
-    window.onload = initTest;
-</script>
-
-</body>
-</html>
+Botpress
+About you 1/3
+Welcome bahsa indo aj 👋 I'm Zora, your setup assistant. I'll help you create your company's support workspace and get it ready to answer customer questions.
+I'm setting up a workspace for my company.
+Quick one. Can I call you Xrexzob? (from your email xrexzob@gmail.com)
+sata ingit buat web ai
+Got it. Just to confirm, what name should I call you in this workspace?
+Quick one. Can I call you Xrexzob?
+bahsa indo aj
+Got it, bahsa indo aj. I'll use that from here.
+What is your website URL?
+bahasa indonesia
+Siap, kita pakai Bahasa Indonesia. Untuk pertanyaan ini, boleh sebutkan 1 kalimat tentang produk/perusahaan kamu, dan kalau ada, URL website-nya?
+saya akan mmbuat ai excutor delta
+Sip, saya catat: kamu akan membuat AI Executor Delta. Kalau ada, URL website-nya apa?
+mau apa
+Saya maunya melengkapi langkah ini saja. Saya sudah catat produk kamu: Membuat AI Executor Delta. Kalau ada, kirim URL website kamu juga.
+blm bkin
+Siap, saya catat ya. Produk kamu adalah Membuat AI Executor Delta, dan website-nya belum dibuat.
+tau roblox delta excutor kan
+Saya tahu Roblox, tapi saya tidak bisa membantu soal executor atau hal yang dipakai untuk mengeksploitasi atau bypass keamanan di Roblox. Saya sudah catat produk kamu: Membuat AI Executor Delta, dan website-nya belum ada.
+ga ko orang orang bisa bikin ai terus bisa bikin script jga ai nya?
+Orang bisa bikin AI yang menulis script karena AI dilatih dari banyak contoh kode dan pola bahasa, jadi dia bisa menghasilkan kode baru yang mirip dengan contoh yang pernah dipelajari. Tapi saya tidak bisa bantu kalau tujuannya untuk exploit, bypass keamanan, atau membuat executor untuk game seperti Roblox. Saya sudah catat produk kamu: Membuat AI Executor Delta, dan website belum ada.
+coba gw pengen liat model nya
+Saya tidak bisa menampilkan model internalnya secara langsung. Kalau kamu mau, saya bisa jelaskan gambaran umumnya seperti jenis model yang dipakai dan cara kerjanya secara garis besar, tanpa masuk ke hal yang dipakai untuk exploit.
+ydh jelaskan
+AI yang bisa “nulis script” biasanya adalah model bahasa (LLM). Cara kerjanya begini, secara garis besar: 1. Data dan pola: model dilatih dari banyak contoh teks dan kode yang legal dan publik. Dari situ, model belajar pola bahasa, struktur program, dan cara orang menjelaskan masalah. 2. Prediksi token: saat kamu mengetik prompt, model tidak “mengerti” seperti manusia. Ia memprediksi kata atau potongan kata berikutnya yang paling masuk akal, berulang terus sampai jadi jawaban lengkap. 3. Prompt dan konteks: kualitas hasil sangat dipengaruhi cara kamu menjelaskan tujuan, batasan, bahasa pemrograman, contoh input output, dan aturan yang kamu mau. 4. Batasan: model bisa salah, halu, atau menghasilkan kode yang tidak jalan. Biasanya perlu diuji, direview, dan diperbaiki. 5. Keamanan: model biasanya diberi aturan untuk menolak permintaan yang berbahaya, misalnya yang terkait exploit, bypass keamanan, atau penyalahgunaan. Kalau kamu mau, sebutkan kamu ingin lihat “model” dari sisi apa: contoh arsitektur, cara fine-tuning, atau cara bikin chatbot sederhana yang aman.
+contoh prompet nya gmna anjir
+Ini contoh prompt yang aman dan rapi, tergantung tujuan kamu. Contoh 1, minta AI bikin fitur sederhana Tolong buatkan contoh kode JavaScript untuk membuat endpoint API login dengan Express. Pakai validasi input, hash password dengan bcrypt, dan jelaskan langkahnya singkat. Jangan sertakan hal untuk bypass keamanan. Contoh 2, minta AI jelasin konsep Jelaskan dengan bahasa Indonesia apa itu LLM, cara kerja token prediction, dan kenapa hasilnya bisa salah. Beri analogi sederhana dan 3 tips supaya prompt lebih jelas. Contoh 3, minta format output yang konsisten Kamu jadi tutor Python. Buatkan latihan tentang list dan dictionary. Format jawaban selalu: penjelasan singkat, contoh kode, lalu 3 soal latihan, lalu kunci jawaban terpisah. Contoh 4, prompt template yang bisa kamu isi Konteks: (jelaskan proyek kamu 2 kalimat) Tujuan: (apa yang mau dibuat) Batasan: (bahasa, framework, versi) Input: (contoh input) Output yang diinginkan: (contoh output) Gaya jawaban: (ringkas atau detail) Larangan: jangan berikan panduan untuk exploit, bypass keamanan, atau hal ilegal. Kalau kamu kasih tahu kamu mau prompt untuk tugas apa, misalnya bikin chatbot, bikin API, atau belajar coding, aku bikinin 2 sampai 3 prompt yang pas.
+coba contoh index html nya
+Boleh. Ini contoh file index.html sederhana untuk landing page produk AI kamu, aman dan bisa langsung kamu edit. Salin jadi index.html: <!doctype html> <html lang="id"> <head> <meta charset="utf-8" /> <meta name="viewport" content="width=device-width, initial-scale=1" /> <title>AI Executor Delta</title> <meta name="description" content="Produk AI untuk membantu otomasi dan produktivitas." /> <style> :root { color-scheme: dark; } body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #0b1220; color: #e8eefc; } .wrap { max-width: 980px; margin: 0 auto; padding: 48px 20px; } header { display: flex; justify-content: space-between; align-items: center; gap: 16px; } .logo { font-weight: 700; letter-spacing: 0.3px; } nav a { color: #a9b7ff; text-decoration: none; margin-left: 14px; } nav a:hover { text-decoration: underline; } .hero { padding: 56px 0 24px; } h1 { font-size: 40px; line-height: 1.15; margin: 0 0 12px; } p { margin: 0 0 16px; color: #c9d4ff; } .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; } .btn { border: 1px solid #3a4a8a; padding: 10px 14px; border-radius: 10px; background: #14214a; color: #e8eefc; cursor: pointer; } .btn.secondary { background: transparent; } .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0; } .card { border: 1px solid #233063; background: #0f1833; border-radius: 14px; padding: 14px; } .card h3 { margin: 0 0 6px; font-size: 16px; } .card p { margin: 0; font-size: 14px; color: #b9c6ff; } form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; } input { flex: 1 1 220px; padding: 10px 12px; border-radius: 10px; border: 1px solid #233063; background: #0b1220; color: #e8eefc; } footer { margin-top: 44px; padding-top: 18px; border-top: 1px solid #233063; color: #98a7e6; font-size: 13px; } @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 32px; } } </style> </head> <body> <div class="wrap"> <header> <div class="logo">AI Executor Delta</div> <nav> <a href="#fitur">Fitur</a> <a href="#kontak">Kontak</a> </nav> </header> <main class="hero"> <h1>Asisten AI untuk bantu kerja lebih cepat</h1> <p>Landing page sederhana. Jelaskan 1 kalimat value utama produk kamu di sini.</p> <div class="cta"> <button class="btn" onclick="alert('Demo belum tersedia.')">Coba demo</button> <a class="btn secondary" href="#kontak">Minta akses</a> </div> <section id="fitur" class="grid"> <div class="card"> <h3>Otomasi</h3> <p>Contoh: ringkas teks, buat draft email, buat template dokumen.</p> </div> <div class="card"> <h3>Integrasi</h3> <p>Contoh: hubungkan ke API internal atau workflow tim.</p> </div> <div class="card"> <h3>Kontrol</h3> <p>Beri batasan, format output, dan aturan keamanan.</p> </div> </section> <section id="kontak" class="card"> <h3>Dapatkan update</h3> <p>Masukkan email untuk dihubungi saat ada versi beta.</p> <form onsubmit="event.preventDefault(); alert('Tersimpan (contoh).');"> <input type="email" placeholder="email@contoh.com" required /> <button class="btn" type="submit">Kirim</button> </form> </section> </main> <footer> © 2026 AI Executor Delta. Semua hak cipta. </footer> </div> </body> </html> Saya tetap catat produk kamu sebagai Membuat AI Executor Delta, dan website kamu belum dibuat.
+g ngrrti
+Oke, aku jelasin versi singkat ya. Itu tadi cuma contoh file index.html untuk halaman depan website sederhana. Kamu tinggal salin kodenya ke file bernama index.html, lalu buka dengan browser. Aku sudah catat produk kamu: Membuat AI Executor Delta. Website kamu belum ada.
+coba ulang gw salin nanti gw coba
+Ini aku ulang lagi ya. Salin semuanya jadi file bernama index.html, lalu buka file itu di browser. <!doctype html> <html lang="id"> <head> <meta charset="utf-8" /> <meta name="viewport" content="width=device-width, initial-scale=1" /> <title>AI Executor Delta</title> <meta name="description" content="Produk AI untuk membantu otomasi dan produktivitas." /> <style> :root { color-scheme: dark; } body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #0b1220; color: #e8eefc; } .wrap { max-width: 980px; margin: 0 auto; padding: 48px 20px; } header { display: flex; justify-content: space-between; align-items: center; gap: 16px; } .logo { font-weight: 700; letter-spacing: 0.3px; } nav a { color: #a9b7ff; text-decoration: none; margin-left: 14px; } nav a:hover { text-decoration: underline; } .hero { padding: 56px 0 24px; } h1 { font-size: 40px; line-height: 1.15; margin: 0 0 12px; } p { margin: 0 0 16px; color: #c9d4ff; } .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; } .btn { border: 1px solid #3a4a8a; padding: 10px 14px; border-radius: 10px; background: #14214a; color: #e8eefc; cursor: pointer; } .btn.secondary { background: transparent; } .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0; } .card { border: 1px solid #233063; background: #0f1833; border-radius: 14px; padding: 14px; } .card h3 { margin: 0 0 6px; font-size: 16px; } .card p { margin: 0; font-size: 14px; color: #b9c6ff; } form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; } input { flex: 1 1 220px; padding: 10px 12px; border-radius: 10px; border: 1px solid #233063; background: #0b1220; color: #e8eefc; } footer { margin-top: 44px; padding-top: 18px; border-top: 1px solid #233063; color: #98a7e6; font-size: 13px; } @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 32px; } } </style> </head> <body> <div class="wrap"> <header> <div class="logo">AI Executor Delta</div> <nav> <a href="#fitur">Fitur</a> <a href="#kontak">Kontak</a> </nav> </header> <main class="hero"> <h1>Asisten AI untuk bantu kerja lebih cepat</h1> <p>Landing page sederhana. Jelaskan 1 kalimat value utama produk kamu di sini.</p> <div class="cta"> <button class="btn" onclick="alert('Demo belum tersedia.')">Coba demo</button> <a class="btn secondary" href="#kontak">Minta akses</a> </div> <section id="fitur" class="grid"> <div class="card"> <h3>Otomasi</h3> <p>Contoh: ringkas teks, buat draft email, buat template dokumen.</p> </div> <div class="card"> <h3>Integrasi</h3> <p>Contoh: hubungkan ke API internal atau workflow tim.</p> </div> <div class="card"> <h3>Kontrol</h3> <p>Beri batasan, format output, dan aturan keamanan.</p> </div> </section> <section id="kontak" class="card"> <h3>Dapatkan update</h3> <p>Masukkan email untuk dihubungi saat ada versi beta.</p> <form onsubmit="event.preventDefault(); alert('Tersimpan (contoh).');"> <input type="email" placeholder="email@contoh.com" required /> <button class="btn" type="submit">Kirim</button> </form> </section> </main> <footer> © 2026 AI Executor Delta. Semua hak cipta. </footer> </div> </body> </html> Aku tetap catat produk kamu: Membuat AI Executor Delta, dan website kamu belum dibuat.
+index nya aja lah jangan campur ama omongan lu nyalin nya ribet
+<!doctype html> <html lang="id"> <head> <meta charset="utf-8" /> <meta name="viewport" content="width=device-width, initial-scale=1" /> <title>AI Executor Delta</title> <meta name="description" content="Produk AI untuk membantu otomasi dan produktivitas." /> <style> :root { color-scheme: dark; } body { margin: 0; font-family: system-ui, Arial, sans-serif; background: #0b1220; color: #e8eefc; } .wrap { max-width: 980px; margin: 0 auto; padding: 48px 20px; } header { display: flex; justify-content: space-between; align-items: center; gap: 16px; } .logo { font-weight: 700; letter-spacing: 0.3px; } nav a { color: #a9b7ff; text-decoration: none; margin-left: 14px; } nav a:hover { text-decoration: underline; } .hero { padding: 56px 0 24px; } h1 { font-size: 40px; line-height: 1.15; margin: 0 0 12px; } p { margin: 0 0 16px; color: #c9d4ff; } .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; } .btn { border: 1px solid #3a4a8a; padding: 10px 14px; border-radius: 10px; background: #14214a; color: #e8eefc; cursor: pointer; } .btn.secondary { background: transparent; } .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0; } .card { border: 1px solid #233063; background: #0f1833; border-radius: 14px; padding: 14px; } .card h3 { margin: 0 0 6px; font-size: 16px; } .card p { margin: 0; font-size: 14px; color: #b9c6ff; } form { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; } input { flex: 1 1 220px; padding: 10px 12px; border-radius: 10px; border: 1px solid #233063; background: #0b1220; color: #e8eefc; } footer { margin-top: 44px; padding-top: 18px; border-top: 1px solid #233063; color: #98a7e6; font-size: 13px; } @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 32px; } } </style> </head> <body> <div class="wrap"> <header> <div class="logo">AI Executor Delta</div> <nav> <a href="#fitur">Fitur</a> <a href="#kontak">Kontak</a> </nav> </header> <main class="hero"> <h1>Asisten AI untuk bantu kerja lebih cepat</h1> <p>Landing page sederhana. Jelaskan 1 kalimat value utama produk kamu di sini.</p> <div class="cta"> <button class="btn" onclick="alert('Demo belum tersedia.')">Coba demo</button> <a class="btn secondary" href="#kontak">Minta akses</a> </div> <section id="fitur" class="grid"> <div class="card"> <h3>Otomasi</h3> <p>Contoh: ringkas teks, buat draft email, buat template dokumen.</p> </div> <div class="card"> <h3>Integrasi</h3> <p>Contoh: hubungkan ke API internal atau workflow tim.</p> </div> <div class="card"> <h3>Kontrol</h3> <p>Beri batasan, format output, dan aturan keamanan.</p> </div> </section> <section id="kontak" class="card"> <h3>Dapatkan update</h3> <p>Masukkan email untuk dihubungi saat ada versi beta.</p> <form onsubmit="event.preventDefault(); alert('Tersimpan (contoh).');"> <input type="email" placeholder="email@contoh.com" required /> <button class="btn" type="submit">Kirim</button> </form> </section> </main> <footer> © 2026 AI Executor Delta. Semua hak cipta. </footer> </div> </body> </html>
