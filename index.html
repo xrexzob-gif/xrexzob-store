@@ -2,220 +2,214 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="theme-color" content="#08090d">
-  <meta name="description" content="XREXZOB STUDIO - Audio Developer">
-  <link rel="icon" href="logo.jpeg">
-
   <title>XREXZOB STUDIO — Audio Developer</title>
-
+  <link rel="icon" href="logo.jpeg">
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <!-- LOADING SCREEN -->
-  <div id="loadingScreen">
-    <div class="loader-box">
-      <div class="logo-ring">
-        <img src="logo.jpeg" alt="XREXZOB">
-      </div>
+<div id="loader">
+  <div class="loader-logo">
+    <img src="logo.jpeg" alt="XREXZOB">
+  </div>
+  <h1>XREXZOB<span>.</span></h1>
+  <p>AUDIO DEVELOPER</p>
+  <div class="loader-line"><i></i></div>
+  <small>STARTING STUDIO...</small>
+</div>
 
-      <div class="loading-title">XREXZOB STUDIO</div>
-      <div class="loading-subtitle">AUDIO DEVELOPER</div>
+<div class="background">
+  <div class="noise"></div>
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="grid"></div>
+</div>
 
-      <div class="loading-bar">
-        <div class="loading-progress"></div>
-      </div>
-
-      <div class="loading-text">INITIALIZING STUDIO...</div>
+<header>
+  <a class="brand">
+    <div class="brand-img">
+      <img src="logo.jpeg" alt="logo">
     </div>
+    <div>
+      <b>XREXZOB<span>.</span></b>
+      <small>STUDIO / AUDIO DEVELOPER</small>
+    </div>
+  </a>
+
+  <div class="online">
+    <i></i> SYSTEM ONLINE
   </div>
+</header>
 
-  <!-- BACKGROUND -->
-  <div class="bg">
-    <div class="grid"></div>
-    <div class="orb orb-one"></div>
-    <div class="orb orb-two"></div>
-    <div class="orb orb-three"></div>
-  </div>
+<main>
 
-  <main class="container">
+  <section class="hero">
+    <div class="hero-tag">XREXZOB AUDIO ENGINE <span>01</span></div>
 
-    <!-- HEADER -->
-    <header class="header">
-      <div class="brand">
-        <div class="brand-logo">
-          <img src="logo.jpeg" alt="XREXZOB">
-        </div>
+    <h2>CREATE YOUR<br><em>AUDIO.</em></h2>
 
-        <div>
-          <h1>XREXZOB <span>STUDIO</span></h1>
-          <p>AUDIO DEVELOPER</p>
-        </div>
+    <p>
+      Upload audio, choose your speed, process it directly
+      inside your browser and export the result.
+    </p>
+  </section>
+
+  <section class="panel">
+
+    <div class="panel-head">
+      <div>
+        <small>01 / INPUT</small>
+        <h3>Upload Audio</h3>
+      </div>
+      <span>MP3 / WAV</span>
+    </div>
+
+    <div id="dropZone" class="upload">
+      <input id="audioInput" type="file"
+        accept=".mp3,.wav,audio/mpeg,audio/wav">
+
+      <div class="upload-circle">↑</div>
+
+      <strong>DROP YOUR AUDIO</strong>
+      <p>Drag & drop atau klik area ini</p>
+
+      <label>SELECT AUDIO FILE</label>
+    </div>
+
+    <div id="fileCard" class="file-card hidden">
+      <div class="music-icon">♫</div>
+
+      <div class="file-text">
+        <strong id="fileName">audio.mp3</strong>
+        <small id="fileInfo">0 MB</small>
       </div>
 
-      <div class="status-badge">
-        <span class="status-dot"></span>
-        ONLINE
+      <button id="removeFile">×</button>
+    </div>
+
+    <div id="preview" class="preview hidden">
+      <div>
+        <small>AUDIO PREVIEW</small>
+        <span id="duration">00:00</span>
       </div>
-    </header>
+      <audio id="player" controls></audio>
+    </div>
 
-    <!-- MAIN CARD -->
-    <section class="studio-card">
+  </section>
 
-      <div class="section-title">
-        <div class="title-icon">♫</div>
-        <div>
-          <h2>Audio Speed Studio</h2>
-          <p>Process audio directly in your browser</p>
-        </div>
+  <section class="panel">
+
+    <div class="panel-head">
+      <div>
+        <small>02 / ENGINE</small>
+        <h3>Speed Control</h3>
       </div>
+      <strong id="speedValue">1.00x</strong>
+    </div>
 
-      <!-- UPLOAD -->
-      <div id="dropZone" class="drop-zone">
+    <div class="presets">
 
-        <input
-          type="file"
-          id="audioInput"
-          accept=".mp3,.wav,audio/mpeg,audio/wav,audio/x-wav"
-          hidden
-        >
+      <button class="speed" data-speed="2.32">
+        <small>PRESET 01</small>
+        <b>2.32x</b>
+        <span>Target 0.43</span>
+      </button>
 
-        <div class="upload-icon">↑</div>
+      <button class="speed" data-speed="2.00">
+        <small>PRESET 02</small>
+        <b>2.00x</b>
+        <span>Target 0.50</span>
+      </button>
 
-        <h3>DROP AUDIO HERE</h3>
-        <p>atau klik untuk memilih file</p>
+      <button class="speed" data-speed="1.54">
+        <small>PRESET 03</small>
+        <b>1.54x</b>
+        <span>Target 0.65</span>
+      </button>
 
-        <div class="formats">
-          MP3 <span>•</span> WAV
-        </div>
-      </div>
+      <button class="speed" data-speed="1.25">
+        <small>PRESET 04</small>
+        <b>1.25x</b>
+        <span>Target 0.80</span>
+      </button>
 
-      <!-- FILE INFO -->
-      <div id="fileBox" class="file-box hidden">
+      <button class="speed active" data-speed="1">
+        <small>PRESET 05</small>
+        <b>1.00x</b>
+        <span>Standard</span>
+      </button>
 
-        <div class="file-icon">♫</div>
+      <button id="custom" class="speed custom">
+        <small>CUSTOM</small>
+        <b>⚙</b>
+        <span>Custom multiplier</span>
+      </button>
 
-        <div class="file-details">
-          <div id="fileName" class="file-name">audio.mp3</div>
-          <div id="fileInfo" class="file-info">0 MB</div>
-        </div>
+    </div>
 
-        <button id="removeFile" class="remove-btn">×</button>
+  </section>
 
-      </div>
+  <section class="panel process-panel">
 
-      <!-- AUDIO PREVIEW -->
-      <div id="previewBox" class="preview-box hidden">
-
-        <div class="preview-label">
-          <span>PREVIEW</span>
-          <span id="durationLabel">00:00</span>
-        </div>
-
-        <audio id="audioPreview" controls></audio>
-
-      </div>
-
-      <!-- SPEED -->
-      <div class="speed-section">
-
-        <div class="section-heading">
-          <div>
-            <h3>Speed Preset</h3>
-            <p>Pilih multiplier audio</p>
-          </div>
-
-          <div id="selectedSpeed" class="selected-speed">
-            1.00x
-          </div>
-        </div>
-
-        <div class="preset-grid">
-
-          <button class="preset" data-speed="2.32">
-            <strong>PRESET 1</strong>
-            <span>2.32x</span>
-            <small>Roblox 0.43</small>
-          </button>
-
-          <button class="preset" data-speed="2.00">
-            <strong>PRESET 2</strong>
-            <span>2.00x</span>
-            <small>Roblox 0.50</small>
-          </button>
-
-          <button class="preset" data-speed="1.54">
-            <strong>PRESET 3</strong>
-            <span>1.54x</span>
-            <small>Roblox 0.65</small>
-          </button>
-
-          <button class="preset" data-speed="1.25">
-            <strong>PRESET 4</strong>
-            <span>1.25x</span>
-            <small>Roblox 0.80</small>
-          </button>
-
-          <button class="preset active" data-speed="1.00">
-            <strong>PRESET 5</strong>
-            <span>1.00x</span>
-            <small>Standard</small>
-          </button>
-
-          <button id="customBtn" class="preset custom">
-            <strong>CUSTOM</strong>
-            <span>⚙</span>
-            <small>Custom multiplier</small>
-          </button>
-
-        </div>
-
+    <div class="process-top">
+      <div>
+        <small>03 / OUTPUT</small>
+        <h3>Audio Processing</h3>
       </div>
 
-      <!-- PROCESS -->
-      <div class="process-section">
+      <div id="state" class="state">READY</div>
+    </div>
 
-        <button id="processBtn" class="process-btn" disabled>
+    <button id="process" disabled>
+      <span>⚡</span>
+      <div>
+        <b>PROCESS & DOWNLOAD</b>
+        <small>LOCAL BROWSER PROCESSING</small>
+      </div>
+      <strong>→</strong>
+    </button>
 
-          <span class="process-icon">⚡</span>
-
-          <span>
-            <strong>PROSES & DOWNLOAD AUDIO</strong>
-            <small>Local browser processing</small>
-          </span>
-
-          <span class="arrow">→</span>
-
-        </button>
-
-        <div class="progress-area">
-
-          <div class="progress-top">
-            <span id="statusText">READY</span>
-            <span id="progressPercent">0%</span>
-          </div>
-
-          <div class="progress-track">
-            <div id="progressBar" class="progress-bar"></div>
-          </div>
-
-        </div>
-
+    <div class="progress-wrap">
+      <div>
+        <span id="status">Waiting for audio...</span>
+        <b id="percent">0%</b>
       </div>
 
-    </section>
+      <div class="progress">
+        <i id="bar"></i>
+      </div>
+    </div>
 
-    <!-- FOOTER -->
-    <footer>
-      <div>© 2026 XREXZOB STUDIO</div>
-      <div>Audio Developer • Browser Processing</div>
-    </footer>
+  </section>
 
-  </main>
+  <section class="features">
 
-  <script src="script.js"></script>
+    <div>
+      <b>LOCAL</b>
+      <span>Browser processing</span>
+    </div>
 
+    <div>
+      <b>FAST</b>
+      <span>Web Audio Engine</span>
+    </div>
+
+    <div>
+      <b>WAV</b>
+      <span>High compatibility</span>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <b>XREXZOB STUDIO</b>
+  <span>© 2026 — AUDIO DEVELOPER</span>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
