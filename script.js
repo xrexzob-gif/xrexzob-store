@@ -1,577 +1,503 @@
-const input = document.getElementById("audioInput");
-const upload = document.getElementById("dropZone");
+/* =========================================================
+   XREXZOB STUDIO
+   AUDIO DEVELOPER
+   Local Audio Speed Processor
+   ========================================================= */
 
-const fileCard = document.getElementById("fileCard");
+const audioInput = document.getElementById("audioInput");
+const dropZone = document.getElementById("dropZone");
+
+const fileBox = document.getElementById("fileBox");
 const fileName = document.getElementById("fileName");
 const fileInfo = document.getElementById("fileInfo");
 const removeFile = document.getElementById("removeFile");
 
-const preview = document.getElementById("preview");
-const player = document.getElementById("player");
-const duration = document.getElementById("duration");
+const previewBox = document.getElementById("previewBox");
+const audioPreview = document.getElementById("audioPreview");
+const durationLabel = document.getElementById("durationLabel");
 
-const processButton = document.getElementById("process");
+const processBtn = document.getElementById("processBtn");
 
-const speedValue = document.getElementById("speedValue");
-const speedButtons = document.querySelectorAll(".speed[data-speed]");
-const customButton = document.getElementById("custom");
+const progressBar = document.getElementById("progressBar");
+const progressPercent = document.getElementById("progressPercent");
+const statusText = document.getElementById("statusText");
 
-const progressBar = document.getElementById("bar");
-const progressPercent = document.getElementById("percent");
-const status = document.getElementById("status");
-const state = document.getElementById("state");
+const selectedSpeed = document.getElementById("selectedSpeed");
+const customBtn = document.getElementById("customBtn");
+const presets = document.querySelectorAll(".preset[data-speed]");
 
-let currentFile = null;
-let multiplier = 1;
+let selectedFile = null;
+let selectedMultiplier = 1.00;
 
 
-/* =========================
-   LOADING
-========================= */
+/* =========================================================
+   LOADING SCREEN
+   ========================================================= */
 
 window.addEventListener("load", () => {
 
   setTimeout(() => {
+    const loading = document.getElementById("loadingScreen");
 
-    document
-      .getElementById("loader")
-      .classList.add("hide");
-
+    if (loading) {
+      loading.classList.add("hide");
+    }
   }, 1700);
 
 });
 
 
-/* =========================
-   FILE PICKER
-========================= */
+/* =========================================================
+   FILE INPUT
+   ========================================================= */
 
-input.addEventListener("change", () => {
+dropZone.addEventListener("click", () => {
+  audioInput.click();
+});
 
-  if (input.files.length) {
-    loadFile(input.files[0]);
+
+audioInput.addEventListener("change", () => {
+
+  if (audioInput.files.length > 0) {
+    handleFile(audioInput.files[0]);
   }
 
 });
 
 
-/* =========================
-   DRAG DROP
-========================= */
+/* =========================================================
+   DRAG & DROP
+   ========================================================= */
 
-["dragenter","dragover"].forEach(event => {
+["dragenter", "dragover"].forEach(eventName => {
 
-  upload.addEventListener(event, e => {
+  dropZone.addEventListener(eventName, event => {
 
-    e.preventDefault();
-    upload.classList.add("drag");
+    event.preventDefault();
+    event.stopPropagation();
 
-  });
-
-});
-
-["dragleave","drop"].forEach(event => {
-
-  upload.addEventListener(event, e => {
-
-    e.preventDefault();
-    upload.classList.remove("drag");
+    dropZone.classList.add("dragover");
 
   });
 
 });
 
-upload.addEventListener("drop", e => {
 
-  const file = e.dataTransfer.files[0];
+["dragleave", "drop"].forEach(eventName => {
 
-  if (file) {
-    loadFile(file);
+  dropZone.addEventListener(eventName, event => {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    dropZone.classList.remove("dragover");
+
+  });
+
+});
+
+
+dropZone.addEventListener("drop", event => {
+
+  const files = event.dataTransfer.files;
+
+  if (files.length > 0) {
+    handleFile(files[0]);
   }
 
 });
 
 
-/* =========================
-   LOAD FILE
-========================= */
+/* =========================================================
+   HANDLE FILE
+   ========================================================= */
 
-function loadFile(file){
+function handleFile(file) {
 
-  const ext =
-    file.name
-      .split(".")
-      .pop()
-      .toLowerCase();
+  const validTypes = [
+    "audio/mpeg",
+    "audio/mp3",
+    "audio/wav",
+    "audio/x-wav",
+    "audio/wave"
+  ];
 
-  if(ext !== "mp3" && ext !== "wav"){
+  const extension = file.name
+    .split(".")
+    .pop()
+    .toLowerCase();
 
-    alert("Pilih file MP3 atau WAV.");
+  const validExtension =
+    extension === "mp3" ||
+    extension === "wav";
+
+  if (!validTypes.includes(file.type) && !validExtension) {
+
+    alert("File harus berupa MP3 atau WAV.");
 
     return;
   }
 
-  currentFile = file;
+  selectedFile = file;
 
   fileName.textContent = file.name;
-
   fileInfo.textContent =
-    `${formatBytes(file.size)} • ${ext.toUpperCase()}`;
+    `${formatBytes(file.size)} • ${extension.toUpperCase()}`;
 
-  fileCard.classList.remove("hidden");
-  preview.classList.remove("hidden");
+  fileBox.classList.remove("hidden");
+  previewBox.classList.remove("hidden");
 
-  processButton.disabled = false;
-
-  status.textContent = "Audio loaded";
-  state.textContent = "READY";
-
-  setProgress(0);
+  processBtn.disabled = false;
 
   const url = URL.createObjectURL(file);
 
-  player.src = url;
+  audioPreview.src = url;
 
-  player.onloadedmetadata = () => {
+  statusText.textContent = "FILE READY";
+  setProgress(0);
 
-    duration.textContent =
-      formatTime(player.duration);
+  audioPreview.onloadedmetadata = () => {
+
+    durationLabel.textContent =
+      formatTime(audioPreview.duration);
 
   };
 
 }
 
 
-/* =========================
-   REMOVE
-========================= */
+/* =========================================================
+   REMOVE FILE
+   ========================================================= */
 
-removeFile.addEventListener("click", () => {
+removeFile.addEventListener("click", event => {
 
-  currentFile = null;
+  event.stopPropagation();
 
-  input.value = "";
+  selectedFile = null;
 
-  fileCard.classList.add("hidden");
-  preview.classList.add("hidden");
+  audioInput.value = "";
 
-  player.pause();
-  player.removeAttribute("src");
-  player.load();
+  fileBox.classList.add("hidden");
+  previewBox.classList.add("hidden");
 
-  processButton.disabled = true;
+  audioPreview.pause();
+  audioPreview.removeAttribute("src");
+  audioPreview.load();
 
-  status.textContent = "Waiting for audio...";
-  state.textContent = "READY";
+  processBtn.disabled = true;
 
+  statusText.textContent = "READY";
   setProgress(0);
 
 });
 
 
-/* =========================
+/* =========================================================
    SPEED PRESETS
-========================= */
+   ========================================================= */
 
-speedButtons.forEach(button => {
+presets.forEach(button => {
 
   button.addEventListener("click", () => {
 
-    speedButtons.forEach(x =>
-      x.classList.remove("active")
-    );
-
-    customButton.classList.remove("active");
+    presets.forEach(btn => {
+      btn.classList.remove("active");
+    });
 
     button.classList.add("active");
 
-    multiplier =
+    selectedMultiplier =
       Number(button.dataset.speed);
 
-    speedValue.textContent =
-      multiplier.toFixed(2) + "x";
+    selectedSpeed.textContent =
+      `${selectedMultiplier.toFixed(2)}x`;
 
-    status.textContent =
-      `Speed ${multiplier.toFixed(2)}x selected`;
+    statusText.textContent = "PRESET SELECTED";
 
   });
 
 });
 
 
-/* =========================
-   CUSTOM
-========================= */
+/* =========================================================
+   CUSTOM SPEED
+   ========================================================= */
 
-customButton.addEventListener("click", () => {
+customBtn.addEventListener("click", () => {
 
-  const answer = prompt(
-    "Masukkan multiplier custom:",
-    multiplier.toFixed(2)
+  let value = prompt(
+    "Masukkan multiplier custom.\nContoh: 1.25, 1.5, 2, 2.32",
+    selectedMultiplier.toFixed(2)
   );
 
-  if(answer === null) return;
+  if (value === null) {
+    return;
+  }
 
-  const value = Number(answer);
+  value = Number(value);
 
-  if(
-    !Number.isFinite(value) ||
-    value <= 0 ||
-    value > 10
-  ){
+  if (!Number.isFinite(value) || value <= 0) {
 
-    alert("Masukkan angka antara 0.01 sampai 10.");
+    alert("Multiplier tidak valid.");
 
     return;
   }
 
-  speedButtons.forEach(x =>
-    x.classList.remove("active")
-  );
+  if (value > 10) {
 
-  customButton.classList.add("active");
+    alert("Multiplier maksimal 10x.");
 
-  multiplier = value;
+    return;
+  }
 
-  speedValue.textContent =
-    value.toFixed(2) + "x";
+  presets.forEach(btn => {
+    btn.classList.remove("active");
+  });
 
-  status.textContent =
-    `Custom speed ${value.toFixed(2)}x`;
+  customBtn.classList.add("active");
+
+  selectedMultiplier = value;
+
+  selectedSpeed.textContent =
+    `${value.toFixed(2)}x`;
+
+  statusText.textContent =
+    "CUSTOM SPEED SELECTED";
 
 });
 
 
-/* =========================
-   PROCESS
-========================= */
+/* =========================================================
+   PROCESS BUTTON
+   ========================================================= */
 
-processButton.addEventListener("click", async () => {
+processBtn.addEventListener("click", async () => {
 
-  if(!currentFile){
+  if (!selectedFile) {
 
-    alert("Upload audio terlebih dahulu.");
+    alert("Pilih audio terlebih dahulu.");
 
     return;
   }
 
-  processButton.disabled = true;
+  if (selectedMultiplier <= 0) {
 
-  try{
+    alert("Speed tidak valid.");
+
+    return;
+  }
+
+  processBtn.disabled = true;
+
+  try {
 
     await processAudio();
 
-  }catch(error){
+  } catch (error) {
 
     console.error(error);
 
-    state.textContent = "ERROR";
-    status.textContent = "Processing failed";
+    statusText.textContent = "ERROR";
 
     alert(
-      "Audio gagal diproses.\n\n" +
-      error.message
+      "Gagal memproses audio.\n\n" +
+      "Detail: " + error.message
     );
 
-  }
+  } finally {
 
-  processButton.disabled = false;
+    processBtn.disabled = false;
+
+  }
 
 });
 
 
-/* =========================
-   AUDIO ENGINE
-========================= */
+/* =========================================================
+   PROCESS AUDIO
+   ========================================================= */
 
-async function processAudio(){
+async function processAudio() {
 
   setProgress(5);
+  statusText.textContent = "READING AUDIO";
 
-  state.textContent = "LOADING";
-  status.textContent = "Reading audio...";
-
-  const data =
-    await currentFile.arrayBuffer();
+  const arrayBuffer =
+    await selectedFile.arrayBuffer();
 
   setProgress(15);
+  statusText.textContent = "DECODING AUDIO";
 
-  status.textContent =
-    "Decoding audio...";
-
-  const AudioContext =
+  const AudioContextClass =
     window.AudioContext ||
     window.webkitAudioContext;
 
-  if(!AudioContext){
-
+  if (!AudioContextClass) {
     throw new Error(
       "Browser tidak mendukung Web Audio API."
     );
   }
 
-  const ctx =
-    new AudioContext();
+  const audioContext =
+    new AudioContextClass();
 
-  let decoded;
+  let audioBuffer;
 
-  try{
+  try {
 
-    decoded =
-      await ctx.decodeAudioData(
-        data.slice(0)
+    audioBuffer =
+      await audioContext.decodeAudioData(
+        arrayBuffer.slice(0)
       );
 
-  }finally{
+  } finally {
 
-    await ctx.close();
+    await audioContext.close();
 
   }
 
   setProgress(30);
+  statusText.textContent = "PREPARING RENDER";
 
-  state.textContent = "PROCESSING";
-  status.textContent =
-    `Rendering ${multiplier.toFixed(2)}x...`;
+  const inputLength = audioBuffer.length;
 
   const outputLength =
     Math.max(
       1,
-      Math.ceil(
-        decoded.length / multiplier
-      )
+      Math.ceil(inputLength / selectedMultiplier)
     );
 
-  const offline =
+  const sampleRate =
+    audioBuffer.sampleRate;
+
+  const channels =
+    audioBuffer.numberOfChannels;
+
+  const offlineContext =
     new OfflineAudioContext(
-      decoded.numberOfChannels,
+      channels,
       outputLength,
-      decoded.sampleRate
+      sampleRate
     );
 
   const source =
-    offline.createBufferSource();
+    offlineContext.createBufferSource();
 
-  source.buffer = decoded;
+  source.buffer = audioBuffer;
 
   source.playbackRate.value =
-    multiplier;
+    selectedMultiplier;
 
   source.connect(
-    offline.destination
+    offlineContext.destination
   );
 
   source.start(0);
 
-  setProgress(45);
+  setProgress(40);
+  statusText.textContent = "RENDERING AUDIO";
 
-  const rendered =
-    await offline.startRendering();
+  const renderedBuffer =
+    await offlineContext.startRendering();
 
   setProgress(75);
+  statusText.textContent = "ENCODING OGG";
 
-  status.textContent =
-    "Encoding WAV...";
-
-  const wav =
-    encodeWav(rendered);
+  // Konversi buffer ke WebM/OGG Blob menggunakan MediaRecorder API bawaan browser
+  const oggBlob = await audioBufferToOgg(renderedBuffer);
 
   setProgress(90);
+  statusText.textContent = "CREATING DOWNLOAD";
 
-  status.textContent =
-    "Preparing download...";
-
-  const base =
-    currentFile.name
+  const baseName =
+    selectedFile.name
       .replace(/\.[^/.]+$/, "");
 
-  const speed =
-    multiplier
+  const speedText =
+    selectedMultiplier
       .toFixed(2)
       .replace(".", "_");
 
-  const filename =
-    `${base}_xrexzob_${speed}x.wav`;
+  const outputName =
+    `${baseName}_xrexzob_${speedText}x.ogg`;
 
-  download(wav, filename);
+  downloadBlob(
+    oggBlob,
+    outputName
+  );
 
   setProgress(100);
 
-  state.textContent = "COMPLETE";
-  status.textContent =
-    "Download started successfully";
+  statusText.textContent =
+    "COMPLETE • DOWNLOAD STARTED";
 
 }
 
 
-/* =========================
-   WAV ENCODER
-========================= */
+/* =========================================================
+   OGG ENCODER (Menggunakan MediaStreamDestination & MediaRecorder)
+   ========================================================= */
 
-function encodeWav(audio){
+async function audioBufferToOgg(buffer) {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const dest = audioCtx.createMediaStreamDestination();
+  const source = audioCtx.createBufferSource();
+  
+  source.buffer = buffer;
+  source.connect(dest);
+  
+  // Pilih mimeType OGG jika didukung browser, fallback ke webm jika tidak
+  const options = { mimeType: 'audio/ogg;codecs=opus' };
+  const mediaRecorder = new MediaRecorder(dest.stream, MediaRecorder.isTypeSupported('audio/ogg;codecs=opus') ? options : { mimeType: 'audio/webm;codecs=opus' });
+  
+  const chunks = [];
+  mediaRecorder.ondataavailable = e => chunks.push(e.data);
+  
+  return new Promise((resolve) => {
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'audio/ogg' });
+      audioCtx.close();
+      resolve(blob);
+    };
 
-  const channels =
-    audio.numberOfChannels;
-
-  const sampleRate =
-    audio.sampleRate;
-
-  const samples =
-    audio.length;
-
-  const bits = 16;
-
-  const blockAlign =
-    channels * bits / 8;
-
-  const byteRate =
-    sampleRate * blockAlign;
-
-  const dataSize =
-    samples * blockAlign;
-
-  const buffer =
-    new ArrayBuffer(
-      44 + dataSize
-    );
-
-  const view =
-    new DataView(buffer);
+    mediaRecorder.start();
+    source.start(0);
+    
+    // Hentikan perekaman otomatis setelah durasi buffer selesai
+    setTimeout(() => {
+      mediaRecorder.stop();
+      source.stop();
+    }, (buffer.duration * 1000) + 100);
+  });
+}
 
 
-  writeString(view,0,"RIFF");
+/* =========================================================
+   PROGRESS
+   ========================================================= */
 
-  view.setUint32(
-    4,
-    36 + dataSize,
-    true
+function setProgress(value) {
+
+  value = Math.max(
+    0,
+    Math.min(100, value)
   );
 
-  writeString(view,8,"WAVE");
+  progressBar.style.width =
+    `${value}%`;
 
-  writeString(view,12,"fmt ");
-
-  view.setUint32(
-    16,
-    16,
-    true
-  );
-
-  view.setUint16(
-    20,
-    1,
-    true
-  );
-
-  view.setUint16(
-    22,
-    channels,
-    true
-  );
-
-  view.setUint32(
-    24,
-    sampleRate,
-    true
-  );
-
-  view.setUint32(
-    28,
-    byteRate,
-    true
-  );
-
-  view.setUint16(
-    32,
-    blockAlign,
-    true
-  );
-
-  view.setUint16(
-    34,
-    bits,
-    true
-  );
-
-  writeString(view,36,"data");
-
-  view.setUint32(
-    40,
-    dataSize,
-    true
-  );
-
-
-  const channelData = [];
-
-  for(let c = 0; c < channels; c++){
-
-    channelData.push(
-      audio.getChannelData(c)
-    );
-
-  }
-
-
-  let offset = 44;
-
-  for(let i = 0; i < samples; i++){
-
-    for(let c = 0; c < channels; c++){
-
-      let sample =
-        channelData[c][i];
-
-      sample =
-        Math.max(
-          -1,
-          Math.min(1,sample)
-        );
-
-      const value =
-        sample < 0
-          ? sample * 32768
-          : sample * 32767;
-
-      view.setInt16(
-        offset,
-        value,
-        true
-      );
-
-      offset += 2;
-
-    }
-
-  }
-
-  return new Blob(
-    [buffer],
-    {type:"audio/wav"}
-  );
+  progressPercent.textContent =
+    `${Math.round(value)}%`;
 
 }
 
 
-/* =========================
-   HELPERS
-========================= */
+/* =========================================================
+   DOWNLOAD
+   ========================================================= */
 
-function writeString(view,offset,string){
-
-  for(let i=0;i<string.length;i++){
-
-    view.setUint8(
-      offset+i,
-      string.charCodeAt(i)
-    );
-
-  }
-
-}
-
-
-function download(blob,name){
+function downloadBlob(blob, filename) {
 
   const url =
     URL.createObjectURL(blob);
@@ -580,7 +506,7 @@ function download(blob,name){
     document.createElement("a");
 
   link.href = url;
-  link.download = name;
+  link.download = filename;
 
   document.body.appendChild(link);
 
@@ -589,38 +515,28 @@ function download(blob,name){
   link.remove();
 
   setTimeout(() => {
-
     URL.revokeObjectURL(url);
-
-  },2000);
-
-}
-
-
-function setProgress(value){
-
-  value =
-    Math.max(
-      0,
-      Math.min(100,value)
-    );
-
-  progressBar.style.width =
-    value + "%";
-
-  progressPercent.textContent =
-    Math.round(value) + "%";
+  }, 2000);
 
 }
 
 
-function formatBytes(bytes){
+/* =========================================================
+   FORMAT BYTES
+   ========================================================= */
 
-  if(bytes === 0)
+function formatBytes(bytes) {
+
+  if (bytes === 0) {
     return "0 Bytes";
+  }
 
-  const units =
-    ["Bytes","KB","MB","GB"];
+  const units = [
+    "Bytes",
+    "KB",
+    "MB",
+    "GB"
+  ];
 
   const index =
     Math.floor(
@@ -629,31 +545,38 @@ function formatBytes(bytes){
     );
 
   return (
-    (bytes /
-      Math.pow(1024,index))
+    parseFloat(
+      (bytes /
+      Math.pow(1024, index))
       .toFixed(2)
-    + " "
-    + units[index]
+    ) +
+    " " +
+    units[index]
   );
 
 }
 
 
-function formatTime(seconds){
+/* =========================================================
+   FORMAT TIME
+   ========================================================= */
 
-  if(!Number.isFinite(seconds))
+function formatTime(seconds) {
+
+  if (!Number.isFinite(seconds)) {
     return "00:00";
+  }
 
-  const min =
+  const minutes =
     Math.floor(seconds / 60);
 
-  const sec =
+  const secs =
     Math.floor(seconds % 60);
 
   return (
-    String(min).padStart(2,"0")
-    + ":" +
-    String(sec).padStart(2,"0")
+    String(minutes).padStart(2, "0") +
+    ":" +
+    String(secs).padStart(2, "0")
   );
 
 }
