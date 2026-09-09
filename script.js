@@ -1,383 +1,760 @@
-// ── XREXZOB AI ──
-const API_BASE = 'https://api.x.ai/v1';
+/* =========================================================
+   XREXZOB STUDIO
+   AUDIO DEVELOPER
+   Local Audio Speed Processor
+   ========================================================= */
 
-const state = {
-  apiKey: localStorage.getItem('xrexzob_api_key') || '',
-  model: localStorage.getItem('xrexzob_model') || 'grok-3-latest',
-  messages: [],
-  isListening: false,
-  isSpeaking: false,
-  screenStream: null,
-  recognition: null,
-  synth: window.speechSynthesis,
-};
+const audioInput = document.getElementById("audioInput");
+const dropZone = document.getElementById("dropZone");
 
-// ── DOM refs ──
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
-const micBtn = document.getElementById('micBtn');
-const screenBtn = document.getElementById('screenBtn');
-const stopScreenBtn = document.getElementById('stopScreenBtn');
-const screenPreview = document.getElementById('screenPreview');
-const voiceVisualizer = document.getElementById('voiceVisualizer');
-const apiKeyInput = document.getElementById('apiKeyInput');
-const modelSelect = document.getElementById('modelSelect');
-const clearBtn = document.getElementById('clearBtn');
-const eyeBtn = document.getElementById('eyeBtn');
-const speakToggle = document.getElementById('speakToggle');
+const fileBox = document.getElementById("fileBox");
+const fileName = document.getElementById("fileName");
+const fileInfo = document.getElementById("fileInfo");
+const removeFile = document.getElementById("removeFile");
 
-// ── Init ──
-function init() {
-  if (state.apiKey) {
-    apiKeyInput.value = state.apiKey;
-    apiKeyInput.type = 'password';
-  }
-  modelSelect.value = state.model;
-  setupRecognition();
-  setupEventListeners();
-}
+const previewBox = document.getElementById("previewBox");
+const audioPreview = document.getElementById("audioPreview");
+const durationLabel = document.getElementById("durationLabel");
 
-// ── Event Listeners ──
-function setupEventListeners() {
-  sendBtn.addEventListener('click', sendMessage);
+const processBtn = document.getElementById("processBtn");
 
-  chatInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
+const progressBar = document.getElementById("progressBar");
+const progressPercent = document.getElementById("progressPercent");
+const statusText = document.getElementById("statusText");
 
-  chatInput.addEventListener('input', () => {
-    chatInput.style.height = 'auto';
-    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
-  });
+const selectedSpeed = document.getElementById("selectedSpeed");
+const customBtn = document.getElementById("customBtn");
+const presets = document.querySelectorAll(".preset[data-speed]");
 
-  apiKeyInput.addEventListener('change', () => {
-    state.apiKey = apiKeyInput.value.trim();
-    localStorage.setItem('xrexzob_api_key', state.apiKey);
-    showToast('API key saved!', 'success');
-  });
+let selectedFile = null;
+let selectedMultiplier = 1.00;
 
-  modelSelect.addEventListener('change', () => {
-    state.model = modelSelect.value;
-    localStorage.setItem('xrexzob_model', state.model);
-    showToast(`Model: ${state.model}`, 'info');
-  });
 
-  eyeBtn.addEventListener('click', () => {
-    apiKeyInput.type = apiKeyInput.type === 'password' ? 'text' : 'password';
-    eyeBtn.textContent = apiKeyInput.type === 'password' ? '👁' : '🙈';
-  });
+/* =========================================================
+   LOADING SCREEN
+   ========================================================= */
 
-  micBtn.addEventListener('click', toggleMic);
-  screenBtn.addEventListener('click', startScreenShare);
-  stopScreenBtn.addEventListener('click', stopScreenShare);
-  clearBtn.addEventListener('click', clearChat);
+window.addEventListener("load", () => {
 
-  document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      chatInput.value = chip.textContent;
-      chatInput.style.height = 'auto';
-      sendMessage();
-    });
-  });
-
-  speakToggle.addEventListener('click', () => {
-    if (state.isSpeaking) {
-      state.synth.cancel();
-      state.isSpeaking = false;
-      speakToggle.textContent = '🔇';
-      speakToggle.title = 'Suara AI: Mati';
-      showToast('Suara AI dimatikan', 'info');
-    }
-  });
-}
-
-// ── Send Message ──
-async function sendMessage() {
-  const text = chatInput.value.trim();
-  if (!text) return;
-
-  if (!state.apiKey) {
-    showToast('Masukkan API Key Grok dulu di sidebar!', 'error');
-    apiKeyInput.focus();
-    return;
-  }
-
-  // Hide welcome screen
-  const welcome = document.getElementById('welcome');
-  if (welcome) welcome.style.display = 'none';
-
-  // Add user message
-  addMessage('user', text);
-  state.messages.push({ role: 'user', content: text });
-
-  chatInput.value = '';
-  chatInput.style.height = 'auto';
-
-  // Show typing
-  const typingEl = addTypingIndicator();
-
-  try {
-    const reply = await callGrok(state.messages);
-    typingEl.remove();
-    addMessage('ai', reply);
-    state.messages.push({ role: 'assistant', content: reply });
-
-    // Auto speak if enabled
-    if (document.getElementById('autoSpeak').checked) {
-      speak(reply);
-    }
-  } catch (err) {
-    typingEl.remove();
-    const errMsg = err.message || 'Gagal konek ke Grok API';
-    addMessage('ai', `⚠️ Error: ${errMsg}`);
-    showToast(errMsg, 'error');
-  }
-}
-
-// ── Grok API ──
-async function callGrok(messages) {
-  const systemPrompt = `Kamu adalah XREXZOB, AI yang dibuat oleh Xrexzob. Kamu cerdas, santai, blak-blakan, dan seru. Kamu ngomong natural, bisa bahasa Indonesia atau Inggris sesuai user. Kamu jujur dan berani tapi tetap helpful. Nama kamu XREXZOB, bukan yang lain.`;
-
-  const res = await fetch(`${API_BASE}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${state.apiKey}`,
-    },
-    body: JSON.stringify({
-      model: state.model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages,
-      ],
-      max_tokens: 1024,
-    }),
-  });
-
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new Error(data.error?.message || `HTTP ${res.status}`);
-  }
-
-  const data = await res.json();
-  return data.choices[0].message.content;
-}
-
-// ── Add Message ──
-function addMessage(role, text) {
-  const div = document.createElement('div');
-  div.className = `message ${role}`;
-
-  const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-  const name = role === 'ai' ? 'XREXZOB' : 'YOU';
-  const avatar = role === 'ai' ? 'XZ' : 'U';
-
-  div.innerHTML = `
-    <div class="msg-avatar">${avatar}</div>
-    <div class="msg-content">
-      <div class="msg-name">${name}</div>
-      <div class="msg-bubble">${formatText(text)}</div>
-      <div class="msg-time">${time}</div>
-    </div>
-  `;
-
-  chatMessages.appendChild(div);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return div;
-}
-
-function addTypingIndicator() {
-  const div = document.createElement('div');
-  div.className = 'message ai typing-indicator';
-  div.innerHTML = `
-    <div class="msg-avatar">XZ</div>
-    <div class="msg-content">
-      <div class="msg-name">XREXZOB</div>
-      <div class="msg-bubble">
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-        <div class="typing-dot"></div>
-      </div>
-    </div>
-  `;
-  chatMessages.appendChild(div);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return div;
-}
-
-function formatText(text) {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/`(.*?)`/g, '<code style="background:#ffffff11;padding:1px 5px;border-radius:4px;font-family:monospace">$1</code>')
-    .replace(/\n/g, '<br>');
-}
-
-// ── Voice Input ──
-function setupRecognition() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) return;
-
-  state.recognition = new SpeechRecognition();
-  state.recognition.continuous = false;
-  state.recognition.interimResults = true;
-  state.recognition.lang = 'id-ID';
-
-  state.recognition.onresult = (e) => {
-    const transcript = Array.from(e.results)
-      .map(r => r[0].transcript)
-      .join('');
-    chatInput.value = transcript;
-    chatInput.style.height = 'auto';
-    chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
-  };
-
-  state.recognition.onend = () => {
-    state.isListening = false;
-    micBtn.classList.remove('mic-active');
-    micBtn.title = 'Mulai voice input';
-    voiceVisualizer.classList.remove('show');
-    const text = chatInput.value.trim();
-    if (text) sendMessage();
-  };
-
-  state.recognition.onerror = (e) => {
-    state.isListening = false;
-    micBtn.classList.remove('mic-active');
-    voiceVisualizer.classList.remove('show');
-    if (e.error !== 'no-speech') {
-      showToast(`Mic error: ${e.error}`, 'error');
-    }
-  };
-}
-
-function toggleMic() {
-  if (!state.recognition) {
-    showToast('Browser lu ga support speech recognition', 'error');
-    return;
-  }
-
-  if (state.isListening) {
-    state.recognition.stop();
-  } else {
-    state.recognition.start();
-    state.isListening = true;
-    micBtn.classList.add('mic-active');
-    micBtn.title = 'Stop mic';
-    voiceVisualizer.classList.add('show');
-    showToast('Lagi dengerin...', 'info');
-  }
-}
-
-// ── Text to Speech ──
-function speak(text) {
-  if (!state.synth) return;
-  state.synth.cancel();
-
-  const clean = text.replace(/<[^>]+>/g, '').replace(/[*_`]/g, '');
-  const utter = new SpeechSynthesisUtterance(clean);
-  utter.lang = 'id-ID';
-  utter.rate = 1.05;
-  utter.pitch = 1;
-
-  utter.onstart = () => {
-    state.isSpeaking = true;
-    speakToggle.textContent = '🔊';
-    speakToggle.title = 'Stop suara AI';
-  };
-  utter.onend = () => {
-    state.isSpeaking = false;
-    speakToggle.textContent = '🔇';
-  };
-
-  state.synth.speak(utter);
-}
-
-// ── Screen Share ──
-async function startScreenShare() {
-  try {
-    state.screenStream = await navigator.mediaDevices.getDisplayMedia({
-      video: { cursor: 'always' },
-      audio: false,
-    });
-
-    screenPreview.srcObject = state.screenStream;
-    screenPreview.classList.add('show');
-    screenBtn.style.display = 'none';
-    stopScreenBtn.style.display = 'flex';
-
-    state.screenStream.getVideoTracks()[0].onended = stopScreenShare;
-    showToast('Screen share aktif!', 'success');
-
-    addMessage('ai', '🖥️ Oke gw liat layar lu. Mau ngomongin apa soal screen ini?');
-    state.messages.push({ role: 'assistant', content: '🖥️ Oke gw liat layar lu. Mau ngomongin apa soal screen ini?' });
-  } catch (err) {
-    if (err.name !== 'NotAllowedError') {
-      showToast('Gagal share screen: ' + err.message, 'error');
-    }
-  }
-}
-
-function stopScreenShare() {
-  if (state.screenStream) {
-    state.screenStream.getTracks().forEach(t => t.stop());
-    state.screenStream = null;
-  }
-  screenPreview.srcObject = null;
-  screenPreview.classList.remove('show');
-  screenBtn.style.display = 'flex';
-  stopScreenBtn.style.display = 'none';
-  showToast('Screen share dihentikan', 'info');
-}
-
-// ── Clear Chat ──
-function clearChat() {
-  state.messages = [];
-  chatMessages.innerHTML = `
-    <div class="welcome" id="welcome">
-      <div class="welcome-logo">XZ</div>
-      <h2>XREXZOB AI</h2>
-      <p>AI canggih yang siap nemenin lu. Tanya apapun, kapanpun.</p>
-      <div class="welcome-chips">
-        <div class="chip">Siapa lo?</div>
-        <div class="chip">Bantu gw nulis code</div>
-        <div class="chip">Jelasin sesuatu</div>
-        <div class="chip">Main roleplay</div>
-      </div>
-    </div>
-  `;
-  document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      chatInput.value = chip.textContent;
-      sendMessage();
-    });
-  });
-  showToast('Chat dihapus', 'info');
-}
-
-// ── Toast ──
-function showToast(msg, type = 'info') {
-  const container = document.getElementById('toastContainer');
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-
-  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
-  toast.innerHTML = `<span>${icons[type] || ''}</span><span>${msg}</span>`;
-
-  container.appendChild(toast);
   setTimeout(() => {
-    toast.style.opacity = '0';
-    toast.style.transition = 'opacity 0.3s';
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
+    const loading = document.getElementById("loadingScreen");
+
+    if (loading) {
+      loading.classList.add("hide");
+    }
+  }, 1700);
+
+});
+
+
+/* =========================================================
+   FILE INPUT
+   ========================================================= */
+
+dropZone.addEventListener("click", () => {
+  audioInput.click();
+});
+
+
+audioInput.addEventListener("change", () => {
+
+  if (audioInput.files.length > 0) {
+    handleFile(audioInput.files[0]);
+  }
+
+});
+
+
+/* =========================================================
+   DRAG & DROP
+   ========================================================= */
+
+["dragenter", "dragover"].forEach(eventName => {
+
+  dropZone.addEventListener(eventName, event => {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    dropZone.classList.add("dragover");
+
+  });
+
+});
+
+
+["dragleave", "drop"].forEach(eventName => {
+
+  dropZone.addEventListener(eventName, event => {
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    dropZone.classList.remove("dragover");
+
+  });
+
+});
+
+
+dropZone.addEventListener("drop", event => {
+
+  const files = event.dataTransfer.files;
+
+  if (files.length > 0) {
+    handleFile(files[0]);
+  }
+
+});
+
+
+/* =========================================================
+   HANDLE FILE
+   ========================================================= */
+
+function handleFile(file) {
+
+  const validTypes = [
+    "audio/mpeg",
+    "audio/mp3",
+    "audio/wav",
+    "audio/x-wav",
+    "audio/wave"
+  ];
+
+  const extension = file.name
+    .split(".")
+    .pop()
+    .toLowerCase();
+
+  const validExtension =
+    extension === "mp3" ||
+    extension === "wav";
+
+  if (!validTypes.includes(file.type) && !validExtension) {
+
+    alert("File harus berupa MP3 atau WAV.");
+
+    return;
+  }
+
+  selectedFile = file;
+
+  fileName.textContent = file.name;
+  fileInfo.textContent =
+    `${formatBytes(file.size)} • ${extension.toUpperCase()}`;
+
+  fileBox.classList.remove("hidden");
+  previewBox.classList.remove("hidden");
+
+  processBtn.disabled = false;
+
+  const url = URL.createObjectURL(file);
+
+  audioPreview.src = url;
+
+  statusText.textContent = "FILE READY";
+  setProgress(0);
+
+  audioPreview.onloadedmetadata = () => {
+
+    durationLabel.textContent =
+      formatTime(audioPreview.duration);
+
+  };
+
 }
 
-// ── Start ──
-document.addEventListener('DOMContentLoaded', init);
+
+/* =========================================================
+   REMOVE FILE
+   ========================================================= */
+
+removeFile.addEventListener("click", event => {
+
+  event.stopPropagation();
+
+  selectedFile = null;
+
+  audioInput.value = "";
+
+  fileBox.classList.add("hidden");
+  previewBox.classList.add("hidden");
+
+  audioPreview.pause();
+  audioPreview.removeAttribute("src");
+  audioPreview.load();
+
+  processBtn.disabled = true;
+
+  statusText.textContent = "READY";
+  setProgress(0);
+
+});
+
+
+/* =========================================================
+   SPEED PRESETS
+   ========================================================= */
+
+presets.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    presets.forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    selectedMultiplier =
+      Number(button.dataset.speed);
+
+    selectedSpeed.textContent =
+      `${selectedMultiplier.toFixed(2)}x`;
+
+    statusText.textContent = "PRESET SELECTED";
+
+  });
+
+});
+
+
+/* =========================================================
+   CUSTOM SPEED
+   ========================================================= */
+
+customBtn.addEventListener("click", () => {
+
+  let value = prompt(
+    "Masukkan multiplier custom.\nContoh: 1.25, 1.5, 2, 2.32",
+    selectedMultiplier.toFixed(2)
+  );
+
+  if (value === null) {
+    return;
+  }
+
+  value = Number(value);
+
+  if (!Number.isFinite(value) || value <= 0) {
+
+    alert("Multiplier tidak valid.");
+
+    return;
+  }
+
+  if (value > 10) {
+
+    alert("Multiplier maksimal 10x.");
+
+    return;
+  }
+
+  presets.forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  customBtn.classList.add("active");
+
+  selectedMultiplier = value;
+
+  selectedSpeed.textContent =
+    `${value.toFixed(2)}x`;
+
+  statusText.textContent =
+    "CUSTOM SPEED SELECTED";
+
+});
+
+
+/* =========================================================
+   PROCESS BUTTON
+   ========================================================= */
+
+processBtn.addEventListener("click", async () => {
+
+  if (!selectedFile) {
+
+    alert("Pilih audio terlebih dahulu.");
+
+    return;
+  }
+
+  if (selectedMultiplier <= 0) {
+
+    alert("Speed tidak valid.");
+
+    return;
+  }
+
+  processBtn.disabled = true;
+
+  try {
+
+    await processAudio();
+
+  } catch (error) {
+
+    console.error(error);
+
+    statusText.textContent = "ERROR";
+
+    alert(
+      "Gagal memproses audio.\n\n" +
+      "Detail: " + error.message
+    );
+
+  } finally {
+
+    processBtn.disabled = false;
+
+  }
+
+});
+
+
+/* =========================================================
+   PROCESS AUDIO
+   ========================================================= */
+
+async function processAudio() {
+
+  setProgress(5);
+  statusText.textContent = "READING AUDIO";
+
+  const arrayBuffer =
+    await selectedFile.arrayBuffer();
+
+  setProgress(15);
+  statusText.textContent = "DECODING AUDIO";
+
+  const AudioContextClass =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+  if (!AudioContextClass) {
+    throw new Error(
+      "Browser tidak mendukung Web Audio API."
+    );
+  }
+
+  const audioContext =
+    new AudioContextClass();
+
+  let audioBuffer;
+
+  try {
+
+    audioBuffer =
+      await audioContext.decodeAudioData(
+        arrayBuffer.slice(0)
+      );
+
+  } finally {
+
+    await audioContext.close();
+
+  }
+
+  setProgress(30);
+  statusText.textContent = "PREPARING RENDER";
+
+  const inputLength = audioBuffer.length;
+
+  /*
+    Speed lebih cepat = durasi output lebih pendek.
+
+    Contoh:
+    2x speed
+    10 detik input
+    = sekitar 5 detik output
+  */
+
+  const outputLength =
+    Math.max(
+      1,
+      Math.ceil(inputLength / selectedMultiplier)
+    );
+
+  const sampleRate =
+    audioBuffer.sampleRate;
+
+  const channels =
+    audioBuffer.numberOfChannels;
+
+  const offlineContext =
+    new OfflineAudioContext(
+      channels,
+      outputLength,
+      sampleRate
+    );
+
+  const source =
+    offlineContext.createBufferSource();
+
+  source.buffer = audioBuffer;
+
+  source.playbackRate.value =
+    selectedMultiplier;
+
+  source.connect(
+    offlineContext.destination
+  );
+
+  source.start(0);
+
+  setProgress(40);
+  statusText.textContent = "RENDERING AUDIO";
+
+  const renderedBuffer =
+    await offlineContext.startRendering();
+
+  setProgress(75);
+  statusText.textContent = "ENCODING WAV";
+
+  const wavBlob =
+    audioBufferToWav(renderedBuffer);
+
+  setProgress(90);
+  statusText.textContent = "CREATING DOWNLOAD";
+
+  const baseName =
+    selectedFile.name
+      .replace(/\.[^/.]+$/, "");
+
+  const speedText =
+    selectedMultiplier
+      .toFixed(2)
+      .replace(".", "_");
+
+  const outputName =
+    `${baseName}_xrexzob_${speedText}x.wav`;
+
+  downloadBlob(
+    wavBlob,
+    outputName
+  );
+
+  setProgress(100);
+
+  statusText.textContent =
+    "COMPLETE • DOWNLOAD STARTED";
+
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+function setProgress(value) {
+
+  value = Math.max(
+    0,
+    Math.min(100, value)
+  );
+
+  progressBar.style.width =
+    `${value}%`;
+
+  progressPercent.textContent =
+    `${Math.round(value)}%`;
+
+}
+
+
+/* =========================================================
+   DOWNLOAD
+   ========================================================= */
+
+function downloadBlob(blob, filename) {
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+  link.download = filename;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 2000);
+
+}
+
+
+/* =========================================================
+   WAV ENCODER
+   ========================================================= */
+
+function audioBufferToWav(buffer) {
+
+  const numberOfChannels =
+    buffer.numberOfChannels;
+
+  const sampleRate =
+    buffer.sampleRate;
+
+  const format = 1;
+  const bitDepth = 16;
+
+  const channelData = [];
+
+  for (
+    let channel = 0;
+    channel < numberOfChannels;
+    channel++
+  ) {
+
+    channelData.push(
+      buffer.getChannelData(channel)
+    );
+
+  }
+
+  const samples =
+    buffer.length;
+
+  const blockAlign =
+    numberOfChannels *
+    bitDepth / 8;
+
+  const byteRate =
+    sampleRate *
+    blockAlign;
+
+  const dataSize =
+    samples *
+    blockAlign;
+
+  const bufferSize =
+    44 + dataSize;
+
+  const arrayBuffer =
+    new ArrayBuffer(bufferSize);
+
+  const view =
+    new DataView(arrayBuffer);
+
+
+  /* RIFF */
+
+  writeString(
+    view,
+    0,
+    "RIFF"
+  );
+
+  view.setUint32(
+    4,
+    36 + dataSize,
+    true
+  );
+
+  writeString(
+    view,
+    8,
+    "WAVE"
+  );
+
+
+  /* fmt */
+
+  writeString(
+    view,
+    12,
+    "fmt "
+  );
+
+  view.setUint32(
+    16,
+    16,
+    true
+  );
+
+  view.setUint16(
+    20,
+    format,
+    true
+  );
+
+  view.setUint16(
+    22,
+    numberOfChannels,
+    true
+  );
+
+  view.setUint32(
+    24,
+    sampleRate,
+    true
+  );
+
+  view.setUint32(
+    28,
+    byteRate,
+    true
+  );
+
+  view.setUint16(
+    32,
+    blockAlign,
+    true
+  );
+
+  view.setUint16(
+    34,
+    bitDepth,
+    true
+  );
+
+
+  /* data */
+
+  writeString(
+    view,
+    36,
+    "data"
+  );
+
+  view.setUint32(
+    40,
+    dataSize,
+    true
+  );
+
+
+  /* PCM */
+
+  let offset = 44;
+
+  for (let i = 0; i < samples; i++) {
+
+    for (
+      let channel = 0;
+      channel < numberOfChannels;
+      channel++
+    ) {
+
+      let sample =
+        channelData[channel][i];
+
+      sample =
+        Math.max(
+          -1,
+          Math.min(1, sample)
+        );
+
+      const intSample =
+        sample < 0
+          ? sample * 0x8000
+          : sample * 0x7FFF;
+
+      view.setInt16(
+        offset,
+        intSample,
+        true
+      );
+
+      offset += 2;
+
+    }
+
+  }
+
+  return new Blob(
+    [arrayBuffer],
+    {
+      type: "audio/wav"
+    }
+  );
+
+}
+
+
+/* =========================================================
+   WRITE STRING
+   ========================================================= */
+
+function writeString(view, offset, string) {
+
+  for (let i = 0; i < string.length; i++) {
+
+    view.setUint8(
+      offset + i,
+      string.charCodeAt(i)
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   FORMAT BYTES
+   ========================================================= */
+
+function formatBytes(bytes) {
+
+  if (bytes === 0) {
+    return "0 Bytes";
+  }
+
+  const units = [
+    "Bytes",
+    "KB",
+    "MB",
+    "GB"
+  ];
+
+  const index =
+    Math.floor(
+      Math.log(bytes) /
+      Math.log(1024)
+    );
+
+  return (
+    parseFloat(
+      (bytes /
+      Math.pow(1024, index))
+      .toFixed(2)
+    ) +
+    " " +
+    units[index]
+  );
+
+}
+
+
+/* =========================================================
+   FORMAT TIME
+   ========================================================= */
+
+function formatTime(seconds) {
+
+  if (!Number.isFinite(seconds)) {
+    return "00:00";
+  }
+
+  const minutes =
+    Math.floor(seconds / 60);
+
+  const secs =
+    Math.floor(seconds % 60);
+
+  return (
+    String(minutes).padStart(2, "0") +
+    ":" +
+    String(secs).padStart(2, "0")
+  );
+
+}
