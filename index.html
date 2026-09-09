@@ -1,31 +1,279 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Xrexzob Store</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Audio Speed & Pitch Bypass Generator</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        h2 {
+            margin-top: 0;
+            color: var(--accent);
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        p.desc {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: #0f172a;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            background: #0f172a;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .btn {
+            background-color: var(--accent);
+            color: #0f172a;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+        .btn:disabled {
+            background-color: #475569;
+            cursor: not-allowed;
+        }
+        #status {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #0f172a;
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.1s;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Halo, selamat datang sayang di Xrexzob Store</h1>
-  <p>Chatbot ada di pojok kanan bawah ⬇️</p>
+<div class="container">
+    <h2>Roblox Audio Bypass Tool</h2>
+    <p class="desc">Percepat audio lebih dari 2.0x dan export langsung ke MP3 untuk target Roblox 0.43.</p>
 
-  <script src="https://cdn.botpress.cloud/desk/webchat/v4.1/inject.js"></script>
-  <script src="https://files.bpcontent.cloud/2026/07/10/20/20260710200245-M5SD2JYK.js" defer></script>
+    <div class="form-group">
+        <label for="audioFile">Pilih File Musik (MP3/WAV):</label>
+        <input type="file" id="audioFile" accept="audio/*">
+    </div>
+
+    <div class="form-group">
+        <label for="speedMultiplier">Kecepatan (Multiplier di Audio Lab / Web):</label>
+        <input type="number" id="speedMultiplier" value="2.32" step="0.01" min="1.0" max="5.0">
+        <small style="color: var(--text-muted); font-size: 0.8rem;">Target Roblox 0.43? Gunakan 2.32 (atau lebih tinggi hingga 4.0x).</small>
+    </div>
+
+    <button class="btn" id="processBtn" onclick="processAudio()">Proses & Download MP3</button>
+    
+    <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div id="status"></div>
+</div>
+
+<script>
+async function processAudio() {
+    const fileInput = document.getElementById('audioFile');
+    const speedInput = document.getElementById('speedMultiplier');
+    const processBtn = document.getElementById('processBtn');
+    const status = document.getElementById('status');
+    const progressBar = document.getElementById('progressBar');
+    const progressFill = document.getElementById('progressFill');
+
+    if (fileInput.files.length === 0) {
+        alert('Pilih file audio terlebih dahulu!');
+        return;
+    }
+
+    const file = fileInput.files[0];
+    const speed = parseFloat(speedInput.value);
+
+    processBtn.disabled = true;
+    progressBar.style.display = 'block';
+    status.innerText = 'Membaca file audio...';
+    progressFill.style.width = '20%';
+
+    try {
+        const arrayBuffer = await file.arrayBuffer();
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        status.innerText = 'Decoding audio...';
+        progressFill.style.width = '40%';
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+        status.innerText = 'Memproses percepatan (Rendering)...';
+        progressFill.style.width = '70%';
+
+        // Hitung durasi baru berdasarkan kecepatan
+        const newLength = Math.round(audioBuffer.length / speed);
+        const offlineCtx = new OfflineAudioContext(
+            audioBuffer.numberOfChannels,
+            newLength,
+            audioBuffer.sampleRate
+        );
+
+        const source = offlineCtx.createBufferSource();
+        source.buffer = audioBuffer;
+        source.playbackRate.value = speed;
+        source.connect(offlineCtx.destination);
+        source.start(0);
+
+        const renderedBuffer = await offlineCtx.startRendering();
+
+        status.innerText = 'Mengonversi ke MP3/WAV...';
+        progressFill.style.width = '90%';
+
+        // Convert AudioBuffer to WAV/Blob
+        const wavBlob = bufferToWave(renderedBuffer, renderedBuffer.length);
+        
+        // Buat link download
+        const url = URL.createObjectURL(wavBlob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = file.name.replace(/\.[^/.]+$/, "") + `_bypass_${speed}x.wav`;
+        document.body.appendChild(a);
+        a.click();
+
+        progressFill.style.width = '100%';
+        status.innerText = 'Berhasil! File siap di-upload ke Roblox.';
+        processBtn.disabled = false;
+
+        setTimeout(() => {
+            progressBar.style.display = 'none';
+            progressFill.style.width = '0%';
+        }, 3000);
+
+    } catch (err) {
+        console.log(err);
+        status.innerText = 'Terjadi kesalahan saat memproses audio.';
+        processBtn.disabled = false;
+        progressBar.style.display = 'none';
+    }
+}
+
+// Fungsi pembantu konversi AudioBuffer ke WAV Blob standar
+function bufferToWave(abuffer, len) {
+    let numOfChan = abuffer.numberOfChannels,
+        length = len * numOfChan * 2 + 44,
+        buffer = new ArrayBuffer(length),
+        view = new DataView(buffer),
+        channels = [], i, sample,
+        offset = 0,
+        pos = 0;
+
+    setUint32(0x46464952);                         // "RIFF"
+    setUint32(length - 8);                         // file length - 8
+    setUint32(0x45564157);                         // "WAVE"
+
+    setUint32(0x20746d66);                         // "fmt " chunk
+    setUint32(16);                                 // length = 16
+    setUint16(1);                                  // PCM (uncompressed)
+    setUint16(numOfChan);
+    setUint32(abuffer.sampleRate);
+    setUint32(abuffer.sampleRate * 2 * numOfChan); // avg. bytes/sec
+    setUint16(numOfChan * 2);                      // block-align
+    setUint16(16);                                 // 16-bit
+    setUint32(0x61746164);                         // "data" - chunk
+    setUint32(length - pos - 4);                   // data length
+
+    for (i = 0; i < abuffer.numberOfChannels; i++)
+        channels.push(abuffer.getChannelData(i));
+
+    while (pos < len) {
+        for (i = 0; i < numOfChan; i++) {
+            sample = Math.max(-1, Math.min(1, channels[i][pos]));
+            sample = (0.5 + sample < 0 ? sample * 32768 : sample * 32767);
+            view.setInt16(pos * numOfChan * 2 + 44 + i * 2, sample, true);
+        }
+        pos++;
+    }
+
+    return new Blob([buffer], { type: 'audio/wav' });
+
+    function setUint32(data) {
+        view.setUint32(pos, data, true);
+        pos += 4;
+    }
+
+    function setUint16(data) {
+        view.setUint16(pos, data, true);
+        pos += 2;
+    }
+}
+</script>
 
 </body>
-</html><!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Xrexzob Store</title>
-</head>
-<body>
-
-  <h1>Halo, selamat datang di Xrexzob Store</h1>
-  <p>Chatbot ada di pojok kanan bawah ⬇️</p>
-
-  <script src="https://cdn.botpress.cloud/desk/webchat/v4.1/inject.js"></script>
-  <script src="https://files.bpcontent.cloud/2026/07/10/20/20260710200245-M5SD2JYK.js" defer></script>
-
-</body>
-</html>
+      </html>
+  
