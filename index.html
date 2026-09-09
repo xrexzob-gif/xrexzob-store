@@ -3,109 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Audio Speed & Pitch Bypass Generator</title>
+    <title>XREXZOB - Roblox Audio Bypass Pro</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #38bdf8;
-            --accent-hover: #0ea5e9;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --card-border: #1f2937;
+            --accent: #f59e0b; /* Warna emas/oranye ala RK */
+            --accent-hover: #d97706;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --glow: rgba(245, 158, 11, 0.15);
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 0;
+        }
+        header {
+            background-color: rgba(11, 15, 25, 0.95);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
+            padding: 15px 20px;
         }
-        .container {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 30px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--text-main);
+            text-transform: uppercase;
         }
-        h2 {
-            margin-top: 0;
+        .logo span {
             color: var(--accent);
-            text-align: center;
-            font-size: 1.5rem;
         }
-        p.desc {
-            color: var(--text-muted);
+        .main-wrapper {
+            max-width: 750px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #111827, #1f2937);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
             text-align: center;
-            font-size: 0.9rem;
             margin-bottom: 25px;
         }
-        .form-group {
+        .hero-banner h1 {
+            margin: 0 0 8px 0;
+            font-size: 1.2rem;
+            color: var(--text-main);
+        }
+        .hero-banner p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .studio-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px var(--glow);
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        /* Grid Preset ala Gambar */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        @media (max-width: 600px) {
+            .preset-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .preset-card {
+            background: #030712;
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            position: relative;
+        }
+        .preset-card:hover {
+            border-color: #374151;
+        }
+        .preset-card.active {
+            border-color: var(--accent);
+            background: rgba(245, 158, 11, 0.05);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+        }
+        .preset-num {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .preset-val {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+        .preset-label {
+            font-size: 0.65rem;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        /* Upload & Settings Box */
+        .upload-box {
+            background: #030712;
+            border: 2px dashed var(--card-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .upload-box input {
+            display: none;
+        }
+        .settings-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
             margin-bottom: 20px;
         }
-        label {
+        @media (max-width: 600px) {
+            .settings-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        .mini-setting {
+            background: #030712;
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 12px;
+        }
+        .mini-setting label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
         }
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            background: #0f172a;
-            border: 1px dashed var(--border);
-            border-radius: 8px;
+        .mini-setting val-text {
+            font-size: 0.95rem;
+            font-weight: bold;
             color: var(--text-main);
-            cursor: pointer;
         }
-        input[type="number"], select {
-            width: 100%;
-            padding: 10px;
-            background: #0f172a;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-main);
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-        .btn {
-            background-color: var(--accent);
-            color: #0f172a;
+
+        .btn-process {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #090d16;
             border: none;
             width: 100%;
-            padding: 12px;
+            padding: 15px;
             font-size: 1rem;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+            transition: opacity 0.2s;
         }
-        .btn:hover {
-            background-color: var(--accent-hover);
+        .btn-process:hover {
+            opacity: 0.9;
         }
-        .btn:disabled {
-            background-color: #475569;
+        .btn-process:disabled {
+            background: #374151;
+            color: var(--text-muted);
             cursor: not-allowed;
+            box-shadow: none;
         }
         #status {
             text-align: center;
             margin-top: 15px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 500;
         }
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: #0f172a;
+            background: #030712;
             border-radius: 3px;
-            margin-top: 10px;
+            margin-top: 12px;
             overflow: hidden;
             display: none;
         }
@@ -115,49 +221,140 @@
             width: 0%;
             transition: width 0.1s;
         }
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 25px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            background-color: #070911;
+        }
+        footer span {
+            color: var(--accent);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Roblox Audio Bypass Tool</h2>
-    <p class="desc">Percepat audio lebih dari 2.0x dan export langsung ke MP3 untuk target Roblox 0.43.</p>
+    <header>
+        <div class="nav-container">
+            <div class="logo">XREXZOB <span>Bypass Pro</span></div>
+            <div style="font-size: 0.8rem; color: var(--accent);">V14 Engine</div>
+        </div>
+    </header>
 
-    <div class="form-group">
-        <label for="audioFile">Pilih File Musik (MP3/WAV):</label>
-        <input type="file" id="audioFile" accept="audio/*">
+    <div class="main-wrapper">
+        <div class="hero-banner">
+            <h1>UBAH AUDIO ANDA BUAT SIAP UNTUK ROBLOX</h1>
+            <p>Pilih preset target kecepatan Roblox di bawah secara instan.</p>
+        </div>
+
+        <div class="studio-card">
+            <div class="section-title">PROCESSING SETTINGS (PILIH PRESET)</div>
+            
+            <div class="preset-grid">
+                <div class="preset-card active" onclick="selectPreset(1, 2.32, this)">
+                    <div class="preset-num"><span>1</span></div>
+                    <div class="preset-val">0.43</div>
+                    <div class="preset-label">ROBLOX TARGET</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset(2, 2.00, this)">
+                    <div class="preset-num"><span>2</span></div>
+                    <div class="preset-val">0.50</div>
+                    <div class="preset-label">ROBLOX TARGET</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset(3, 1.54, this)">
+                    <div class="preset-num"><span>3</span></div>
+                    <div class="preset-val">0.65</div>
+                    <div class="preset-label">ROBLOX TARGET</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset(4, 1.25, this)">
+                    <div class="preset-num"><span>4</span></div>
+                    <div class="preset-val">0.80</div>
+                    <div class="preset-label">ROBLOX TARGET</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset(5, 1.00, this)">
+                    <div class="preset-num"><span>5</span></div>
+                    <div class="preset-val">1.00</div>
+                    <div class="preset-label">STANDARD</div>
+                </div>
+                <div class="preset-card" onclick="selectPreset('C', 2.32, this)">
+                    <div class="preset-num"><span>C</span></div>
+                    <div class="preset-val">Custom</div>
+                    <div class="preset-label">MANUAL</div>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="mini-setting">
+                    <label>WEB MULTIPLIER SPEED</label>
+                    <val-text id="speedDisplay">2.32x</val-text>
+                </div>
+                <div class="mini-setting">
+                    <label>PITCH ENGINE</label>
+                    <val-text style="color: var(--accent);">LINKED</val-text>
+                </div>
+            </div>
+
+            <div class="upload-box" onclick="document.getElementById('audioFile').click()">
+                <div style="font-size: 0.9rem; font-weight: bold; margin-bottom: 5px;" id="fileLabel">📁 Pilih File Musik (MP3 / WAV)</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Klik untuk telusuri perangkat Anda</div>
+                <input type="file" id="audioFile" accept="audio/*" onchange="updateFileName(this)">
+            </div>
+
+            <button class="btn-process" id="processBtn" onclick="processAudio()">PROSES & DOWNLOAD AUDIO</button>
+            
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div id="status"></div>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label for="speedMultiplier">Kecepatan (Multiplier di Audio Lab / Web):</label>
-        <input type="number" id="speedMultiplier" value="2.32" step="0.01" min="1.0" max="5.0">
-        <small style="color: var(--text-muted); font-size: 0.8rem;">Target Roblox 0.43? Gunakan 2.32 (atau lebih tinggi hingga 4.0x).</small>
-    </div>
-
-    <button class="btn" id="processBtn" onclick="processAudio()">Proses & Download MP3</button>
-    
-    <div class="progress-bar" id="progressBar">
-        <div class="progress-fill" id="progressFill"></div>
-    </div>
-    <div id="status"></div>
-</div>
+    <footer>
+        Powered by <span>XREXZOB System</span> &copy; 2026
+    </footer>
 
 <script>
+let activeMultiplier = 2.32; // Default Preset 1 (Target Roblox 0.43)
+
+function selectPreset(id, multiplier, element) {
+    document.querySelectorAll('.preset-card').forEach(card => card.classList.remove('active'));
+    element.classList.add('active');
+
+    if(id === 'C') {
+        let customVal = prompt("Masukkan angka multiplier web secara bebas (contoh: 2.5):", "2.32");
+        if(customVal) {
+            activeMultiplier = parseFloat(customVal) || 2.32;
+        }
+    } else {
+        activeMultiplier = multiplier;
+    }
+
+    document.getElementById('speedDisplay').innerText = activeMultiplier.toFixed(2) + 'x';
+}
+
+function updateFileName(input) {
+    if(input.files.length > 0) {
+        document.getElementById('fileLabel').innerText = "Terpilih: " + input.files[0].name;
+    }
+}
+
 async function processAudio() {
     const fileInput = document.getElementById('audioFile');
-    const speedInput = document.getElementById('speedMultiplier');
     const processBtn = document.getElementById('processBtn');
     const status = document.getElementById('status');
     const progressBar = document.getElementById('progressBar');
     const progressFill = document.getElementById('progressFill');
 
     if (fileInput.files.length === 0) {
-        alert('Pilih file audio terlebih dahulu!');
+        alert('Pilih file audio terlebih dahulu, Bos!');
         return;
     }
 
     const file = fileInput.files[0];
-    const speed = parseFloat(speedInput.value);
+    const speed = activeMultiplier;
 
     processBtn.disabled = true;
     progressBar.style.display = 'block';
@@ -175,7 +372,6 @@ async function processAudio() {
         status.innerText = 'Memproses percepatan (Rendering)...';
         progressFill.style.width = '70%';
 
-        // Hitung durasi baru berdasarkan kecepatan
         const newLength = Math.round(audioBuffer.length / speed);
         const offlineCtx = new OfflineAudioContext(
             audioBuffer.numberOfChannels,
@@ -191,18 +387,16 @@ async function processAudio() {
 
         const renderedBuffer = await offlineCtx.startRendering();
 
-        status.innerText = 'Mengonversi ke MP3/WAV...';
+        status.innerText = 'Mengonversi ke file WAV...';
         progressFill.style.width = '90%';
 
-        // Convert AudioBuffer to WAV/Blob
         const wavBlob = bufferToWave(renderedBuffer, renderedBuffer.length);
         
-        // Buat link download
         const url = URL.createObjectURL(wavBlob);
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
-        a.download = file.name.replace(/\.[^/.]+$/, "") + `_bypass_${speed}x.wav`;
+        a.download = file.name.replace(/\.[^/.]+$/, "") + `_xrexzob_bypassed.wav`;
         document.body.appendChild(a);
         a.click();
 
@@ -213,7 +407,7 @@ async function processAudio() {
         setTimeout(() => {
             progressBar.style.display = 'none';
             progressFill.style.width = '0%';
-        }, 3000);
+        }, 4000);
 
     } catch (err) {
         console.log(err);
@@ -223,30 +417,28 @@ async function processAudio() {
     }
 }
 
-// Fungsi pembantu konversi AudioBuffer ke WAV Blob standar
 function bufferToWave(abuffer, len) {
     let numOfChan = abuffer.numberOfChannels,
         length = len * numOfChan * 2 + 44,
         buffer = new ArrayBuffer(length),
         view = new DataView(buffer),
         channels = [], i, sample,
-        offset = 0,
         pos = 0;
 
-    setUint32(0x46464952);                         // "RIFF"
-    setUint32(length - 8);                         // file length - 8
-    setUint32(0x45564157);                         // "WAVE"
+    setUint32(0x46464952);                         
+    setUint32(length - 8);                         
+    setUint32(0x45564157);                         
 
-    setUint32(0x20746d66);                         // "fmt " chunk
-    setUint32(16);                                 // length = 16
-    setUint16(1);                                  // PCM (uncompressed)
+    setUint32(0x20746d66);                         
+    setUint32(16);                                 
+    setUint16(1);                                  
     setUint16(numOfChan);
     setUint32(abuffer.sampleRate);
-    setUint32(abuffer.sampleRate * 2 * numOfChan); // avg. bytes/sec
-    setUint16(numOfChan * 2);                      // block-align
-    setUint16(16);                                 // 16-bit
-    setUint32(0x61746164);                         // "data" - chunk
-    setUint32(length - pos - 4);                   // data length
+    setUint32(abuffer.sampleRate * 2 * numOfChan); 
+    setUint16(numOfChan * 2);                      
+    setUint16(16);                                 
+    setUint32(0x61746164);                         
+    setUint32(length - pos - 4);                   
 
     for (i = 0; i < abuffer.numberOfChannels; i++)
         channels.push(abuffer.getChannelData(i));
@@ -271,9 +463,8 @@ function bufferToWave(abuffer, len) {
         view.setUint16(pos, data, true);
         pos += 2;
     }
-}
 </script>
 
 </body>
-      </html>
-  
+                        </html>
+    
