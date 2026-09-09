@@ -1,558 +1,445 @@
-/* =========================================================
-   XREXZOB STUDIO
-   AUDIO DEVELOPER
-   Local Audio Speed Processor
-   ========================================================= */
+const input = document.getElementById("audioInput");
+const upload = document.getElementById("dropZone");
 
-const audioInput = document.getElementById("audioInput");
-const dropZone = document.getElementById("dropZone");
-
-const fileBox = document.getElementById("fileBox");
+const fileCard = document.getElementById("fileCard");
 const fileName = document.getElementById("fileName");
 const fileInfo = document.getElementById("fileInfo");
 const removeFile = document.getElementById("removeFile");
 
-const previewBox = document.getElementById("previewBox");
-const audioPreview = document.getElementById("audioPreview");
-const durationLabel = document.getElementById("durationLabel");
+const preview = document.getElementById("preview");
+const player = document.getElementById("player");
+const duration = document.getElementById("duration");
 
-const processBtn = document.getElementById("processBtn");
+const processButton = document.getElementById("process");
 
-const progressBar = document.getElementById("progressBar");
-const progressPercent = document.getElementById("progressPercent");
-const statusText = document.getElementById("statusText");
+const speedValue = document.getElementById("speedValue");
+const speedButtons = document.querySelectorAll(".speed[data-speed]");
+const customButton = document.getElementById("custom");
 
-const selectedSpeed = document.getElementById("selectedSpeed");
-const customBtn = document.getElementById("customBtn");
-const presets = document.querySelectorAll(".preset[data-speed]");
+const progressBar = document.getElementById("bar");
+const progressPercent = document.getElementById("percent");
+const status = document.getElementById("status");
+const state = document.getElementById("state");
 
-let selectedFile = null;
-let selectedMultiplier = 1.00;
+let currentFile = null;
+let multiplier = 1;
 
 
-/* =========================================================
-   LOADING SCREEN
-   ========================================================= */
+/* =========================
+   LOADING
+========================= */
 
 window.addEventListener("load", () => {
 
   setTimeout(() => {
-    const loading = document.getElementById("loadingScreen");
 
-    if (loading) {
-      loading.classList.add("hide");
-    }
+    document
+      .getElementById("loader")
+      .classList.add("hide");
+
   }, 1700);
 
 });
 
 
-/* =========================================================
-   FILE INPUT
-   ========================================================= */
+/* =========================
+   FILE PICKER
+========================= */
 
-dropZone.addEventListener("click", () => {
-  audioInput.click();
-});
+input.addEventListener("change", () => {
 
-
-audioInput.addEventListener("change", () => {
-
-  if (audioInput.files.length > 0) {
-    handleFile(audioInput.files[0]);
+  if (input.files.length) {
+    loadFile(input.files[0]);
   }
 
 });
 
 
-/* =========================================================
-   DRAG & DROP
-   ========================================================= */
+/* =========================
+   DRAG DROP
+========================= */
 
-["dragenter", "dragover"].forEach(eventName => {
+["dragenter","dragover"].forEach(event => {
 
-  dropZone.addEventListener(eventName, event => {
+  upload.addEventListener(event, e => {
 
-    event.preventDefault();
-    event.stopPropagation();
-
-    dropZone.classList.add("dragover");
+    e.preventDefault();
+    upload.classList.add("drag");
 
   });
 
 });
 
+["dragleave","drop"].forEach(event => {
 
-["dragleave", "drop"].forEach(eventName => {
+  upload.addEventListener(event, e => {
 
-  dropZone.addEventListener(eventName, event => {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    dropZone.classList.remove("dragover");
+    e.preventDefault();
+    upload.classList.remove("drag");
 
   });
 
 });
 
+upload.addEventListener("drop", e => {
 
-dropZone.addEventListener("drop", event => {
+  const file = e.dataTransfer.files[0];
 
-  const files = event.dataTransfer.files;
-
-  if (files.length > 0) {
-    handleFile(files[0]);
+  if (file) {
+    loadFile(file);
   }
 
 });
 
 
-/* =========================================================
-   HANDLE FILE
-   ========================================================= */
+/* =========================
+   LOAD FILE
+========================= */
 
-function handleFile(file) {
+function loadFile(file){
 
-  const validTypes = [
-    "audio/mpeg",
-    "audio/mp3",
-    "audio/wav",
-    "audio/x-wav",
-    "audio/wave"
-  ];
+  const ext =
+    file.name
+      .split(".")
+      .pop()
+      .toLowerCase();
 
-  const extension = file.name
-    .split(".")
-    .pop()
-    .toLowerCase();
+  if(ext !== "mp3" && ext !== "wav"){
 
-  const validExtension =
-    extension === "mp3" ||
-    extension === "wav";
-
-  if (!validTypes.includes(file.type) && !validExtension) {
-
-    alert("File harus berupa MP3 atau WAV.");
+    alert("Pilih file MP3 atau WAV.");
 
     return;
   }
 
-  selectedFile = file;
+  currentFile = file;
 
   fileName.textContent = file.name;
+
   fileInfo.textContent =
-    `${formatBytes(file.size)} • ${extension.toUpperCase()}`;
+    `${formatBytes(file.size)} • ${ext.toUpperCase()}`;
 
-  fileBox.classList.remove("hidden");
-  previewBox.classList.remove("hidden");
+  fileCard.classList.remove("hidden");
+  preview.classList.remove("hidden");
 
-  processBtn.disabled = false;
+  processButton.disabled = false;
+
+  status.textContent = "Audio loaded";
+  state.textContent = "READY";
+
+  setProgress(0);
 
   const url = URL.createObjectURL(file);
 
-  audioPreview.src = url;
+  player.src = url;
 
-  statusText.textContent = "FILE READY";
-  setProgress(0);
+  player.onloadedmetadata = () => {
 
-  audioPreview.onloadedmetadata = () => {
-
-    durationLabel.textContent =
-      formatTime(audioPreview.duration);
+    duration.textContent =
+      formatTime(player.duration);
 
   };
 
 }
 
 
-/* =========================================================
-   REMOVE FILE
-   ========================================================= */
+/* =========================
+   REMOVE
+========================= */
 
-removeFile.addEventListener("click", event => {
+removeFile.addEventListener("click", () => {
 
-  event.stopPropagation();
+  currentFile = null;
 
-  selectedFile = null;
+  input.value = "";
 
-  audioInput.value = "";
+  fileCard.classList.add("hidden");
+  preview.classList.add("hidden");
 
-  fileBox.classList.add("hidden");
-  previewBox.classList.add("hidden");
+  player.pause();
+  player.removeAttribute("src");
+  player.load();
 
-  audioPreview.pause();
-  audioPreview.removeAttribute("src");
-  audioPreview.load();
+  processButton.disabled = true;
 
-  processBtn.disabled = true;
+  status.textContent = "Waiting for audio...";
+  state.textContent = "READY";
 
-  statusText.textContent = "READY";
   setProgress(0);
 
 });
 
 
-/* =========================================================
+/* =========================
    SPEED PRESETS
-   ========================================================= */
+========================= */
 
-presets.forEach(button => {
+speedButtons.forEach(button => {
 
   button.addEventListener("click", () => {
 
-    presets.forEach(btn => {
-      btn.classList.remove("active");
-    });
+    speedButtons.forEach(x =>
+      x.classList.remove("active")
+    );
+
+    customButton.classList.remove("active");
 
     button.classList.add("active");
 
-    selectedMultiplier =
+    multiplier =
       Number(button.dataset.speed);
 
-    selectedSpeed.textContent =
-      `${selectedMultiplier.toFixed(2)}x`;
+    speedValue.textContent =
+      multiplier.toFixed(2) + "x";
 
-    statusText.textContent = "PRESET SELECTED";
+    status.textContent =
+      `Speed ${multiplier.toFixed(2)}x selected`;
 
   });
 
 });
 
 
-/* =========================================================
-   CUSTOM SPEED
-   ========================================================= */
+/* =========================
+   CUSTOM
+========================= */
 
-customBtn.addEventListener("click", () => {
+customButton.addEventListener("click", () => {
 
-  let value = prompt(
-    "Masukkan multiplier custom.\nContoh: 1.25, 1.5, 2, 2.32",
-    selectedMultiplier.toFixed(2)
+  const answer = prompt(
+    "Masukkan multiplier custom:",
+    multiplier.toFixed(2)
   );
 
-  if (value === null) {
-    return;
-  }
+  if(answer === null) return;
 
-  value = Number(value);
+  const value = Number(answer);
 
-  if (!Number.isFinite(value) || value <= 0) {
+  if(
+    !Number.isFinite(value) ||
+    value <= 0 ||
+    value > 10
+  ){
 
-    alert("Multiplier tidak valid.");
-
-    return;
-  }
-
-  if (value > 10) {
-
-    alert("Multiplier maksimal 10x.");
+    alert("Masukkan angka antara 0.01 sampai 10.");
 
     return;
   }
 
-  presets.forEach(btn => {
-    btn.classList.remove("active");
-  });
+  speedButtons.forEach(x =>
+    x.classList.remove("active")
+  );
 
-  customBtn.classList.add("active");
+  customButton.classList.add("active");
 
-  selectedMultiplier = value;
+  multiplier = value;
 
-  selectedSpeed.textContent =
-    `${value.toFixed(2)}x`;
+  speedValue.textContent =
+    value.toFixed(2) + "x";
 
-  statusText.textContent =
-    "CUSTOM SPEED SELECTED";
+  status.textContent =
+    `Custom speed ${value.toFixed(2)}x`;
 
 });
 
 
-/* =========================================================
-   PROCESS BUTTON
-   ========================================================= */
+/* =========================
+   PROCESS
+========================= */
 
-processBtn.addEventListener("click", async () => {
+processButton.addEventListener("click", async () => {
 
-  if (!selectedFile) {
+  if(!currentFile){
 
-    alert("Pilih audio terlebih dahulu.");
-
-    return;
-  }
-
-  if (selectedMultiplier <= 0) {
-
-    alert("Speed tidak valid.");
+    alert("Upload audio terlebih dahulu.");
 
     return;
   }
 
-  processBtn.disabled = true;
+  processButton.disabled = true;
 
-  try {
+  try{
 
     await processAudio();
 
-  } catch (error) {
+  }catch(error){
 
     console.error(error);
 
-    statusText.textContent = "ERROR";
+    state.textContent = "ERROR";
+    status.textContent = "Processing failed";
 
     alert(
-      "Gagal memproses audio.\n\n" +
-      "Detail: " + error.message
+      "Audio gagal diproses.\n\n" +
+      error.message
     );
 
-  } finally {
-
-    processBtn.disabled = false;
-
   }
+
+  processButton.disabled = false;
 
 });
 
 
-/* =========================================================
-   PROCESS AUDIO
-   ========================================================= */
+/* =========================
+   AUDIO ENGINE
+========================= */
 
-async function processAudio() {
+async function processAudio(){
 
   setProgress(5);
-  statusText.textContent = "READING AUDIO";
 
-  const arrayBuffer =
-    await selectedFile.arrayBuffer();
+  state.textContent = "LOADING";
+  status.textContent = "Reading audio...";
+
+  const data =
+    await currentFile.arrayBuffer();
 
   setProgress(15);
-  statusText.textContent = "DECODING AUDIO";
 
-  const AudioContextClass =
+  status.textContent =
+    "Decoding audio...";
+
+  const AudioContext =
     window.AudioContext ||
     window.webkitAudioContext;
 
-  if (!AudioContextClass) {
+  if(!AudioContext){
+
     throw new Error(
       "Browser tidak mendukung Web Audio API."
     );
   }
 
-  const audioContext =
-    new AudioContextClass();
+  const ctx =
+    new AudioContext();
 
-  let audioBuffer;
+  let decoded;
 
-  try {
+  try{
 
-    audioBuffer =
-      await audioContext.decodeAudioData(
-        arrayBuffer.slice(0)
+    decoded =
+      await ctx.decodeAudioData(
+        data.slice(0)
       );
 
-  } finally {
+  }finally{
 
-    await audioContext.close();
+    await ctx.close();
 
   }
 
   setProgress(30);
-  statusText.textContent = "PREPARING RENDER";
 
-  const inputLength = audioBuffer.length;
-
-  /*
-    Speed lebih cepat = durasi output lebih pendek.
-
-    Contoh:
-    2x speed
-    10 detik input
-    = sekitar 5 detik output
-  */
+  state.textContent = "PROCESSING";
+  status.textContent =
+    `Rendering ${multiplier.toFixed(2)}x...`;
 
   const outputLength =
     Math.max(
       1,
-      Math.ceil(inputLength / selectedMultiplier)
+      Math.ceil(
+        decoded.length / multiplier
+      )
     );
 
-  const sampleRate =
-    audioBuffer.sampleRate;
-
-  const channels =
-    audioBuffer.numberOfChannels;
-
-  const offlineContext =
+  const offline =
     new OfflineAudioContext(
-      channels,
+      decoded.numberOfChannels,
       outputLength,
-      sampleRate
+      decoded.sampleRate
     );
 
   const source =
-    offlineContext.createBufferSource();
+    offline.createBufferSource();
 
-  source.buffer = audioBuffer;
+  source.buffer = decoded;
 
   source.playbackRate.value =
-    selectedMultiplier;
+    multiplier;
 
   source.connect(
-    offlineContext.destination
+    offline.destination
   );
 
   source.start(0);
 
-  setProgress(40);
-  statusText.textContent = "RENDERING AUDIO";
+  setProgress(45);
 
-  const renderedBuffer =
-    await offlineContext.startRendering();
+  const rendered =
+    await offline.startRendering();
 
   setProgress(75);
-  statusText.textContent = "ENCODING WAV";
 
-  const wavBlob =
-    audioBufferToWav(renderedBuffer);
+  status.textContent =
+    "Encoding WAV...";
+
+  const wav =
+    encodeWav(rendered);
 
   setProgress(90);
-  statusText.textContent = "CREATING DOWNLOAD";
 
-  const baseName =
-    selectedFile.name
+  status.textContent =
+    "Preparing download...";
+
+  const base =
+    currentFile.name
       .replace(/\.[^/.]+$/, "");
 
-  const speedText =
-    selectedMultiplier
+  const speed =
+    multiplier
       .toFixed(2)
       .replace(".", "_");
 
-  const outputName =
-    `${baseName}_xrexzob_${speedText}x.wav`;
+  const filename =
+    `${base}_xrexzob_${speed}x.wav`;
 
-  downloadBlob(
-    wavBlob,
-    outputName
-  );
+  download(wav, filename);
 
   setProgress(100);
 
-  statusText.textContent =
-    "COMPLETE • DOWNLOAD STARTED";
+  state.textContent = "COMPLETE";
+  status.textContent =
+    "Download started successfully";
 
 }
 
 
-/* =========================================================
-   PROGRESS
-   ========================================================= */
-
-function setProgress(value) {
-
-  value = Math.max(
-    0,
-    Math.min(100, value)
-  );
-
-  progressBar.style.width =
-    `${value}%`;
-
-  progressPercent.textContent =
-    `${Math.round(value)}%`;
-
-}
-
-
-/* =========================================================
-   DOWNLOAD
-   ========================================================= */
-
-function downloadBlob(blob, filename) {
-
-  const url =
-    URL.createObjectURL(blob);
-
-  const link =
-    document.createElement("a");
-
-  link.href = url;
-  link.download = filename;
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  link.remove();
-
-  setTimeout(() => {
-    URL.revokeObjectURL(url);
-  }, 2000);
-
-}
-
-
-/* =========================================================
+/* =========================
    WAV ENCODER
-   ========================================================= */
+========================= */
 
-function audioBufferToWav(buffer) {
+function encodeWav(audio){
 
-  const numberOfChannels =
-    buffer.numberOfChannels;
+  const channels =
+    audio.numberOfChannels;
 
   const sampleRate =
-    buffer.sampleRate;
-
-  const format = 1;
-  const bitDepth = 16;
-
-  const channelData = [];
-
-  for (
-    let channel = 0;
-    channel < numberOfChannels;
-    channel++
-  ) {
-
-    channelData.push(
-      buffer.getChannelData(channel)
-    );
-
-  }
+    audio.sampleRate;
 
   const samples =
-    buffer.length;
+    audio.length;
+
+  const bits = 16;
 
   const blockAlign =
-    numberOfChannels *
-    bitDepth / 8;
+    channels * bits / 8;
 
   const byteRate =
-    sampleRate *
-    blockAlign;
+    sampleRate * blockAlign;
 
   const dataSize =
-    samples *
-    blockAlign;
+    samples * blockAlign;
 
-  const bufferSize =
-    44 + dataSize;
-
-  const arrayBuffer =
-    new ArrayBuffer(bufferSize);
+  const buffer =
+    new ArrayBuffer(
+      44 + dataSize
+    );
 
   const view =
-    new DataView(arrayBuffer);
+    new DataView(buffer);
 
 
-  /* RIFF */
-
-  writeString(
-    view,
-    0,
-    "RIFF"
-  );
+  writeString(view,0,"RIFF");
 
   view.setUint32(
     4,
@@ -560,20 +447,9 @@ function audioBufferToWav(buffer) {
     true
   );
 
-  writeString(
-    view,
-    8,
-    "WAVE"
-  );
+  writeString(view,8,"WAVE");
 
-
-  /* fmt */
-
-  writeString(
-    view,
-    12,
-    "fmt "
-  );
+  writeString(view,12,"fmt ");
 
   view.setUint32(
     16,
@@ -583,13 +459,13 @@ function audioBufferToWav(buffer) {
 
   view.setUint16(
     20,
-    format,
+    1,
     true
   );
 
   view.setUint16(
     22,
-    numberOfChannels,
+    channels,
     true
   );
 
@@ -613,18 +489,11 @@ function audioBufferToWav(buffer) {
 
   view.setUint16(
     34,
-    bitDepth,
+    bits,
     true
   );
 
-
-  /* data */
-
-  writeString(
-    view,
-    36,
-    "data"
-  );
+  writeString(view,36,"data");
 
   view.setUint32(
     40,
@@ -633,35 +502,40 @@ function audioBufferToWav(buffer) {
   );
 
 
-  /* PCM */
+  const channelData = [];
+
+  for(let c = 0; c < channels; c++){
+
+    channelData.push(
+      audio.getChannelData(c)
+    );
+
+  }
+
 
   let offset = 44;
 
-  for (let i = 0; i < samples; i++) {
+  for(let i = 0; i < samples; i++){
 
-    for (
-      let channel = 0;
-      channel < numberOfChannels;
-      channel++
-    ) {
+    for(let c = 0; c < channels; c++){
 
       let sample =
-        channelData[channel][i];
+        channelData[c][i];
 
       sample =
         Math.max(
           -1,
-          Math.min(1, sample)
+          Math.min(1,sample)
         );
 
-      const intSample =
+      const value =
         sample < 0
-          ? sample * 0x8000
-          : sample * 0x7FFF;
+          ? sample * 32768
+          : sample * 32767;
 
       view.setInt16(
         offset,
-        intSample,
+        value,
         true
       );
 
@@ -672,25 +546,23 @@ function audioBufferToWav(buffer) {
   }
 
   return new Blob(
-    [arrayBuffer],
-    {
-      type: "audio/wav"
-    }
+    [buffer],
+    {type:"audio/wav"}
   );
 
 }
 
 
-/* =========================================================
-   WRITE STRING
-   ========================================================= */
+/* =========================
+   HELPERS
+========================= */
 
-function writeString(view, offset, string) {
+function writeString(view,offset,string){
 
-  for (let i = 0; i < string.length; i++) {
+  for(let i=0;i<string.length;i++){
 
     view.setUint8(
-      offset + i,
+      offset+i,
       string.charCodeAt(i)
     );
 
@@ -699,22 +571,56 @@ function writeString(view, offset, string) {
 }
 
 
-/* =========================================================
-   FORMAT BYTES
-   ========================================================= */
+function download(blob,name){
 
-function formatBytes(bytes) {
+  const url =
+    URL.createObjectURL(blob);
 
-  if (bytes === 0) {
+  const link =
+    document.createElement("a");
+
+  link.href = url;
+  link.download = name;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
+  setTimeout(() => {
+
+    URL.revokeObjectURL(url);
+
+  },2000);
+
+}
+
+
+function setProgress(value){
+
+  value =
+    Math.max(
+      0,
+      Math.min(100,value)
+    );
+
+  progressBar.style.width =
+    value + "%";
+
+  progressPercent.textContent =
+    Math.round(value) + "%";
+
+}
+
+
+function formatBytes(bytes){
+
+  if(bytes === 0)
     return "0 Bytes";
-  }
 
-  const units = [
-    "Bytes",
-    "KB",
-    "MB",
-    "GB"
-  ];
+  const units =
+    ["Bytes","KB","MB","GB"];
 
   const index =
     Math.floor(
@@ -723,38 +629,31 @@ function formatBytes(bytes) {
     );
 
   return (
-    parseFloat(
-      (bytes /
-      Math.pow(1024, index))
+    (bytes /
+      Math.pow(1024,index))
       .toFixed(2)
-    ) +
-    " " +
-    units[index]
+    + " "
+    + units[index]
   );
 
 }
 
 
-/* =========================================================
-   FORMAT TIME
-   ========================================================= */
+function formatTime(seconds){
 
-function formatTime(seconds) {
-
-  if (!Number.isFinite(seconds)) {
+  if(!Number.isFinite(seconds))
     return "00:00";
-  }
 
-  const minutes =
+  const min =
     Math.floor(seconds / 60);
 
-  const secs =
+  const sec =
     Math.floor(seconds % 60);
 
   return (
-    String(minutes).padStart(2, "0") +
-    ":" +
-    String(secs).padStart(2, "0")
+    String(min).padStart(2,"0")
+    + ":" +
+    String(sec).padStart(2,"0")
   );
 
 }
