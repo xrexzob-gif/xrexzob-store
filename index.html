@@ -1,215 +1,1088 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="theme-color" content="#08090d">
-  <title>XREXZOB STUDIO — Audio Developer</title>
-  <link rel="icon" href="logo.jpeg">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XREXZOB STUDIO — Audio Developer</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --orange:#f59e0b;
+  --orange2:#ffb52e;
+  --bg:#050505;
+  --card:rgba(18,18,18,.78);
+  --border:rgba(245,158,11,.18);
+  --text:#f5f5f5;
+  --muted:#888;
+}
+
+body{
+  min-height:100vh;
+  color:var(--text);
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(245,158,11,.16),transparent 35%),
+    radial-gradient(circle at 10% 80%,rgba(245,158,11,.07),transparent 30%),
+    #050505;
+  overflow-x:hidden;
+}
+
+/* ANIMATED BACKGROUND */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.12;
+  background-image:
+    linear-gradient(rgba(245,158,11,.18) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(245,158,11,.18) 1px,transparent 1px);
+  background-size:45px 45px;
+  animation:gridMove 14s linear infinite;
+}
+
+@keyframes gridMove{
+  from{background-position:0 0}
+  to{background-position:45px 45px}
+}
+
+.orb{
+  position:fixed;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:rgba(245,158,11,.06);
+  filter:blur(70px);
+  pointer-events:none;
+  animation:float 8s ease-in-out infinite;
+}
+
+.orb.one{top:10%;left:-100px}
+.orb.two{right:-100px;bottom:10%;animation-delay:2s}
+
+@keyframes float{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-35px) scale(1.08)}
+}
+
+/* LOADING */
+#loader{
+  position:fixed;
+  z-index:9999;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  background:#050505;
+  transition:.7s ease;
+}
+
+.loader-logo{
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:22px;
+  border:1px solid rgba(245,158,11,.5);
+  box-shadow:0 0 45px rgba(245,158,11,.25);
+  animation:pulse 1.5s infinite;
+}
+
+.loader-title{
+  margin-top:22px;
+  font-weight:800;
+  letter-spacing:4px;
+  font-size:18px;
+}
+
+.loader-text{
+  margin-top:8px;
+  color:var(--orange);
+  font-size:11px;
+  letter-spacing:3px;
+}
+
+@keyframes pulse{
+  50%{
+    transform:scale(1.06);
+    box-shadow:0 0 65px rgba(245,158,11,.4);
+  }
+}
+
+/* MAIN */
+main{
+  position:relative;
+  z-index:2;
+  width:min(920px,94%);
+  margin:auto;
+  padding:35px 0 60px;
+}
+
+header{
+  text-align:center;
+  padding:20px 0 30px;
+}
+
+.brand{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:13px;
+}
+
+.brand img{
+  width:54px;
+  height:54px;
+  object-fit:cover;
+  border-radius:15px;
+  border:1px solid rgba(245,158,11,.4);
+  box-shadow:0 0 30px rgba(245,158,11,.18);
+}
+
+.brand h1{
+  font-size:27px;
+  letter-spacing:2px;
+}
+
+.brand h1 span{
+  color:var(--orange);
+}
+
+header p{
+  margin-top:12px;
+  color:#777;
+  font-size:13px;
+  letter-spacing:2px;
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:25px;
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.5),
+    inset 0 1px rgba(255,255,255,.03);
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.section-title::before{
+  content:"";
+  width:4px;
+  height:17px;
+  border-radius:10px;
+  background:var(--orange);
+  box-shadow:0 0 12px var(--orange);
+}
+
+/* UPLOAD */
+.upload{
+  position:relative;
+  border:1px dashed rgba(245,158,11,.35);
+  border-radius:20px;
+  padding:35px 20px;
+  text-align:center;
+  background:rgba(245,158,11,.025);
+  cursor:pointer;
+  transition:.25s;
+}
+
+.upload:hover,
+.upload.drag{
+  border-color:var(--orange);
+  background:rgba(245,158,11,.07);
+  transform:translateY(-2px);
+}
+
+.upload-icon{
+  font-size:35px;
+  margin-bottom:12px;
+}
+
+.upload strong{
+  display:block;
+  font-size:15px;
+}
+
+.upload small{
+  display:block;
+  margin-top:7px;
+  color:#666;
+}
+
+#fileInput{
+  display:none;
+}
+
+/* FILE INFO */
+.file-box{
+  display:none;
+  margin-top:16px;
+  padding:15px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.025);
+  border-radius:16px;
+}
+
+.file-box.show{
+  display:block;
+}
+
+.file-name{
+  font-weight:700;
+  word-break:break-all;
+}
+
+.file-meta{
+  color:#777;
+  font-size:12px;
+  margin-top:5px;
+}
+
+/* AUDIO */
+audio{
+  width:100%;
+  margin-top:15px;
+  height:42px;
+}
+
+/* PRESETS */
+.presets{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+}
+
+.preset{
+  border:1px solid rgba(255,255,255,.08);
+  background:#0d0d0d;
+  color:#aaa;
+  border-radius:15px;
+  padding:15px 8px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.preset:hover{
+  border-color:rgba(245,158,11,.4);
+  color:white;
+  transform:translateY(-2px);
+}
+
+.preset.active{
+  color:#080808;
+  background:var(--orange);
+  border-color:var(--orange);
+  box-shadow:0 0 25px rgba(245,158,11,.18);
+}
+
+.preset b{
+  display:block;
+  font-size:16px;
+}
+
+.preset span{
+  display:block;
+  margin-top:5px;
+  font-size:10px;
+}
+
+/* CUSTOM */
+.custom{
+  margin-top:12px;
+  display:none;
+}
+
+.custom.show{
+  display:block;
+}
+
+.custom input{
+  width:100%;
+  padding:14px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.1);
+  outline:none;
+  background:#090909;
+  color:white;
+}
+
+.custom input:focus{
+  border-color:var(--orange);
+}
+
+/* PROCESS */
+.process{
+  margin-top:25px;
+}
+
+.process-btn{
+  width:100%;
+  border:0;
+  padding:17px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#f59e0b,#ffb52e);
+  color:#090909;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:1px;
+  cursor:pointer;
+  box-shadow:0 10px 35px rgba(245,158,11,.15);
+  transition:.2s;
+}
+
+.process-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 15px 45px rgba(245,158,11,.25);
+}
+
+.process-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* PROGRESS */
+.progress-area{
+  display:none;
+  margin-top:18px;
+}
+
+.progress-area.show{
+  display:block;
+}
+
+.progress-top{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:#888;
+  margin-bottom:8px;
+}
+
+.progress{
+  height:8px;
+  border-radius:20px;
+  overflow:hidden;
+  background:#161616;
+}
+
+.progress-bar{
+  width:0%;
+  height:100%;
+  border-radius:20px;
+  background:var(--orange);
+  box-shadow:0 0 15px rgba(245,158,11,.5);
+  transition:.2s;
+}
+
+.status{
+  margin-top:12px;
+  text-align:center;
+  color:#888;
+  font-size:12px;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding-top:25px;
+  color:#555;
+  font-size:11px;
+  letter-spacing:1px;
+}
+
+footer b{
+  color:var(--orange);
+}
+
+/* MOBILE */
+@media(max-width:700px){
+  main{
+    width:94%;
+    padding-top:15px;
+  }
+
+  .card{
+    padding:18px;
+    border-radius:22px;
+  }
+
+  .brand h1{
+    font-size:21px;
+  }
+
+  .brand img{
+    width:45px;
+    height:45px;
+  }
+
+  .presets{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .upload{
+    padding:28px 15px;
+  }
+}
+
+@media(max-width:380px){
+  .presets{
+    grid-template-columns:1fr 1fr;
+  }
+}
+</style>
 </head>
+
 <body>
 
+<div class="orb one"></div>
+<div class="orb two"></div>
+
+<!-- LOADING -->
 <div id="loader">
-  <div class="loader-logo">
-    <img src="logo.jpeg" alt="XREXZOB">
-  </div>
-  <h1>XREXZOB<span>.</span></h1>
-  <p>AUDIO DEVELOPER</p>
-  <div class="loader-line"><i></i></div>
-  <small>STARTING STUDIO...</small>
+  <img src="logo.jpeg" class="loader-logo" alt="XREXZOB">
+  <div class="loader-title">XREXZOB STUDIO</div>
+  <div class="loader-text">AUDIO DEVELOPER</div>
 </div>
-
-<div class="background">
-  <div class="noise"></div>
-  <div class="glow g1"></div>
-  <div class="glow g2"></div>
-  <div class="grid"></div>
-</div>
-
-<header>
-  <a class="brand">
-    <div class="brand-img">
-      <img src="logo.jpeg" alt="logo">
-    </div>
-    <div>
-      <b>XREXZOB<span>.</span></b>
-      <small>STUDIO / AUDIO DEVELOPER</small>
-    </div>
-  </a>
-
-  <div class="online">
-    <i></i> SYSTEM ONLINE
-  </div>
-</header>
 
 <main>
 
-  <section class="hero">
-    <div class="hero-tag">XREXZOB AUDIO ENGINE <span>01</span></div>
+<header>
+  <div class="brand">
+    <img src="logo.jpeg" alt="XREXZOB Studio">
+    <h1>XREXZOB <span>STUDIO</span></h1>
+  </div>
+  <p>AUDIO DEVELOPER • LOCAL PROCESSING</p>
+</header>
 
-    <h2>CREATE YOUR<br><em>AUDIO.</em></h2>
+<div class="card">
 
-    <p>
-      Upload audio, choose your speed, process it directly
-      inside your browser and export the result.
-    </p>
-  </section>
+  <!-- UPLOAD -->
+  <div class="section-title">AUDIO INPUT</div>
 
-  <section class="panel">
+  <label class="upload" id="dropArea" for="fileInput">
+    <div class="upload-icon">🎵</div>
+    <strong>UPLOAD AUDIO</strong>
+    <small>MP3 atau WAV • Klik atau drag & drop</small>
+    <input id="fileInput" type="file" accept=".mp3,.wav,audio/mpeg,audio/wav">
+  </label>
 
-    <div class="panel-head">
-      <div>
-        <small>01 / INPUT</small>
-        <h3>Upload Audio</h3>
-      </div>
-      <span>MP3 / WAV</span>
-    </div>
+  <div class="file-box" id="fileBox">
+    <div class="file-name" id="fileName">-</div>
+    <div class="file-meta" id="fileMeta">-</div>
+    <audio id="audioPreview" controls></audio>
+  </div>
 
-    <div id="dropZone" class="upload">
-      <input id="audioInput" type="file"
-        accept=".mp3,.wav,audio/mpeg,audio/wav">
+  <br>
 
-      <div class="upload-circle">↑</div>
+  <!-- SPEED -->
+  <div class="section-title">SPEED PRESET</div>
 
-      <strong>DROP YOUR AUDIO</strong>
-      <p>Drag & drop atau klik area ini</p>
+  <div class="presets">
 
-      <label>SELECT AUDIO FILE</label>
-    </div>
-
-    <div id="fileCard" class="file-card hidden">
-      <div class="music-icon">♫</div>
-
-      <div class="file-text">
-        <strong id="fileName">audio.mp3</strong>
-        <small id="fileInfo">0 MB</small>
-      </div>
-
-      <button id="removeFile">×</button>
-    </div>
-
-    <div id="preview" class="preview hidden">
-      <div>
-        <small>AUDIO PREVIEW</small>
-        <span id="duration">00:00</span>
-      </div>
-      <audio id="player" controls></audio>
-    </div>
-
-  </section>
-
-  <section class="panel">
-
-    <div class="panel-head">
-      <div>
-        <small>02 / ENGINE</small>
-        <h3>Speed Control</h3>
-      </div>
-      <strong id="speedValue">1.00x</strong>
-    </div>
-
-    <div class="presets">
-
-      <button class="speed" data-speed="2.32">
-        <small>PRESET 01</small>
-        <b>2.32x</b>
-        <span>Target 0.43</span>
-      </button>
-
-      <button class="speed" data-speed="2.00">
-        <small>PRESET 02</small>
-        <b>2.00x</b>
-        <span>Target 0.50</span>
-      </button>
-
-      <button class="speed" data-speed="1.54">
-        <small>PRESET 03</small>
-        <b>1.54x</b>
-        <span>Target 0.65</span>
-      </button>
-
-      <button class="speed" data-speed="1.25">
-        <small>PRESET 04</small>
-        <b>1.25x</b>
-        <span>Target 0.80</span>
-      </button>
-
-      <button class="speed active" data-speed="1">
-        <small>PRESET 05</small>
-        <b>1.00x</b>
-        <span>Standard</span>
-      </button>
-
-      <button id="custom" class="speed custom">
-        <small>CUSTOM</small>
-        <b>⚙</b>
-        <span>Custom multiplier</span>
-      </button>
-
-    </div>
-
-  </section>
-
-  <section class="panel process-panel">
-
-    <div class="process-top">
-      <div>
-        <small>03 / OUTPUT</small>
-        <h3>Audio Processing</h3>
-      </div>
-
-      <div id="state" class="state">READY</div>
-    </div>
-
-    <button id="process" disabled>
-      <span>⚡</span>
-      <div>
-        <b>PROCESS & DOWNLOAD</b>
-        <small>LOCAL BROWSER PROCESSING</small>
-      </div>
-      <strong>→</strong>
+    <button class="preset" data-multiplier="2.32">
+      <b>2.32×</b>
+      <span>Target 0.43</span>
     </button>
 
-    <div class="progress-wrap">
-      <div>
-        <span id="status">Waiting for audio...</span>
-        <b id="percent">0%</b>
+    <button class="preset" data-multiplier="2">
+      <b>2.00×</b>
+      <span>Target 0.50</span>
+    </button>
+
+    <button class="preset" data-multiplier="1.54">
+      <b>1.54×</b>
+      <span>Target 0.65</span>
+    </button>
+
+    <button class="preset" data-multiplier="1.25">
+      <b>1.25×</b>
+      <span>Target 0.80</span>
+    </button>
+
+    <button class="preset active" data-multiplier="1">
+      <b>1.00×</b>
+      <span>Standard</span>
+    </button>
+
+  </div>
+
+  <div style="margin-top:10px;">
+    <button class="preset" id="customBtn" style="width:100%;">
+      <b>CUSTOM</b>
+      <span>Gunakan multiplier sendiri</span>
+    </button>
+  </div>
+
+  <div class="custom" id="customBox">
+    <input
+      id="customInput"
+      type="number"
+      min="0.1"
+      max="20"
+      step="0.01"
+      placeholder="Contoh: 2.32"
+    >
+  </div>
+
+  <!-- PROCESS -->
+  <div class="process">
+
+    <button class="process-btn" id="processBtn">
+      ⚡ PROSES & DOWNLOAD AUDIO
+    </button>
+
+    <div class="progress-area" id="progressArea">
+
+      <div class="progress-top">
+        <span id="progressText">Processing...</span>
+        <span id="progressPercent">0%</span>
       </div>
 
       <div class="progress">
-        <i id="bar"></i>
+        <div class="progress-bar" id="progressBar"></div>
       </div>
+
+      <div class="status" id="status">
+        Menunggu proses...
+      </div>
+
     </div>
 
-  </section>
+  </div>
 
-  <section class="features">
+</div>
 
-    <div>
-      <b>LOCAL</b>
-      <span>Browser processing</span>
-    </div>
-
-    <div>
-      <b>FAST</b>
-      <span>Web Audio Engine</span>
-    </div>
-
-    <div>
-      <b>WAV</b>
-      <span>High compatibility</span>
-    </div>
-
-  </section>
+<footer>
+  <b>XREXZOB STUDIO</b> © 2026 • Audio Developer
+</footer>
 
 </main>
 
-<footer>
-  <b>XREXZOB STUDIO</b>
-  <span>© 2026 — AUDIO DEVELOPER</span>
-</footer>
+<script>
+let audioFile = null;
+let selectedMultiplier = 1;
 
-<script src="script.js"></script>
+const fileInput = document.getElementById("fileInput");
+const dropArea = document.getElementById("dropArea");
+const fileBox = document.getElementById("fileBox");
+const fileName = document.getElementById("fileName");
+const fileMeta = document.getElementById("fileMeta");
+const audioPreview = document.getElementById("audioPreview");
+
+const processBtn = document.getElementById("processBtn");
+const progressArea = document.getElementById("progressArea");
+const progressBar = document.getElementById("progressBar");
+const progressPercent = document.getElementById("progressPercent");
+const progressText = document.getElementById("progressText");
+const status = document.getElementById("status");
+
+const customBtn = document.getElementById("customBtn");
+const customBox = document.getElementById("customBox");
+const customInput = document.getElementById("customInput");
+
+
+// LOADING SCREEN
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const loader = document.getElementById("loader");
+    loader.style.opacity = "0";
+
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 700);
+
+  }, 900);
+});
+
+
+// FILE INPUT
+fileInput.addEventListener("change", () => {
+  if(fileInput.files.length){
+    loadFile(fileInput.files[0]);
+  }
+});
+
+
+// DRAG DROP
+["dragenter","dragover"].forEach(event => {
+  dropArea.addEventListener(event, e => {
+    e.preventDefault();
+    dropArea.classList.add("drag");
+  });
+});
+
+["dragleave","drop"].forEach(event => {
+  dropArea.addEventListener(event, e => {
+    e.preventDefault();
+    dropArea.classList.remove("drag");
+  });
+});
+
+dropArea.addEventListener("drop", e => {
+  const files = e.dataTransfer.files;
+
+  if(files.length){
+    loadFile(files[0]);
+  }
+});
+
+
+// LOAD FILE
+function loadFile(file){
+
+  const validTypes = [
+    "audio/mpeg",
+    "audio/mp3",
+    "audio/wav",
+    "audio/x-wav"
+  ];
+
+  const ext = file.name.split(".").pop().toLowerCase();
+
+  if(!validTypes.includes(file.type) && !["mp3","wav"].includes(ext)){
+    alert("File harus MP3 atau WAV.");
+    return;
+  }
+
+  audioFile = file;
+
+  fileName.textContent = file.name;
+
+  const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+
+  fileMeta.textContent =
+    ext.toUpperCase() +
+    " • " +
+    sizeMB +
+    " MB";
+
+  audioPreview.src = URL.createObjectURL(file);
+
+  fileBox.classList.add("show");
+
+  status.textContent = "Audio siap diproses.";
+}
+
+
+// PRESETS
+document.querySelectorAll(".preset[data-multiplier]").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    document.querySelectorAll(".preset").forEach(b => {
+      b.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    selectedMultiplier =
+      parseFloat(button.dataset.multiplier);
+
+    customBox.classList.remove("show");
+
+    status.textContent =
+      "Multiplier dipilih: " +
+      selectedMultiplier +
+      "×";
+  });
+
+});
+
+
+// CUSTOM
+customBtn.addEventListener("click", () => {
+
+  document.querySelectorAll(".preset").forEach(b => {
+    b.classList.remove("active");
+  });
+
+  customBtn.classList.add("active");
+
+  customBox.classList.add("show");
+
+  customInput.focus();
+
+  status.textContent =
+    "Masukkan multiplier custom.";
+});
+
+
+// CUSTOM INPUT
+customInput.addEventListener("input", () => {
+
+  const value = parseFloat(customInput.value);
+
+  if(!isNaN(value) && value > 0){
+    selectedMultiplier = value;
+
+    status.textContent =
+      "Custom multiplier: " +
+      value +
+      "×";
+  }
+
+});
+
+
+// PROGRESS
+function setProgress(percent, text){
+
+  progressBar.style.width = percent + "%";
+  progressPercent.textContent =
+    Math.round(percent) + "%";
+
+  progressText.textContent = text;
+}
+
+
+// PROCESS
+processBtn.addEventListener("click", async () => {
+
+  if(!audioFile){
+    alert("Upload audio terlebih dahulu.");
+    return;
+  }
+
+  if(!selectedMultiplier || selectedMultiplier <= 0){
+    alert("Multiplier tidak valid.");
+    return;
+  }
+
+  processBtn.disabled = true;
+
+  progressArea.classList.add("show");
+
+  setProgress(5,"Membaca audio...");
+  status.textContent =
+    "Menyiapkan audio...";
+
+  try{
+
+    const arrayBuffer =
+      await audioFile.arrayBuffer();
+
+    setProgress(20,"Decode audio...");
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if(!AudioContext){
+      throw new Error(
+        "Browser tidak mendukung Web Audio API."
+      );
+    }
+
+    const context = new AudioContext();
+
+    const audioBuffer =
+      await context.decodeAudioData(
+        arrayBuffer.slice(0)
+      );
+
+    await context.close();
+
+    setProgress(40,"Membuat audio baru...");
+
+    /*
+      Audio dipercepat dengan OfflineAudioContext.
+      Tidak menggunakan server/API.
+    */
+
+    const newDuration =
+      audioBuffer.duration / selectedMultiplier;
+
+    const sampleRate =
+      audioBuffer.sampleRate;
+
+    const channels =
+      audioBuffer.numberOfChannels;
+
+    const frameCount =
+      Math.ceil(newDuration * sampleRate);
+
+    const offline =
+      new OfflineAudioContext(
+        channels,
+        frameCount,
+        sampleRate
+      );
+
+    const source =
+      offline.createBufferSource();
+
+    source.buffer = audioBuffer;
+
+    source.playbackRate.value =
+      selectedMultiplier;
+
+    source.connect(
+      offline.destination
+    );
+
+    source.start(0);
+
+    setProgress(55,"Rendering audio...");
+
+    const rendered =
+      await offline.startRendering();
+
+    setProgress(80,"Membuat WAV...");
+
+    const wavBlob =
+      audioBufferToWav(rendered);
+
+    setProgress(95,"Menyiapkan download...");
+
+    const originalName =
+      audioFile.name
+        .replace(/\.[^/.]+$/,"");
+
+    const safeMultiplier =
+      String(selectedMultiplier)
+        .replace(".","_");
+
+    const outputName =
+      originalName +
+      "_xrexzob_" +
+      safeMultiplier +
+      "x.wav";
+
+    downloadBlob(
+      wavBlob,
+      outputName
+    );
+
+    setProgress(100,"Selesai!");
+
+    status.textContent =
+      "Audio berhasil diproses dan didownload.";
+
+  }catch(error){
+
+    console.error(error);
+
+    status.textContent =
+      "Terjadi kesalahan saat memproses audio.";
+
+    alert(
+      "Gagal memproses audio.\n\n" +
+      error.message
+    );
+
+  }finally{
+
+    processBtn.disabled = false;
+
+  }
+
+});
+
+
+// WAV ENCODER
+function audioBufferToWav(buffer){
+
+  const numberOfChannels =
+    buffer.numberOfChannels;
+
+  const sampleRate =
+    buffer.sampleRate;
+
+  const format = 1;
+
+  const bitDepth = 16;
+
+  const length =
+    buffer.length *
+    numberOfChannels *
+    2;
+
+  const arrayBuffer =
+    new ArrayBuffer(44 + length);
+
+  const view =
+    new DataView(arrayBuffer);
+
+  writeString(view,0,"RIFF");
+
+  view.setUint32(
+    4,
+    36 + length,
+    true
+  );
+
+  writeString(view,8,"WAVE");
+
+  writeString(view,12,"fmt ");
+
+  view.setUint32(
+    16,
+    16,
+    true
+  );
+
+  view.setUint16(
+    20,
+    format,
+    true
+  );
+
+  view.setUint16(
+    22,
+    numberOfChannels,
+    true
+  );
+
+  view.setUint32(
+    24,
+    sampleRate,
+    true
+  );
+
+  view.setUint32(
+    28,
+    sampleRate *
+    numberOfChannels *
+    bitDepth / 8,
+    true
+  );
+
+  view.setUint16(
+    32,
+    numberOfChannels *
+    bitDepth / 8,
+    true
+  );
+
+  view.setUint16(
+    34,
+    bitDepth,
+    true
+  );
+
+  writeString(
+    view,
+    36,
+    "data"
+  );
+
+  view.setUint32(
+    40,
+    length,
+    true
+  );
+
+  const channels = [];
+
+  for(
+    let i = 0;
+    i < numberOfChannels;
+    i++
+  ){
+    channels.push(
+      buffer.getChannelData(i)
+    );
+  }
+
+  let offset = 44;
+
+  for(
+    let i = 0;
+    i < buffer.length;
+    i++
+  ){
+
+    for(
+      let channel = 0;
+      channel < numberOfChannels;
+      channel++
+    ){
+
+      let sample =
+        channels[channel][i];
+
+      sample =
+        Math.max(-1,Math.min(1,sample));
+
+      const value =
+        sample < 0
+          ? sample * 0x8000
+          : sample * 0x7FFF;
+
+      view.setInt16(
+        offset,
+        value,
+        true
+      );
+
+      offset += 2;
+    }
+  }
+
+  return new Blob(
+    [arrayBuffer],
+    {type:"audio/wav"}
+  );
+}
+
+
+function writeString(view,offset,string){
+
+  for(let i=0;i<string.length;i++){
+
+    view.setUint8(
+      offset + i,
+      string.charCodeAt(i)
+    );
+
+  }
+
+}
+
+
+function downloadBlob(blob,filename){
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+  a.download = filename;
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  },1000);
+
+}
+</script>
+
 </body>
 </html>
