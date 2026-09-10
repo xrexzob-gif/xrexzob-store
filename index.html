@@ -686,11 +686,8 @@ footer{
 
 </div>
 
-<!--
-  OggVorbisEncoder.js
-  Real OGG Vorbis encoder.
--->
-<script src="https://cdn.jsdelivr.net/gh/higuma/ogg-vorbis-encoder-js@master/lib/OggVorbisEncoder.min.js"></script>
+<!-- Menggunakan CDN alternatif untuk encoder Ogg Vorbis murni berbasis JS tanpa file .mem terpisah -->
+<script src="https://cdn.jsdelivr.net/npm/ogg-vorbis-encoder-js@1.1.2/lib/OggVorbisEncoder.min.js"></script>
 
 <script>
 "use strict";
@@ -1137,6 +1134,3 @@ async function processAudio(){
 
   checkSize.textContent=
    bytes(outputBlob.size);
-
-  checkSpeed.textContent=
-   selectedSpee
