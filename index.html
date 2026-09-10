@@ -1,410 +1,1277 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XREXZOB - Roblox Audio Bypass</title>
-    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.12.7/dist/umd/ffmpeg.js"></script>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0b0b0f;
-            color: #ffffff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            background-color: #15151a;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.7);
-            width: 100%;
-            max-width: 480px;
-            border: 1px solid #22222d;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .header h1 {
-            color: #f39c12;
-            margin: 0;
-            font-size: 26px;
-            letter-spacing: 1px;
-        }
-        .header p {
-            color: #8a8a99;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-        .section-title {
-            font-size: 12px;
-            color: #8a8a99;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .upload-box {
-            border: 2px dashed #333344;
-            background-color: #1b1b22;
-            padding: 25px;
-            text-align: center;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-bottom: 20px;
-        }
-        .upload-box:hover {
-            border-color: #f39c12;
-            background-color: #21212b;
-        }
-        .upload-box input {
-            display: none;
-        }
-        .upload-text {
-            color: #f39c12;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .upload-sub {
-            color: #777;
-            font-size: 11px;
-            margin-top: 5px;
-        }
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .preset-card {
-            background-color: #1b1b22;
-            border: 1px solid #2d2d3d;
-            border-radius: 10px;
-            padding: 12px;
-            cursor: pointer;
-            text-align: left;
-            position: relative;
-            transition: 0.2s;
-        }
-        .preset-card:hover {
-            border-color: #f39c12;
-        }
-        .preset-card.active {
-            border-color: #f39c12;
-            background-color: #26211a;
-        }
-        .preset-card .num {
-            position: absolute;
-            top: 8px;
-            right: 10px;
-            font-size: 11px;
-            color: #666;
-            font-weight: bold;
-        }
-        .preset-card .title {
-            font-size: 12px;
-            color: #aaa;
-            display: block;
-        }
-        .preset-card .val {
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            margin-top: 4px;
-            display: block;
-        }
-        .info-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .info-card {
-            background-color: #1b1b22;
-            border: 1px solid #2d2d3d;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-        }
-        .info-card .label {
-            font-size: 10px;
-            color: #777;
-            text-transform: uppercase;
-        }
-        .info-card .value {
-            font-size: 13px;
-            font-weight: bold;
-            color: #fff;
-            margin-top: 4px;
-        }
-        .process-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #f39c12, #d35400);
-            border: none;
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
-        }
-        .process-btn:hover {
-            opacity: 0.9;
-        }
-        .process-btn:disabled {
-            background: #333;
-            cursor: not-allowed;
-            box-shadow: none;
-            color: #777;
-        }
-        #status {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 13px;
-            color: #a0a0b0;
-            font-style: italic;
-        }
-        .download-area {
-            margin-top: 15px;
-            text-align: center;
-        }
-        .download-btn {
-            display: inline-block;
-            width: 100%;
-            padding: 12px;
-            background-color: #27ae60;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: bold;
-            box-sizing: border-box;
-            transition: 0.2s;
-        }
-        .download-btn:hover {
-            background-color: #219653;
-        }
-        .hidden {
-            display: none;
-        }
-        .file-info {
-            font-size: 12px;
-            color: #27ae60;
-            text-align: center;
-            margin-top: -10px;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<meta name="theme-color" content="#071b25">
+
+<title>Sharejo - MP3 to Roblox OGG</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --bg:#061821;
+    --panel:#0a222c;
+    --panel2:#0d2a35;
+    --border:#214854;
+    --text:#edf8fb;
+    --muted:#78949d;
+    --yellow:#ffd84d;
+    --yellow2:#ffe77e;
+    --green:#55d98b;
+    --red:#ff7070;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 50% -10%,#123b49 0,#061821 48%,#04131a 100%);
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+    display:flex;
+    justify-content:center;
+    padding:20px;
+}
+
+.app{
+    width:min(1080px,100%);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 25px 80px rgba(0,0,0,.45);
+}
+
+header{
+    height:70px;
+    padding:0 28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+    background:#081e28;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:900;
+}
+
+.logo span{
+    color:var(--yellow);
+}
+
+.status{
+    color:var(--muted);
+    font-size:11px;
+    letter-spacing:1px;
+}
+
+main{
+    padding:36px;
+}
+
+/* UPLOAD */
+
+.upload{
+    min-height:245px;
+    border:2px dashed #315762;
+    border-radius:16px;
+    background:#081e28;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload:hover,
+.upload.drag{
+    border-color:var(--yellow);
+    background:#0b2732;
+}
+
+.upload input{
+    display:none;
+}
+
+.upload-icon{
+    width:64px;
+    height:64px;
+    margin:0 auto 17px;
+    border-radius:50%;
+    background:var(--yellow);
+    color:#061821;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    font-weight:900;
+}
+
+.upload h1{
+    font-size:20px;
+    letter-spacing:1px;
+    margin-bottom:8px;
+}
+
+.upload p{
+    color:#819da5;
+    font-size:13px;
+}
+
+.formats{
+    margin-top:12px;
+    color:#526f78;
+    font-size:10px;
+}
+
+/* FILE */
+
+.file-card{
+    display:none;
+    margin-top:16px;
+    padding:15px;
+    background:var(--panel2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.file-card.show{
+    display:flex;
+}
+
+.file-name{
+    font-weight:700;
+    font-size:14px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.file-meta{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.remove{
+    flex-shrink:0;
+    width:36px;
+    height:36px;
+    border:0;
+    border-radius:9px;
+    background:#173b46;
+    color:#c3d5da;
+    font-size:20px;
+    cursor:pointer;
+}
+
+/* SECTION */
+
+.section{
+    margin-top:30px;
+}
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:13px;
+}
+
+.section-head h2{
+    font-size:13px;
+    letter-spacing:.8px;
+}
+
+.selected{
+    color:var(--yellow);
+    font-size:13px;
+    font-weight:bold;
+}
+
+/* PRESETS */
+
+.presets{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:11px;
+}
+
+.preset{
+    min-height:88px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--panel2);
+    color:var(--text);
+    cursor:pointer;
+}
+
+.preset:hover{
+    border-color:#66818a;
+}
+
+.preset.active{
+    border:2px solid var(--yellow);
+    background:#152f37;
+}
+
+.preset-speed{
+    font-size:23px;
+    font-weight:900;
+}
+
+.preset.active .preset-speed{
+    color:var(--yellow);
+}
+
+.preset-label{
+    margin-top:6px;
+    font-size:9px;
+    color:#6f8992;
+}
+
+/* MANUAL */
+
+.manual{
+    margin-top:15px;
+    padding:18px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--panel2);
+}
+
+.manual-title{
+    color:#8ca5ac;
+    font-size:11px;
+    margin-bottom:10px;
+}
+
+.manual-row{
+    display:flex;
+    gap:10px;
+}
+
+.speed-input{
+    flex:1;
+    min-width:0;
+    height:52px;
+    border-radius:10px;
+    border:1px solid #315762;
+    background:#061a22;
+    color:white;
+    outline:none;
+    padding:0 15px;
+    font-size:19px;
+    font-weight:bold;
+}
+
+.speed-input:focus{
+    border-color:var(--yellow);
+}
+
+.apply{
+    width:135px;
+    border:0;
+    border-radius:10px;
+    background:var(--yellow);
+    color:#061821;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.manual-note{
+    margin-top:8px;
+    color:#58747d;
+    font-size:10px;
+}
+
+/* ACTION */
+
+.actions{
+    display:flex;
+    gap:11px;
+    margin-top:28px;
+}
+
+.process{
+    flex:1;
+    height:54px;
+    border:0;
+    border-radius:10px;
+    background:var(--yellow);
+    color:#061821;
+    font-size:14px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.process:hover{
+    background:var(--yellow2);
+}
+
+.process:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+.reset{
+    width:110px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--panel2);
+    color:#b5cbd1;
+    cursor:pointer;
+}
+
+/* PROGRESS */
+
+.progress-box{
+    display:none;
+    margin-top:20px;
+}
+
+.progress-box.show{
+    display:block;
+}
+
+.progress-line{
+    display:flex;
+    justify-content:space-between;
+    color:#78949d;
+    font-size:11px;
+    margin-bottom:8px;
+}
+
+.progress{
+    height:7px;
+    background:#17333d;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:var(--yellow);
+    transition:width .15s;
+}
+
+/* ERROR */
+
+.error{
+    display:none;
+    margin-top:15px;
+    padding:13px 15px;
+    border:1px solid #704040;
+    border-radius:10px;
+    background:#321e22;
+    color:#ffb5b5;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.error.show{
+    display:block;
+}
+
+/* ROBLOX CHECK */
+
+.check{
+    display:none;
+    margin-top:20px;
+    padding:19px;
+    border-radius:13px;
+    background:#0c2933;
+    border:1px solid var(--border);
+}
+
+.check.show{
+    display:block;
+}
+
+.check-title{
+    font-size:14px;
+    font-weight:900;
+    margin-bottom:14px;
+}
+
+.check-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+}
+
+.check-item{
+    padding:11px;
+    border-radius:9px;
+    background:#081f29;
+    border:1px solid #193e49;
+}
+
+.check-label{
+    color:#6e8992;
+    font-size:9px;
+    text-transform:uppercase;
+}
+
+.check-value{
+    margin-top:4px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.ok{
+    color:var(--green);
+}
+
+.bad{
+    color:var(--red);
+}
+
+.ready{
+    margin-top:12px;
+    padding:12px;
+    border-radius:9px;
+    text-align:center;
+    font-size:12px;
+    font-weight:900;
+    background:#123c2c;
+    color:var(--green);
+    border:1px solid #266c4d;
+}
+
+.not-ready{
+    background:#3a2225;
+    color:var(--red);
+    border-color:#704044;
+}
+
+/* RESULT */
+
+.result{
+    display:none;
+    margin-top:18px;
+    padding:18px;
+    background:var(--panel2);
+    border:1px solid var(--border);
+    border-radius:13px;
+}
+
+.result.show{
+    display:block;
+}
+
+.result-title{
+    font-size:14px;
+    font-weight:900;
+    margin-bottom:12px;
+}
+
+audio{
+    width:100%;
+    margin-bottom:13px;
+}
+
+.download{
+    width:100%;
+    height:49px;
+    border:0;
+    border-radius:9px;
+    background:var(--yellow);
+    color:#061821;
+    font-weight:900;
+    cursor:pointer;
+}
+
+footer{
+    padding:0 20px 25px;
+    text-align:center;
+    color:#49656e;
+    font-size:9px;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    body{
+        padding:0;
+        display:block;
+    }
+
+    .app{
+        min-height:100vh;
+        border-radius:0;
+        border-left:0;
+        border-right:0;
+    }
+
+    header{
+        padding:0 17px;
+    }
+
+    main{
+        padding:20px 15px 30px;
+    }
+
+    .upload{
+        min-height:220px;
+    }
+
+    .presets{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .preset:last-child{
+        grid-column:span 2;
+    }
+
+    .manual-row{
+        flex-direction:column;
+    }
+
+    .speed-input{
+        width:100%;
+    }
+
+    .apply{
+        width:100%;
+        height:48px;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
+
+    .reset{
+        width:100%;
+        height:48px;
+    }
+
+    .check-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>XREXZOB</h1>
-        <p>Audio Bypass Converter for Roblox Workflow</p>
+<div class="app">
+
+<header>
+    <div class="logo">share<span>jo</span></div>
+    <div class="status" id="status">READY</div>
+</header>
+
+<main>
+
+<!-- UPLOAD -->
+
+<label class="upload" id="uploadBox">
+
+    <input
+        id="fileInput"
+        type="file"
+        accept=".mp3,.wav,.ogg,.m4a,.aac,.flac,audio/*"
+    >
+
+    <div>
+
+        <div class="upload-icon">↑</div>
+
+        <h1>DROP AUDIO HERE</h1>
+
+        <p>Click to upload audio file</p>
+
+        <div class="formats">
+            MP3 • WAV • OGG • M4A • AAC • FLAC
+        </div>
+
     </div>
 
-    <div class="section-title">Upload Your Audio</div>
-    <div class="upload-box" onclick="document.getElementById('audioFile').click()">
-        <div class="upload-text">Browse & Pilih File Audio</div>
-        <div class="upload-sub">MP3 • WAV • OGG • FLAC • M4A</div>
-        <input type="file" id="audioFile" accept="audio/*" onchange="handleFileSelect(this)">
-    </div>
-    <div id="fileInfo" class="file-info hidden"></div>
+</label>
 
-    <div class="section-title">Processing Settings (5 Custom Slots)</div>
-    <div class="settings-grid">
-        <div class="preset-card active" onclick="setCustomPreset(0, this)">
-            <span class="num">C1</span>
-            <span class="title">Custom 1</span>
-            <span class="val" id="val-c1">0.43</span>
-        </div>
-        <div class="preset-card" onclick="setCustomPreset(1, this)">
-            <span class="num">C2</span>
-            <span class="title">Custom 2</span>
-            <span class="val" id="val-c2">0.50</span>
-        </div>
-        <div class="preset-card" onclick="setCustomPreset(2, this)">
-            <span class="num">C3</span>
-            <span class="title">Custom 3</span>
-            <span class="val" id="val-c3">0.65</span>
-        </div>
-        <div class="preset-card" onclick="setCustomPreset(3, this)">
-            <span class="num">C4</span>
-            <span class="title">Custom 4</span>
-            <span class="val" id="val-c4">0.80</span>
-        </div>
-        <div class="preset-card" onclick="setCustomPreset(4, this)" style="grid-column: span 2;">
-            <span class="num">C5</span>
-            <span class="title">Custom 5 (Klik untuk atur angka)</span>
-            <span class="val" id="val-c5">1.00</span>
-        </div>
+
+<!-- FILE INFO -->
+
+<div class="file-card" id="fileCard">
+
+    <div style="min-width:0">
+
+        <div class="file-name" id="fileName">-</div>
+
+        <div class="file-meta" id="fileMeta">-</div>
+
     </div>
 
-    <div class="info-row">
-        <div class="info-card">
-            <div class="label">Speed</div>
-            <div class="value" id="dispSpeed">0.43</div>
-        </div>
-        <div class="info-card">
-            <div class="label">Pitch</div>
-            <div class="value">Linked</div>
-        </div>
-        <div class="info-card">
-            <div class="label">Output</div>
-            <div class="value" style="color: #f39c12;">.OGG Asli</div>
-        </div>
-    </div>
+    <button
+        class="remove"
+        id="removeBtn"
+        type="button"
+    >×</button>
 
-    <button type="button" class="process-btn" id="processBtn" onclick="processAudio()">PROSES AUDIO</button>
-
-    <div id="status">Memuat sistem engine... Mohon tunggu sebentar.</div>
-
-    <div id="downloadArea" class="download-area hidden">
-        <a id="downloadLink" class="download-btn">DOWNLOAD AUDIO .OGG</a>
-    </div>
 </div>
 
+
+<!-- SPEED -->
+
+<div class="section">
+
+    <div class="section-head">
+
+        <h2>SPEED PRESET</h2>
+
+        <div
+            class="selected"
+            id="selectedText"
+        >1.00x</div>
+
+    </div>
+
+
+    <div class="presets">
+
+        <button
+            class="preset active"
+            data-speed="1"
+            type="button"
+        >
+            <div class="preset-speed">1.00x</div>
+            <div class="preset-label">ORIGINAL</div>
+        </button>
+
+        <button
+            class="preset"
+            data-speed="1.25"
+            type="button"
+        >
+            <div class="preset-speed">1.25x</div>
+            <div class="preset-label">FAST</div>
+        </button>
+
+        <button
+            class="preset"
+            data-speed="1.50"
+            type="button"
+        >
+            <div class="preset-speed">1.50x</div>
+            <div class="preset-label">FASTER</div>
+        </button>
+
+        <button
+            class="preset"
+            data-speed="1.75"
+            type="button"
+        >
+            <div class="preset-speed">1.75x</div>
+            <div class="preset-label">VERY FAST</div>
+        </button>
+
+        <button
+            class="preset"
+            data-speed="2"
+            type="button"
+        >
+            <div class="preset-speed">2.00x</div>
+            <div class="preset-label">2X</div>
+        </button>
+
+    </div>
+
+
+    <!-- MANUAL SPEED -->
+
+    <div class="manual">
+
+        <div class="manual-title">
+            CUSTOM SPEED
+        </div>
+
+        <div class="manual-row">
+
+            <input
+                id="speedInput"
+                class="speed-input"
+                type="number"
+                inputmode="decimal"
+                min="0.01"
+                max="1000"
+                step="0.01"
+                value="1.00"
+                placeholder="Contoh: 3.50"
+            >
+
+            <button
+                id="applySpeed"
+                class="apply"
+                type="button"
+            >
+                PAKAI SPEED
+            </button>
+
+        </div>
+
+        <div class="manual-note">
+            Bisa ketik speed sendiri, misalnya 2.50x, 3x, 4.75x, 10x, dst.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ACTION -->
+
+<div class="actions">
+
+    <button
+        id="processBtn"
+        class="process"
+        type="button"
+        disabled
+    >
+        PROSES AUDIO
+    </button>
+
+    <button
+        id="resetBtn"
+        class="reset"
+        type="button"
+    >
+        RESET
+    </button>
+
+</div>
+
+
+<!-- PROGRESS -->
+
+<div
+    id="progressBox"
+    class="progress-box"
+>
+
+    <div class="progress-line">
+
+        <span id="progressText">
+            Preparing...
+        </span>
+
+        <span id="progressPercent">
+            0%
+        </span>
+
+    </div>
+
+    <div class="progress">
+
+        <div
+            id="progressBar"
+            class="progress-bar"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- ERROR -->
+
+<div
+    id="errorBox"
+    class="error"
+></div>
+
+
+<!-- ROBLOX CHECK -->
+
+<div
+    id="checkBox"
+    class="check"
+>
+
+    <div class="check-title">
+        ROBLOX AUDIO CHECK
+    </div>
+
+    <div class="check-grid">
+
+        <div class="check-item">
+            <div class="check-label">Format</div>
+            <div
+                id="checkFormat"
+                class="check-value"
+            >-</div>
+        </div>
+
+        <div class="check-item">
+            <div class="check-label">Sample Rate</div>
+            <div
+                id="checkRate"
+                class="check-value"
+            >-</div>
+        </div>
+
+        <div class="check-item">
+            <div class="check-label">Channels</div>
+            <div
+                id="checkChannels"
+                class="check-value"
+            >-</div>
+        </div>
+
+        <div class="check-item">
+            <div class="check-label">Duration</div>
+            <div
+                id="checkDuration"
+                class="check-value"
+            >-</div>
+        </div>
+
+        <div class="check-item">
+            <div class="check-label">File Size</div>
+            <div
+                id="checkSize"
+                class="check-value"
+            >-</div>
+        </div>
+
+        <div class="check-item">
+            <div class="check-label">Speed</div>
+            <div
+                id="checkSpeed"
+                class="check-value"
+            >-</div>
+        </div>
+
+    </div>
+
+    <div
+        id="readyBox"
+        class="ready"
+    >
+        ROBLOX READY ✓
+    </div>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div
+    id="resultBox"
+    class="result"
+>
+
+    <div class="result-title">
+        AUDIO BERHASIL DIPROSES
+    </div>
+
+    <audio
+        id="preview"
+        controls
+    ></audio>
+
+    <button
+        id="downloadBtn"
+        class="download"
+        type="button"
+    >
+        DOWNLOAD OGG
+    </button>
+
+</div>
+
+</main>
+
+<footer>
+    SHAREJO • MP3 SPEED → OGG • ROBLOX READY CHECK
+</footer>
+
+</div>
+
+
+<!--
+    REAL OGG VORBIS ENCODER
+
+    Library:
+    higuma/ogg-vorbis-encoder-js
+-->
+
+<script src="https://cdn.jsdelivr.net/gh/higuma/ogg-vorbis-encoder-js@master/lib/OggVorbisEncoder.js"></script>
+
+
 <script>
-    // Menyimpan 5 nilai slot custom kecepatan
-    let customSpeeds = [0.43, 0.50, 0.65, 0.80, 1.00];
-    let selectedSpeed = customSpeeds[0];
-    let ffmpeg = null;
 
-    async function initFFmpeg() {
-        const { FFmpeg } = FFmpegWASM;
-        ffmpeg = new FFmpeg();
-        
-        const statusDiv = document.getElementById('status');
-        try {
-            statusDiv.textContent = 'Memuat modul engine OGG...';
-            await ffmpeg.load({
-                coreURL: "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js",
-                wasmURL: "https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm"
-            });
-            statusDiv.textContent = 'Sistem siap! Silakan upload audio.';
-        } catch (error) {
-            console.error(error);
-            statusDiv.textContent = 'Gagal memuat engine. Cek koneksi internet.';
-        }
+"use strict";
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const uploadBox =
+    document.getElementById("uploadBox");
+
+const fileCard =
+    document.getElementById("fileCard");
+
+const fileName =
+    document.getElementById("fileName");
+
+const fileMeta =
+    document.getElementById("fileMeta");
+
+const removeBtn =
+    document.getElementById("removeBtn");
+
+const statusEl =
+    document.getElementById("status");
+
+const speedInput =
+    document.getElementById("speedInput");
+
+const applySpeed =
+    document.getElementById("applySpeed");
+
+const selectedText =
+    document.getElementById("selectedText");
+
+const processBtn =
+    document.getElementById("processBtn");
+
+const resetBtn =
+    document.getElementById("resetBtn");
+
+const progressBox =
+    document.getElementById("progressBox");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const progressText =
+    document.getElementById("progressText");
+
+const progressPercent =
+    document.getElementById("progressPercent");
+
+const errorBox =
+    document.getElementById("errorBox");
+
+const checkBox =
+    document.getElementById("checkBox");
+
+const checkFormat =
+    document.getElementById("checkFormat");
+
+const checkRate =
+    document.getElementById("checkRate");
+
+const checkChannels =
+    document.getElementById("checkChannels");
+
+const checkDuration =
+    document.getElementById("checkDuration");
+
+const checkSize =
+    document.getElementById("checkSize");
+
+const checkSpeed =
+    document.getElementById("checkSpeed");
+
+const readyBox =
+    document.getElementById("readyBox");
+
+const resultBox =
+    document.getElementById("resultBox");
+
+const preview =
+    document.getElementById("preview");
+
+const downloadBtn =
+    document.getElementById("downloadBtn");
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let selectedFile = null;
+let decodedAudio = null;
+let selectedSpeed = 1;
+let outputBlob = null;
+let outputURL = null;
+
+const ROBLOX_MAX_BYTES =
+    20 * 1024 * 1024;
+
+const ROBLOX_MAX_SECONDS =
+    7 * 60;
+
+const TARGET_SAMPLE_RATE =
+    48000;
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function showError(message){
+
+    errorBox.textContent =
+        message;
+
+    errorBox.classList.add("show");
+
+}
+
+
+function hideError(){
+
+    errorBox.textContent =
+        "";
+
+    errorBox.classList.remove(
+        "show"
+    );
+
+}
+
+
+function setProgress(
+    percent,
+    message
+){
+
+    const p =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                percent
+            )
+        );
+
+    progressBox.classList.add(
+        "show"
+    );
+
+    progressBar.style.width =
+        p + "%";
+
+    progressPercent.textContent =
+        Math.round(p) + "%";
+
+    if(message){
+
+        progressText.textContent =
+            message;
+
     }
 
-    initFFmpeg();
+}
 
-    function handleFileSelect(input) {
-        if (input.files.length > 0) {
-            const fileInfo = document.getElementById('fileInfo');
-            fileInfo.textContent = `File terpilih: ${input.files[0].name}`;
-            fileInfo.classList.remove('hidden');
-        }
+
+function formatBytes(bytes){
+
+    if(bytes < 1024){
+
+        return bytes + " B";
+
     }
 
-    function setCustomPreset(index, element) {
-        let currentVal = customSpeeds[index];
-        let userInput = prompt(`Atur nilai kecepatan untuk Custom ${index + 1}:`, currentVal);
-        
-        if (userInput !== null) {
-            let val = parseFloat(userInput);
-            if (!isNaN(val) && val > 0.05 && val <= 3.0) {
-                customSpeeds[index] = val;
-                selectedSpeed = val;
-                
-                // Update tampilan teks pada kartu
-                document.getElementById(`val-c${index + 1}`).textContent = val.toFixed(2);
-                document.getElementById('dispSpeed').textContent = val.toFixed(2);
-                
-                document.querySelectorAll('.preset-card').forEach(card => card.classList.remove('active'));
-                element.classList.add('active');
-            } else {
-                alert("Nilai kecepatan tidak valid! Masukkan angka antara 0.06 sampai 3.0");
+    if(bytes < 1024 * 1024){
+
+        return (
+            bytes / 1024
+        ).toFixed(1) +
+        " KB";
+
+    }
+
+    return (
+        bytes /
+        (1024 * 1024)
+    ).toFixed(2) +
+    " MB";
+
+}
+
+
+function formatTime(seconds){
+
+    if(!Number.isFinite(seconds)){
+
+        return "--:--";
+
+    }
+
+    const total =
+        Math.floor(seconds);
+
+    const min =
+        Math.floor(
+            total / 60
+        );
+
+    const sec =
+        total % 60;
+
+    return (
+        String(min).padStart(2,"0") +
+        ":" +
+        String(sec).padStart(2,"0")
+    );
+
+}
+
+
+function nextFrame(){
+
+    return new Promise(resolve => {
+
+        setTimeout(
+            resolve,
+            0
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   SPEED
+========================================================= */
+
+function setSpeed(value){
+
+    value =
+        Number(value);
+
+    if(
+        !Number.isFinite(value) ||
+        value <= 0
+    ){
+
+        showError(
+            "Speed harus berupa angka lebih dari 0."
+        );
+
+        return false;
+
+    }
+
+    /*
+       Tidak dibatasi 2x.
+       Range praktis 0.01x - 1000x.
+    */
+
+    if(value < 0.01){
+
+        value = 0.01;
+
+    }
+
+    if(value > 1000){
+
+        value = 1000;
+
+    }
+
+    selectedSpeed =
+        value;
+
+    speedInput.value =
+        value.toFixed(2);
+
+    selectedText.textContent =
+        value.toFixed(2) + "x";
+
+    document
+        .querySelectorAll(".preset")
+        .forEach(button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+        });
+
+    hideError();
+
+    return true;
+
+}
+
+
+document
+    .querySelectorAll(".preset")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                setSpeed(
+                    button.dataset.speed
+                );
+
+                button.classList.add(
+                    "active"
+                );
+
             }
-        } else {
-            // Jika user batal nge-prompt tapi klik kotaknya, langsung pilih nilainya
-            selectedSpeed = customSpeeds[index];
-            document.getElementById('dispSpeed').textContent = selectedSpeed.toFixed(2);
-            document.querySelectorAll('.preset-card').forEach(card => card.classList.remove('active'));
-            element.classList.add('active');
-        }
+        );
+
+    });
+
+
+applySpeed.addEventListener(
+    "click",
+    () => {
+
+        setSpeed(
+            speedInput.value
+        );
+
     }
+);
 
-    async function processAudio() {
-        if (!ffmpeg) {
-            alert('Sistem sedang inisialisasi, tunggu sebentar!');
-            return;
+
+speedInput.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key === "Enter"){
+
+            setSpeed(
+                speedInput.value
+            );
+
         }
 
-        const fileInput = document.getElementById('audioFile');
-        const statusDiv = document.getElementById('status');
-        const downloadArea = document.getElementById('downloadArea');
-        const processBtn = document.getElementById('processBtn');
-
-        if (fileInput.files.length === 0) {
-            alert('Silakan pilih file audio terlebih dahulu!');
-            return;
-        }
-
-        const file = fileInput.files[0];
-        processBtn.disabled = true;
-        downloadArea.classList.add('hidden');
-        statusDiv.textContent = 'Membaca file ke memori...';
-
-        try {
-            const fileData = await file.arrayBuffer();
-            const inputFileName = 'input' + file.name.substring(file.name.lastIndexOf('.'));
-            const outputFileName = 'output_xrexzob.ogg';
-
-            await ffmpeg.writeFile(inputFileName, new Uint8Array(fileData));
-
-            statusDiv.textContent = `Memproses bypass (Speed: ${selectedSpeed}x)...`;
-
-            let filterString = `atempo=${selectedSpeed}`;
-            if (selectedSpeed < 0.5) {
-                let firstFactor = 0.5;
-                let secondFactor = selectedSpeed / 0.5;
-                filterString = `atempo=${firstFactor},atempo=${secondFactor}`;
-            } else if (selectedSpeed > 2.0) {
-                let firstFactor = 2.0;
-                let secondFactor = selectedSpeed / 2.0;
-                filterString = `atempo=${firstFactor},atempo=${secondFactor}`;
-            }
-
-            await ffmpeg.exec([
-                '-i', inputFileName,
-                '-filter:a', filterString,
-                '-c:a', 'libvorbis',
-                '-q:a', '4',
-                outputFileName
-            ]);
-
-            statusDiv.textContent = 'Menyiapkan file OGG asli...';
-            const data = await ffmpeg.readFile(outputFileName);
-
-            const oggBlob = new Blob([data.buffer], { type: 'audio/ogg' });
-            const audioUrl = URL.createObjectURL(oggBlob);
-            
-            const downloadLink = document.getElementById('downloadLink');
-            downloadLink.href = audioUrl;
-            downloadLink.download = `XREXZOB_Bypass_${selectedSpeed}x_${file.name.replace(/\.[^/.]+$/, "")}.ogg`;
-
-            statusDiv.textContent = 'Berhasil! File OGG asli siap di-download.';
-            downloadArea.classList.remove('hidden');
-
-        } catch (error) {
-            console.error(error);
-            statusDiv.textContent = 'Terjadi kesalahan saat pemrosesan audio.';
-        } finally {
-            processBtn.disabled = false;
-        }
     }
-</script>
+);
 
-</body>
-</html>
+
+/* =========================================================
+   AUDIO DECODER
+========================================================= */
+
+async function decod
