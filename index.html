@@ -2,566 +2,493 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-<meta name="theme-color" content="#071b25">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#070b12">
 
-<title>Sharejo - MP3 to Roblox OGG</title>
+<title>xrexzob developer — MP3 to OGG</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-    --bg:#061821;
-    --panel:#0a222c;
-    --panel2:#0d2a35;
-    --border:#214854;
-    --text:#edf8fb;
-    --muted:#78949d;
-    --yellow:#ffd84d;
-    --yellow2:#ffe77e;
-    --green:#55d98b;
-    --red:#ff7070;
+ --bg:#05070b;
+ --card:#0b1018;
+ --card2:#0f1620;
+ --line:#202c3a;
+ --text:#f3f7fb;
+ --muted:#718096;
+ --accent:#7c5cff;
+ --accent2:#a78bfa;
+ --green:#39e58c;
+ --red:#ff6677;
 }
 
+html,body{min-height:100%;font-family:Arial,Helvetica,sans-serif}
+
 body{
-    min-height:100vh;
-    background:
-        radial-gradient(circle at 50% -10%,#123b49 0,#061821 48%,#04131a 100%);
-    color:var(--text);
-    font-family:Arial,Helvetica,sans-serif;
-    display:flex;
-    justify-content:center;
-    padding:20px;
+ background:
+ radial-gradient(circle at 50% -10%,#25204b 0,#0a0b14 35%,#05070b 75%);
+ color:var(--text);
+ padding:20px;
 }
 
 .app{
-    width:min(1080px,100%);
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 25px 80px rgba(0,0,0,.45);
+ width:min(1000px,100%);
+ margin:auto;
+ background:rgba(11,16,24,.96);
+ border:1px solid var(--line);
+ border-radius:24px;
+ overflow:hidden;
+ box-shadow:0 30px 100px rgba(0,0,0,.55);
 }
 
 header{
-    height:70px;
-    padding:0 28px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid var(--border);
-    background:#081e28;
+ min-height:76px;
+ padding:16px 25px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ border-bottom:1px solid var(--line);
+ background:rgba(9,13,20,.95);
 }
 
 .logo{
-    font-size:23px;
-    font-weight:900;
+ font-size:22px;
+ font-weight:900;
+ letter-spacing:.3px;
 }
 
-.logo span{
-    color:var(--yellow);
+.logo span{color:var(--accent2)}
+
+.badge{
+ padding:8px 11px;
+ border:1px solid #332c60;
+ border-radius:999px;
+ color:#b7aaff;
+ background:#151229;
+ font-size:10px;
+ font-weight:800;
+ letter-spacing:1px;
 }
 
-.status{
-    color:var(--muted);
-    font-size:11px;
-    letter-spacing:1px;
+main{padding:28px}
+
+.hero{
+ margin-bottom:22px;
 }
 
-main{
-    padding:36px;
+.hero h1{
+ font-size:27px;
+ margin-bottom:7px;
 }
 
-/* UPLOAD */
+.hero p{
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.6;
+}
 
 .upload{
-    min-height:245px;
-    border:2px dashed #315762;
-    border-radius:16px;
-    background:#081e28;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    cursor:pointer;
-    transition:.2s;
+ min-height:235px;
+ border:2px dashed #303c4d;
+ border-radius:18px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ cursor:pointer;
+ background:linear-gradient(145deg,#0c121b,#080c13);
+ transition:.2s;
 }
 
-.upload:hover,
-.upload.drag{
-    border-color:var(--yellow);
-    background:#0b2732;
+.upload:hover,.upload.drag{
+ border-color:var(--accent);
+ background:#0d1020;
+ transform:translateY(-1px);
 }
 
-.upload input{
-    display:none;
-}
+.upload input{display:none}
 
 .upload-icon{
-    width:64px;
-    height:64px;
-    margin:0 auto 17px;
-    border-radius:50%;
-    background:var(--yellow);
-    color:#061821;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:32px;
-    font-weight:900;
+ width:68px;
+ height:68px;
+ border-radius:20px;
+ margin:auto auto 15px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:white;
+ font-size:31px;
+ font-weight:900;
+ box-shadow:0 12px 35px rgba(124,92,255,.25);
 }
 
-.upload h1{
-    font-size:20px;
-    letter-spacing:1px;
-    margin-bottom:8px;
+.upload h2{
+ font-size:18px;
+ margin-bottom:7px;
 }
 
 .upload p{
-    color:#819da5;
-    font-size:13px;
+ color:#758397;
+ font-size:12px;
 }
 
 .formats{
-    margin-top:12px;
-    color:#526f78;
-    font-size:10px;
+ margin-top:11px;
+ color:#4e5c6d;
+ font-size:9px;
+ letter-spacing:1px;
 }
-
-/* FILE */
 
 .file-card{
-    display:none;
-    margin-top:16px;
-    padding:15px;
-    background:var(--panel2);
-    border:1px solid var(--border);
-    border-radius:12px;
-    align-items:center;
-    justify-content:space-between;
-    gap:15px;
+ display:none;
+ margin-top:14px;
+ padding:14px;
+ border:1px solid var(--line);
+ background:var(--card2);
+ border-radius:13px;
+ align-items:center;
+ gap:14px;
 }
 
-.file-card.show{
-    display:flex;
+.file-card.show{display:flex}
+
+.file-icon{
+ width:42px;
+ height:42px;
+ flex:none;
+ border-radius:10px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:#19142e;
+ color:#a995ff;
+ font-weight:900;
 }
+
+.file-info{min-width:0;flex:1}
 
 .file-name{
-    font-weight:700;
-    font-size:14px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+ font-size:13px;
+ font-weight:800;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
 }
 
 .file-meta{
-    margin-top:6px;
-    color:var(--muted);
-    font-size:11px;
+ color:var(--muted);
+ font-size:10px;
+ margin-top:5px;
 }
 
 .remove{
-    flex-shrink:0;
-    width:36px;
-    height:36px;
-    border:0;
-    border-radius:9px;
-    background:#173b46;
-    color:#c3d5da;
-    font-size:20px;
-    cursor:pointer;
+ width:38px;
+ height:38px;
+ border:1px solid #2a3542;
+ border-radius:9px;
+ background:#131a24;
+ color:#9aa7b8;
+ cursor:pointer;
+ font-size:19px;
 }
-
-/* SECTION */
 
 .section{
-    margin-top:30px;
+ margin-top:25px;
 }
 
-.section-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:13px;
+.section-title{
+ font-size:11px;
+ font-weight:900;
+ letter-spacing:1px;
+ color:#9aa7b8;
+ margin-bottom:11px;
 }
 
-.section-head h2{
-    font-size:13px;
-    letter-spacing:.8px;
+.speed-grid{
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:9px;
 }
 
-.selected{
-    color:var(--yellow);
-    font-size:13px;
-    font-weight:bold;
+.speed{
+ min-height:72px;
+ border:1px solid var(--line);
+ border-radius:12px;
+ background:var(--card2);
+ color:white;
+ cursor:pointer;
 }
 
-/* PRESETS */
+.speed:hover{border-color:#536177}
 
-.presets{
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:11px;
+.speed.active{
+ border-color:var(--accent);
+ background:#17132b;
+ box-shadow:inset 0 0 0 1px var(--accent);
 }
 
-.preset{
-    min-height:88px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    background:var(--panel2);
-    color:var(--text);
-    cursor:pointer;
+.speed strong{
+ display:block;
+ font-size:18px;
 }
 
-.preset:hover{
-    border-color:#66818a;
+.speed small{
+ display:block;
+ margin-top:5px;
+ color:#637084;
+ font-size:8px;
 }
 
-.preset.active{
-    border:2px solid var(--yellow);
-    background:#152f37;
+.speed.active strong{color:#b8aaff}
+
+.custom{
+ margin-top:10px;
+ padding:15px;
+ border:1px solid var(--line);
+ border-radius:13px;
+ background:var(--card2);
 }
 
-.preset-speed{
-    font-size:23px;
-    font-weight:900;
+.custom-label{
+ color:#77859a;
+ font-size:10px;
+ margin-bottom:9px;
 }
 
-.preset.active .preset-speed{
-    color:var(--yellow);
+.custom-row{
+ display:flex;
+ gap:9px;
 }
 
-.preset-label{
-    margin-top:6px;
-    font-size:9px;
-    color:#6f8992;
+#speedInput{
+ flex:1;
+ min-width:0;
+ height:48px;
+ padding:0 13px;
+ border-radius:9px;
+ border:1px solid #2c3949;
+ background:#080d14;
+ color:white;
+ outline:none;
+ font-size:16px;
+ font-weight:800;
 }
 
-/* MANUAL */
-
-.manual{
-    margin-top:15px;
-    padding:18px;
-    border-radius:12px;
-    border:1px solid var(--border);
-    background:var(--panel2);
-}
-
-.manual-title{
-    color:#8ca5ac;
-    font-size:11px;
-    margin-bottom:10px;
-}
-
-.manual-row{
-    display:flex;
-    gap:10px;
-}
-
-.speed-input{
-    flex:1;
-    min-width:0;
-    height:52px;
-    border-radius:10px;
-    border:1px solid #315762;
-    background:#061a22;
-    color:white;
-    outline:none;
-    padding:0 15px;
-    font-size:19px;
-    font-weight:bold;
-}
-
-.speed-input:focus{
-    border-color:var(--yellow);
-}
+#speedInput:focus{border-color:var(--accent)}
 
 .apply{
-    width:135px;
-    border:0;
-    border-radius:10px;
-    background:var(--yellow);
-    color:#061821;
-    font-weight:900;
-    cursor:pointer;
+ width:140px;
+ border:0;
+ border-radius:9px;
+ background:var(--accent);
+ color:white;
+ font-weight:900;
+ cursor:pointer;
 }
 
-.manual-note{
-    margin-top:8px;
-    color:#58747d;
-    font-size:10px;
+.note{
+ margin-top:8px;
+ color:#526074;
+ font-size:9px;
+ line-height:1.5;
 }
 
-/* ACTION */
+.current{
+ margin-top:10px;
+ padding:11px;
+ border-radius:9px;
+ background:#0b0e18;
+ color:#a995ff;
+ font-size:11px;
+ font-weight:900;
+ text-align:center;
+}
 
 .actions{
-    display:flex;
-    gap:11px;
-    margin-top:28px;
+ display:flex;
+ gap:9px;
+ margin-top:25px;
 }
 
 .process{
-    flex:1;
-    height:54px;
-    border:0;
-    border-radius:10px;
-    background:var(--yellow);
-    color:#061821;
-    font-size:14px;
-    font-weight:900;
-    cursor:pointer;
-}
-
-.process:hover{
-    background:var(--yellow2);
+ flex:1;
+ height:53px;
+ border:0;
+ border-radius:10px;
+ background:linear-gradient(135deg,var(--accent),var(--accent2));
+ color:white;
+ font-weight:900;
+ cursor:pointer;
 }
 
 .process:disabled{
-    opacity:.35;
-    cursor:not-allowed;
+ opacity:.35;
+ cursor:not-allowed;
 }
 
 .reset{
-    width:110px;
-    border:1px solid var(--border);
-    border-radius:10px;
-    background:var(--panel2);
-    color:#b5cbd1;
-    cursor:pointer;
+ width:105px;
+ border:1px solid var(--line);
+ border-radius:10px;
+ background:var(--card2);
+ color:#a3afbf;
+ cursor:pointer;
 }
 
-/* PROGRESS */
-
-.progress-box{
-    display:none;
-    margin-top:20px;
+.progress-box,.check,.result,.error{
+ display:none;
+ margin-top:17px;
 }
 
-.progress-box.show{
-    display:block;
-}
+.progress-box.show,.check.show,.result.show,.error.show{display:block}
 
-.progress-line{
-    display:flex;
-    justify-content:space-between;
-    color:#78949d;
-    font-size:11px;
-    margin-bottom:8px;
+.progress-top{
+ display:flex;
+ justify-content:space-between;
+ color:#758397;
+ font-size:10px;
+ margin-bottom:7px;
 }
 
 .progress{
-    height:7px;
-    background:#17333d;
-    border-radius:10px;
-    overflow:hidden;
+ height:7px;
+ background:#17202b;
+ border-radius:99px;
+ overflow:hidden;
 }
 
 .progress-bar{
-    width:0%;
-    height:100%;
-    background:var(--yellow);
-    transition:width .15s;
+ width:0%;
+ height:100%;
+ background:linear-gradient(90deg,var(--accent),var(--accent2));
+ transition:width .08s linear;
 }
-
-/* ERROR */
 
 .error{
-    display:none;
-    margin-top:15px;
-    padding:13px 15px;
-    border:1px solid #704040;
-    border-radius:10px;
-    background:#321e22;
-    color:#ffb5b5;
-    font-size:12px;
-    line-height:1.5;
+ padding:13px;
+ border:1px solid #5e2b38;
+ background:#24131a;
+ color:#ffadb8;
+ border-radius:10px;
+ font-size:11px;
+ line-height:1.5;
 }
-
-.error.show{
-    display:block;
-}
-
-/* ROBLOX CHECK */
 
 .check{
-    display:none;
-    margin-top:20px;
-    padding:19px;
-    border-radius:13px;
-    background:#0c2933;
-    border:1px solid var(--border);
+ padding:17px;
+ border:1px solid var(--line);
+ background:#0d141d;
+ border-radius:14px;
 }
 
-.check.show{
-    display:block;
-}
-
-.check-title{
-    font-size:14px;
-    font-weight:900;
-    margin-bottom:14px;
+.check h3{
+ font-size:13px;
+ margin-bottom:12px;
 }
 
 .check-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:9px;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
 }
 
 .check-item{
-    padding:11px;
-    border-radius:9px;
-    background:#081f29;
-    border:1px solid #193e49;
+ padding:11px;
+ border-radius:9px;
+ background:#090e15;
+ border:1px solid #1b2633;
 }
 
-.check-label{
-    color:#6e8992;
-    font-size:9px;
-    text-transform:uppercase;
+.check-item label{
+ display:block;
+ color:#5e6c7f;
+ text-transform:uppercase;
+ font-size:8px;
 }
 
-.check-value{
-    margin-top:4px;
-    font-size:12px;
-    font-weight:bold;
+.check-item b{
+ display:block;
+ margin-top:5px;
+ font-size:11px;
 }
 
-.ok{
-    color:var(--green);
-}
-
-.bad{
-    color:var(--red);
-}
+.ok{color:var(--green)}
+.bad{color:var(--red)}
 
 .ready{
-    margin-top:12px;
-    padding:12px;
-    border-radius:9px;
-    text-align:center;
-    font-size:12px;
-    font-weight:900;
-    background:#123c2c;
-    color:var(--green);
-    border:1px solid #266c4d;
+ margin-top:10px;
+ padding:12px;
+ border-radius:9px;
+ text-align:center;
+ background:#0d2a20;
+ border:1px solid #215f49;
+ color:var(--green);
+ font-size:11px;
+ font-weight:900;
 }
 
-.not-ready{
-    background:#3a2225;
-    color:var(--red);
-    border-color:#704044;
+.notready{
+ background:#29151a;
+ border-color:#64313b;
+ color:var(--red);
 }
-
-/* RESULT */
 
 .result{
-    display:none;
-    margin-top:18px;
-    padding:18px;
-    background:var(--panel2);
-    border:1px solid var(--border);
-    border-radius:13px;
+ padding:17px;
+ border:1px solid var(--line);
+ background:var(--card2);
+ border-radius:14px;
 }
 
-.result.show{
-    display:block;
-}
-
-.result-title{
-    font-size:14px;
-    font-weight:900;
-    margin-bottom:12px;
+.result h3{
+ font-size:13px;
+ margin-bottom:11px;
 }
 
 audio{
-    width:100%;
-    margin-bottom:13px;
+ width:100%;
+ margin-bottom:10px;
 }
 
 .download{
-    width:100%;
-    height:49px;
-    border:0;
-    border-radius:9px;
-    background:var(--yellow);
-    color:#061821;
-    font-weight:900;
-    cursor:pointer;
+ width:100%;
+ height:49px;
+ border:0;
+ border-radius:9px;
+ background:var(--green);
+ color:#06140d;
+ font-weight:900;
+ cursor:pointer;
 }
 
 footer{
-    padding:0 20px 25px;
-    text-align:center;
-    color:#49656e;
-    font-size:9px;
+ text-align:center;
+ padding:0 20px 22px;
+ color:#465365;
+ font-size:9px;
+ letter-spacing:.5px;
 }
 
-/* MOBILE */
-
 @media(max-width:700px){
+ body{padding:0}
+ .app{min-height:100vh;border-radius:0;border-left:0;border-right:0}
+ header{padding:14px 16px}
+ main{padding:20px 14px 28px}
+ .hero h1{font-size:23px}
+ .upload{min-height:215px}
+ .speed-grid{grid-template-columns:repeat(2,1fr)}
+ .speed:last-child{grid-column:span 2}
+ .custom-row{flex-direction:column}
+ .apply{width:100%;height:47px}
+ .actions{flex-direction:column}
+ .reset{width:100%;height:47px}
+ .check-grid{grid-template-columns:1fr 1fr}
+}
 
-    body{
-        padding:0;
-        display:block;
-    }
-
-    .app{
-        min-height:100vh;
-        border-radius:0;
-        border-left:0;
-        border-right:0;
-    }
-
-    header{
-        padding:0 17px;
-    }
-
-    main{
-        padding:20px 15px 30px;
-    }
-
-    .upload{
-        min-height:220px;
-    }
-
-    .presets{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .preset:last-child{
-        grid-column:span 2;
-    }
-
-    .manual-row{
-        flex-direction:column;
-    }
-
-    .speed-input{
-        width:100%;
-    }
-
-    .apply{
-        width:100%;
-        height:48px;
-    }
-
-    .actions{
-        flex-direction:column;
-    }
-
-    .reset{
-        width:100%;
-        height:48px;
-    }
-
-    .check-grid{
-        grid-template-columns:1fr;
-    }
+@media(max-width:390px){
+ .check-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -571,707 +498,645 @@ footer{
 <div class="app">
 
 <header>
-    <div class="logo">share<span>jo</span></div>
-    <div class="status" id="status">READY</div>
+ <div class="logo">xrexzob <span>developer</span></div>
+ <div class="badge" id="status">READY</div>
 </header>
 
 <main>
 
-<!-- UPLOAD -->
-
-<label class="upload" id="uploadBox">
-
-    <input
-        id="fileInput"
-        type="file"
-        accept=".mp3,.wav,.ogg,.m4a,.aac,.flac,audio/*"
-    >
-
-    <div>
-
-        <div class="upload-icon">↑</div>
-
-        <h1>DROP AUDIO HERE</h1>
-
-        <p>Click to upload audio file</p>
-
-        <div class="formats">
-            MP3 • WAV • OGG • M4A • AAC • FLAC
-        </div>
-
-    </div>
-
-</label>
-
-
-<!-- FILE INFO -->
-
-<div class="file-card" id="fileCard">
-
-    <div style="min-width:0">
-
-        <div class="file-name" id="fileName">-</div>
-
-        <div class="file-meta" id="fileMeta">-</div>
-
-    </div>
-
-    <button
-        class="remove"
-        id="removeBtn"
-        type="button"
-    >×</button>
-
+<div class="hero">
+ <h1>MP3 → OGG Converter</h1>
+ <p>Convert audio ke OGG Vorbis dengan custom speed. Dibuat untuk workflow audio Roblox.</p>
 </div>
 
+<label class="upload" id="uploadBox">
+ <input id="fileInput" type="file"
+ accept=".mp3,.wav,.ogg,.m4a,.aac,.flac,audio/*">
 
-<!-- SPEED -->
+ <div>
+  <div class="upload-icon">↑</div>
+  <h2>UPLOAD AUDIO</h2>
+  <p>Klik di sini atau masukkan file audio</p>
+  <div class="formats">MP3 • WAV • OGG • M4A • AAC • FLAC</div>
+ </div>
+</label>
+
+<div class="file-card" id="fileCard">
+ <div class="file-icon">♫</div>
+
+ <div class="file-info">
+  <div class="file-name" id="fileName">-</div>
+  <div class="file-meta" id="fileMeta">-</div>
+ </div>
+
+ <button class="remove" id="removeBtn" type="button">×</button>
+</div>
 
 <div class="section">
 
-    <div class="section-head">
+ <div class="section-title">SPEED PRESET</div>
 
-        <h2>SPEED PRESET</h2>
+ <div class="speed-grid">
 
-        <div
-            class="selected"
-            id="selectedText"
-        >1.00x</div>
+  <button class="speed active" data-speed="1" type="button">
+   <strong>1.00x</strong>
+   <small>ORIGINAL</small>
+  </button>
 
-    </div>
+  <button class="speed" data-speed="1.25" type="button">
+   <strong>1.25x</strong>
+   <small>FAST</small>
+  </button>
 
+  <button class="speed" data-speed="1.50" type="button">
+   <strong>1.50x</strong>
+   <small>FASTER</small>
+  </button>
 
-    <div class="presets">
+  <button class="speed" data-speed="1.75" type="button">
+   <strong>1.75x</strong>
+   <small>VERY FAST</small>
+  </button>
 
-        <button
-            class="preset active"
-            data-speed="1"
-            type="button"
-        >
-            <div class="preset-speed">1.00x</div>
-            <div class="preset-label">ORIGINAL</div>
-        </button>
+  <button class="speed" data-speed="2" type="button">
+   <strong>2.00x</strong>
+   <small>2X</small>
+  </button>
 
-        <button
-            class="preset"
-            data-speed="1.25"
-            type="button"
-        >
-            <div class="preset-speed">1.25x</div>
-            <div class="preset-label">FAST</div>
-        </button>
+ </div>
 
-        <button
-            class="preset"
-            data-speed="1.50"
-            type="button"
-        >
-            <div class="preset-speed">1.50x</div>
-            <div class="preset-label">FASTER</div>
-        </button>
+ <div class="custom">
 
-        <button
-            class="preset"
-            data-speed="1.75"
-            type="button"
-        >
-            <div class="preset-speed">1.75x</div>
-            <div class="preset-label">VERY FAST</div>
-        </button>
+  <div class="custom-label">CUSTOM SPEED — BEBAS</div>
 
-        <button
-            class="preset"
-            data-speed="2"
-            type="button"
-        >
-            <div class="preset-speed">2.00x</div>
-            <div class="preset-label">2X</div>
-        </button>
+  <div class="custom-row">
+   <input id="speedInput"
+    type="number"
+    inputmode="decimal"
+    min="0.01"
+    max="1000"
+    step="0.01"
+    value="1.00"
+    placeholder="Contoh 3.50">
 
-    </div>
+   <button id="applySpeed" class="apply" type="button">
+    PAKAI SPEED
+   </button>
+  </div>
 
+  <div class="note">
+   Masukkan angka sesuai kebutuhan: 0.5x, 2.5x, 3x, 5x, 10x, 50x, dan seterusnya.
+   Batas teknis UI: 0.01x–1000x.
+  </div>
 
-    <!-- MANUAL SPEED -->
+  <div class="current" id="currentSpeed">
+   SPEED TERPILIH: 1.00x
+  </div>
 
-    <div class="manual">
-
-        <div class="manual-title">
-            CUSTOM SPEED
-        </div>
-
-        <div class="manual-row">
-
-            <input
-                id="speedInput"
-                class="speed-input"
-                type="number"
-                inputmode="decimal"
-                min="0.01"
-                max="1000"
-                step="0.01"
-                value="1.00"
-                placeholder="Contoh: 3.50"
-            >
-
-            <button
-                id="applySpeed"
-                class="apply"
-                type="button"
-            >
-                PAKAI SPEED
-            </button>
-
-        </div>
-
-        <div class="manual-note">
-            Bisa ketik speed sendiri, misalnya 2.50x, 3x, 4.75x, 10x, dst.
-        </div>
-
-    </div>
+ </div>
 
 </div>
-
-
-<!-- ACTION -->
 
 <div class="actions">
+ <button id="processBtn" class="process" type="button" disabled>
+  PROSES MP3 → OGG
+ </button>
 
-    <button
-        id="processBtn"
-        class="process"
-        type="button"
-        disabled
-    >
-        PROSES AUDIO
-    </button>
+ <button id="resetBtn" class="reset" type="button">
+  RESET
+ </button>
+</div>
 
-    <button
-        id="resetBtn"
-        class="reset"
-        type="button"
-    >
-        RESET
-    </button>
+<div class="progress-box" id="progressBox">
+
+ <div class="progress-top">
+  <span id="progressText">Preparing...</span>
+  <span id="progressPercent">0%</span>
+ </div>
+
+ <div class="progress">
+  <div class="progress-bar" id="progressBar"></div>
+ </div>
 
 </div>
 
+<div class="error" id="errorBox"></div>
 
-<!-- PROGRESS -->
+<div class="check" id="checkBox">
 
-<div
-    id="progressBox"
-    class="progress-box"
->
+ <h3>ROBLOX AUDIO CHECK</h3>
 
-    <div class="progress-line">
+ <div class="check-grid">
 
-        <span id="progressText">
-            Preparing...
-        </span>
+  <div class="check-item">
+   <label>Format</label>
+   <b id="checkFormat">-</b>
+  </div>
 
-        <span id="progressPercent">
-            0%
-        </span>
+  <div class="check-item">
+   <label>Sample Rate</label>
+   <b id="checkRate">-</b>
+  </div>
 
-    </div>
+  <div class="check-item">
+   <label>Channels</label>
+   <b id="checkChannels">-</b>
+  </div>
 
-    <div class="progress">
+  <div class="check-item">
+   <label>Duration</label>
+   <b id="checkDuration">-</b>
+  </div>
 
-        <div
-            id="progressBar"
-            class="progress-bar"
-        ></div>
+  <div class="check-item">
+   <label>File Size</label>
+   <b id="checkSize">-</b>
+  </div>
 
-    </div>
+  <div class="check-item">
+   <label>Speed</label>
+   <b id="checkSpeed">-</b>
+  </div>
 
-</div>
+ </div>
 
-
-<!-- ERROR -->
-
-<div
-    id="errorBox"
-    class="error"
-></div>
-
-
-<!-- ROBLOX CHECK -->
-
-<div
-    id="checkBox"
-    class="check"
->
-
-    <div class="check-title">
-        ROBLOX AUDIO CHECK
-    </div>
-
-    <div class="check-grid">
-
-        <div class="check-item">
-            <div class="check-label">Format</div>
-            <div
-                id="checkFormat"
-                class="check-value"
-            >-</div>
-        </div>
-
-        <div class="check-item">
-            <div class="check-label">Sample Rate</div>
-            <div
-                id="checkRate"
-                class="check-value"
-            >-</div>
-        </div>
-
-        <div class="check-item">
-            <div class="check-label">Channels</div>
-            <div
-                id="checkChannels"
-                class="check-value"
-            >-</div>
-        </div>
-
-        <div class="check-item">
-            <div class="check-label">Duration</div>
-            <div
-                id="checkDuration"
-                class="check-value"
-            >-</div>
-        </div>
-
-        <div class="check-item">
-            <div class="check-label">File Size</div>
-            <div
-                id="checkSize"
-                class="check-value"
-            >-</div>
-        </div>
-
-        <div class="check-item">
-            <div class="check-label">Speed</div>
-            <div
-                id="checkSpeed"
-                class="check-value"
-            >-</div>
-        </div>
-
-    </div>
-
-    <div
-        id="readyBox"
-        class="ready"
-    >
-        ROBLOX READY ✓
-    </div>
+ <div class="ready" id="readyBox">
+  OGG BERHASIL DIBUAT ✓
+ </div>
 
 </div>
 
+<div class="result" id="resultBox">
 
-<!-- RESULT -->
+ <h3>HASIL OGG</h3>
 
-<div
-    id="resultBox"
-    class="result"
->
+ <audio id="preview" controls></audio>
 
-    <div class="result-title">
-        AUDIO BERHASIL DIPROSES
-    </div>
-
-    <audio
-        id="preview"
-        controls
-    ></audio>
-
-    <button
-        id="downloadBtn"
-        class="download"
-        type="button"
-    >
-        DOWNLOAD OGG
-    </button>
+ <button id="downloadBtn" class="download" type="button">
+  DOWNLOAD OGG
+ </button>
 
 </div>
 
 </main>
 
 <footer>
-    SHAREJO • MP3 SPEED → OGG • ROBLOX READY CHECK
+ xrexzob developer • MP3 SPEED → OGG VORBIS
 </footer>
 
 </div>
 
-
 <!--
-    REAL OGG VORBIS ENCODER
-
-    Library:
-    higuma/ogg-vorbis-encoder-js
+  OggVorbisEncoder.js
+  Real OGG Vorbis encoder.
 -->
-
-<script src="https://cdn.jsdelivr.net/gh/higuma/ogg-vorbis-encoder-js@master/lib/OggVorbisEncoder.js"></script>
-
+<script src="https://cdn.jsdelivr.net/gh/higuma/ogg-vorbis-encoder-js@master/lib/OggVorbisEncoder.min.js"></script>
 
 <script>
-
 "use strict";
 
+const $ = id => document.getElementById(id);
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+const fileInput = $("fileInput");
+const uploadBox = $("uploadBox");
+const fileCard = $("fileCard");
+const fileName = $("fileName");
+const fileMeta = $("fileMeta");
+const removeBtn = $("removeBtn");
 
-const fileInput =
-    document.getElementById("fileInput");
+const speedInput = $("speedInput");
+const applySpeed = $("applySpeed");
+const currentSpeed = $("currentSpeed");
 
-const uploadBox =
-    document.getElementById("uploadBox");
+const processBtn = $("processBtn");
+const resetBtn = $("resetBtn");
 
-const fileCard =
-    document.getElementById("fileCard");
+const progressBox = $("progressBox");
+const progressBar = $("progressBar");
+const progressText = $("progressText");
+const progressPercent = $("progressPercent");
 
-const fileName =
-    document.getElementById("fileName");
+const errorBox = $("errorBox");
+const status = $("status");
 
-const fileMeta =
-    document.getElementById("fileMeta");
+const checkBox = $("checkBox");
+const checkFormat = $("checkFormat");
+const checkRate = $("checkRate");
+const checkChannels = $("checkChannels");
+const checkDuration = $("checkDuration");
+const checkSize = $("checkSize");
+const checkSpeed = $("checkSpeed");
+const readyBox = $("readyBox");
 
-const removeBtn =
-    document.getElementById("removeBtn");
-
-const statusEl =
-    document.getElementById("status");
-
-const speedInput =
-    document.getElementById("speedInput");
-
-const applySpeed =
-    document.getElementById("applySpeed");
-
-const selectedText =
-    document.getElementById("selectedText");
-
-const processBtn =
-    document.getElementById("processBtn");
-
-const resetBtn =
-    document.getElementById("resetBtn");
-
-const progressBox =
-    document.getElementById("progressBox");
-
-const progressBar =
-    document.getElementById("progressBar");
-
-const progressText =
-    document.getElementById("progressText");
-
-const progressPercent =
-    document.getElementById("progressPercent");
-
-const errorBox =
-    document.getElementById("errorBox");
-
-const checkBox =
-    document.getElementById("checkBox");
-
-const checkFormat =
-    document.getElementById("checkFormat");
-
-const checkRate =
-    document.getElementById("checkRate");
-
-const checkChannels =
-    document.getElementById("checkChannels");
-
-const checkDuration =
-    document.getElementById("checkDuration");
-
-const checkSize =
-    document.getElementById("checkSize");
-
-const checkSpeed =
-    document.getElementById("checkSpeed");
-
-const readyBox =
-    document.getElementById("readyBox");
-
-const resultBox =
-    document.getElementById("resultBox");
-
-const preview =
-    document.getElementById("preview");
-
-const downloadBtn =
-    document.getElementById("downloadBtn");
-
-
-/* =========================================================
-   VARIABLES
-========================================================= */
+const resultBox = $("resultBox");
+const preview = $("preview");
+const downloadBtn = $("downloadBtn");
 
 let selectedFile = null;
-let decodedAudio = null;
+let decoded = null;
 let selectedSpeed = 1;
 let outputBlob = null;
 let outputURL = null;
 
-const ROBLOX_MAX_BYTES =
-    20 * 1024 * 1024;
+const MAX_UPLOAD = 200 * 1024 * 1024;
+const MAX_SPEED = 1000;
+const MIN_SPEED = 0.01;
 
-const ROBLOX_MAX_SECONDS =
-    7 * 60;
-
-const TARGET_SAMPLE_RATE =
-    48000;
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function showError(message){
-
-    errorBox.textContent =
-        message;
-
-    errorBox.classList.add("show");
-
+function error(message){
+ errorBox.textContent = message;
+ errorBox.classList.add("show");
+ status.textContent = "ERROR";
 }
 
-
-function hideError(){
-
-    errorBox.textContent =
-        "";
-
-    errorBox.classList.remove(
-        "show"
-    );
-
+function clearError(){
+ errorBox.textContent = "";
+ errorBox.classList.remove("show");
 }
 
-
-function setProgress(
-    percent,
-    message
-){
-
-    const p =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                percent
-            )
-        );
-
-    progressBox.classList.add(
-        "show"
-    );
-
-    progressBar.style.width =
-        p + "%";
-
-    progressPercent.textContent =
-        Math.round(p) + "%";
-
-    if(message){
-
-        progressText.textContent =
-            message;
-
-    }
-
+function bytes(n){
+ if(n < 1024) return n + " B";
+ if(n < 1024*1024) return (n/1024).toFixed(1)+" KB";
+ return (n/(1024*1024)).toFixed(2)+" MB";
 }
 
-
-function formatBytes(bytes){
-
-    if(bytes < 1024){
-
-        return bytes + " B";
-
-    }
-
-    if(bytes < 1024 * 1024){
-
-        return (
-            bytes / 1024
-        ).toFixed(1) +
-        " KB";
-
-    }
-
-    return (
-        bytes /
-        (1024 * 1024)
-    ).toFixed(2) +
-    " MB";
-
+function time(sec){
+ if(!Number.isFinite(sec)) return "--:--";
+ let s=Math.floor(sec);
+ let m=Math.floor(s/60);
+ s=s%60;
+ return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
 }
 
-
-function formatTime(seconds){
-
-    if(!Number.isFinite(seconds)){
-
-        return "--:--";
-
-    }
-
-    const total =
-        Math.floor(seconds);
-
-    const min =
-        Math.floor(
-            total / 60
-        );
-
-    const sec =
-        total % 60;
-
-    return (
-        String(min).padStart(2,"0") +
-        ":" +
-        String(sec).padStart(2,"0")
-    );
-
+function progress(value,text){
+ value=Math.max(0,Math.min(100,value));
+ progressBox.classList.add("show");
+ progressBar.style.width=value+"%";
+ progressPercent.textContent=Math.round(value)+"%";
+ if(text) progressText.textContent=text;
 }
-
-
-function nextFrame(){
-
-    return new Promise(resolve => {
-
-        setTimeout(
-            resolve,
-            0
-        );
-
-    });
-
-}
-
-
-/* =========================================================
-   SPEED
-========================================================= */
 
 function setSpeed(value){
+ value=Number(value);
 
-    value =
-        Number(value);
+ if(!Number.isFinite(value) || value<=0){
+  error("Speed harus berupa angka lebih dari 0.");
+  return false;
+ }
 
-    if(
-        !Number.isFinite(value) ||
-        value <= 0
-    ){
+ if(value<MIN_SPEED) value=MIN_SPEED;
+ if(value>MAX_SPEED) value=MAX_SPEED;
 
-        showError(
-            "Speed harus berupa angka lebih dari 0."
-        );
+ selectedSpeed=value;
+ speedInput.value=value.toFixed(2);
+ currentSpeed.textContent="SPEED TERPILIH: "+value.toFixed(2)+"x";
 
-        return false;
+ document.querySelectorAll(".speed").forEach(x=>{
+  x.classList.toggle(
+   "active",
+   Math.abs(Number(x.dataset.speed)-value)<0.00001
+  );
+ });
 
-    }
-
-    /*
-       Tidak dibatasi 2x.
-       Range praktis 0.01x - 1000x.
-    */
-
-    if(value < 0.01){
-
-        value = 0.01;
-
-    }
-
-    if(value > 1000){
-
-        value = 1000;
-
-    }
-
-    selectedSpeed =
-        value;
-
-    speedInput.value =
-        value.toFixed(2);
-
-    selectedText.textContent =
-        value.toFixed(2) + "x";
-
-    document
-        .querySelectorAll(".preset")
-        .forEach(button => {
-
-            button.classList.remove(
-                "active"
-            );
-
-        });
-
-    hideError();
-
-    return true;
-
+ clearError();
+ return true;
 }
 
+document.querySelectorAll(".speed").forEach(button=>{
+ button.addEventListener("click",()=>{
+  setSpeed(button.dataset.speed);
+ });
+});
 
-document
-    .querySelectorAll(".preset")
-    .forEach(button => {
+applySpeed.addEventListener("click",()=>{
+ setSpeed(speedInput.value);
+});
 
-        button.addEventListener(
-            "click",
-            () => {
+speedInput.addEventListener("keydown",e=>{
+ if(e.key==="Enter") setSpeed(speedInput.value);
+});
 
-                setSpeed(
-                    button.dataset.speed
-                );
+function selectFile(file){
+ if(!file) return;
 
-                button.classList.add(
-                    "active"
-                );
+ clearError();
 
-            }
-        );
+ if(file.size>MAX_UPLOAD){
+  error("File terlalu besar. Maksimal file input adalah 200 MB.");
+  return;
+ }
 
-    });
+ selectedFile=file;
 
+ fileName.textContent=file.name;
+ fileMeta.textContent=
+  (file.type || "audio")+
+  " • "+
+  bytes(file.size);
 
-applySpeed.addEventListener(
-    "click",
-    () => {
+ fileCard.classList.add("show");
+ processBtn.disabled=false;
 
-        setSpeed(
-            speedInput.value
-        );
+ status.textContent="FILE READY";
 
-    }
-);
+ checkBox.classList.remove("show");
+ resultBox.classList.remove("show");
+ progressBox.classList.remove("show");
 
+ decoded=null;
+ outputBlob=null;
 
-speedInput.addEventListener(
-    "keydown",
-    event => {
+ if(outputURL){
+  URL.revokeObjectURL(outputURL);
+  outputURL=null;
+ }
 
-        if(event.key === "Enter"){
+ preview.removeAttribute("src");
+ preview.load();
+}
 
-            setSpeed(
-                speedInput.value
-            );
+fileInput.addEventListener("change",()=>{
+ if(fileInput.files && fileInput.files[0]){
+  selectFile(fileInput.files[0]);
+ }
+});
 
-        }
+uploadBox.addEventListener("dragover",e=>{
+ e.preventDefault();
+ uploadBox.classList.add("drag");
+});
 
-    }
-);
+uploadBox.addEventListener("dragleave",()=>{
+ uploadBox.classList.remove("drag");
+});
 
+uploadBox.addEventListener("drop",e=>{
+ e.preventDefault();
+ uploadBox.classList.remove("drag");
 
-/* =========================================================
-   AUDIO DECODER
-========================================================= */
+ const file=e.dataTransfer.files[0];
 
-async function decod
+ if(file) selectFile(file);
+});
+
+removeBtn.addEventListener("click",()=>{
+ resetAll();
+});
+
+resetBtn.addEventListener("click",()=>{
+ resetAll();
+});
+
+function resetAll(){
+
+ selectedFile=null;
+ decoded=null;
+ outputBlob=null;
+
+ fileInput.value="";
+ fileCard.classList.remove("show");
+
+ progressBox.classList.remove("show");
+ checkBox.classList.remove("show");
+ resultBox.classList.remove("show");
+
+ clearError();
+
+ processBtn.disabled=true;
+ status.textContent="READY";
+
+ if(outputURL){
+  URL.revokeObjectURL(outputURL);
+  outputURL=null;
+ }
+
+ preview.removeAttribute("src");
+ preview.load();
+
+ progress(0,"Preparing...");
+ progressBox.classList.remove("show");
+
+ setSpeed(1);
+}
+
+function makeSpeedBuffer(source,speed){
+
+ /*
+   Speed processing dilakukan dengan resampling.
+   speed > 1 = lebih cepat.
+   speed < 1 = lebih lambat.
+ */
+
+ const oldRate=source.sampleRate;
+ const oldLength=source.length;
+
+ const newLength=Math.max(
+  1,
+  Math.floor(oldLength/speed)
+ );
+
+ const channels=source.numberOfChannels;
+
+ const offline=new OfflineAudioContext(
+  channels,
+  newLength,
+  oldRate
+ );
+
+ const sourceNode=offline.createBufferSource();
+ sourceNode.buffer=source;
+
+ sourceNode.playbackRate.value=speed;
+
+ sourceNode.connect(offline.destination);
+ sourceNode.start(0);
+
+ return offline.startRendering();
+}
+
+async function decodeFile(file){
+
+ const arrayBuffer=await file.arrayBuffer();
+
+ const AudioCtx=
+  window.AudioContext ||
+  window.webkitAudioContext;
+
+ if(!AudioCtx){
+  throw new Error("Browser tidak mendukung Web Audio API.");
+ }
+
+ const ctx=new AudioCtx();
+
+ try{
+  return await ctx.decodeAudioData(arrayBuffer.slice(0));
+ }finally{
+  if(ctx.close) await ctx.close();
+ }
+}
+
+function audioBufferToChannels(buffer){
+
+ const channels=[];
+
+ for(let c=0;c<buffer.numberOfChannels;c++){
+  channels.push(buffer.getChannelData(c));
+ }
+
+ return channels;
+}
+
+async function encodeOGG(buffer){
+
+ if(typeof OggVorbisEncoder==="undefined"){
+  throw new Error(
+   "Encoder OGG belum berhasil dimuat. Pastikan internet aktif lalu refresh halaman."
+  );
+ }
+
+ /*
+  Roblox-friendly target:
+  48 kHz
+  stereo/mono sesuai input
+  Vorbis quality 0.4
+ */
+
+ const sampleRate=buffer.sampleRate;
+ const channels=buffer.numberOfChannels;
+
+ const encoder=new OggVorbisEncoder(
+  sampleRate,
+  channels,
+  0.4
+ );
+
+ const channelData=audioBufferToChannels(buffer);
+
+ const total=buffer.length;
+ const chunk=4096;
+
+ for(let i=0;i<total;i+=chunk){
+
+  const end=Math.min(i+chunk,total);
+
+  const block=[];
+
+  for(let c=0;c<channels;c++){
+   block.push(
+    channelData[c].subarray(i,end)
+   );
+  }
+
+  encoder.encode(block);
+
+  if(i % (chunk*16)===0){
+   progress(
+    50 + (i/total)*40,
+    "Encoding OGG..."
+   );
+
+   await new Promise(r=>setTimeout(r,0));
+  }
+ }
+
+ const result=encoder.finish();
+
+ let blob;
+
+ if(result instanceof Blob){
+  blob=new Blob(
+   [result],
+   {type:"audio/ogg"}
+  );
+ }else{
+  blob=new Blob(
+   result,
+   {type:"audio/ogg"}
+  );
+ }
+
+ return blob;
+}
+
+async function processAudio(){
+
+ if(!selectedFile){
+  error("Upload file audio terlebih dahulu.");
+  return;
+ }
+
+ clearError();
+
+ processBtn.disabled=true;
+ status.textContent="PROCESSING";
+
+ resultBox.classList.remove("show");
+ checkBox.classList.remove("show");
+
+ try{
+
+  progress(5,"Membaca file...");
+
+  await new Promise(r=>setTimeout(r,20));
+
+  progress(15,"Decoding audio...");
+
+  decoded=await decodeFile(selectedFile);
+
+  progress(30,"Audio berhasil dibaca.");
+
+  await new Promise(r=>setTimeout(r,20));
+
+  let processed=decoded;
+
+  if(Math.abs(selectedSpeed-1)>0.0001){
+
+   progress(
+    32,
+    "Mengatur speed "+selectedSpeed.toFixed(2)+"x..."
+   );
+
+   processed=
+    await makeSpeedBuffer(
+     decoded,
+     selectedSpeed
+    );
+  }
+
+  progress(50,"Menyiapkan encoder OGG...");
+
+  await new Promise(r=>setTimeout(r,20));
+
+  outputBlob=await encodeOGG(processed);
+
+  progress(94,"Finalizing OGG...");
+
+  await new Promise(r=>setTimeout(r,80));
+
+  if(outputURL){
+   URL.revokeObjectURL(outputURL);
+  }
+
+  outputURL=URL.createObjectURL(outputBlob);
+
+  preview.src=outputURL;
+  preview.load();
+
+  checkFormat.textContent="OGG Vorbis";
+  checkFormat.className="ok";
+
+  checkRate.textContent=
+   processed.sampleRate+" Hz";
+
+  checkChannels.textContent=
+   processed.numberOfChannels===1
+    ? "Mono"
+    : processed.numberOfChannels+" Channels";
+
+  checkDuration.textContent=
+   time(processed.duration);
+
+  checkSize.textContent=
+   bytes(outputBlob.size);
+
+  checkSpeed.textContent=
+   selectedSpee
